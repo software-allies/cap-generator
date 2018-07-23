@@ -2,6 +2,7 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
+const clientPackages = require('../../utils/client-packages')
 
 module.exports = class extends Generator {
   prompting() {
@@ -30,18 +31,7 @@ module.exports = class extends Generator {
         type: 'checkbox',
         name: 'client.modules',
         message: 'Select the modules you want to include',
-        choices: [
-          {
-            name: 'ionic-auth-module',
-            value: 'ionoic-auth',
-            short: 'Ionic Auth Module'
-          },
-          {
-            name: 'ionic-storage',
-            value: 'ionoic-storage',
-            short: 'Ionic Storage Module'
-          } 
-        ],
+        choices: clientPackages,
         when: (ctx) => ctx.appType === 'client'
       }
     ];
@@ -49,7 +39,6 @@ module.exports = class extends Generator {
     return this.prompt(prompts).then(props => {
       // To access props later use this.props.someAnswer;
       this.props = props;
-      console.log('this.props', this.props)
     });
   }
 };
