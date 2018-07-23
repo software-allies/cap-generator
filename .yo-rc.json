@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Cristofer Flores",
+      "authorEmail": "cristofer.flort@gmail.com",
+      "authorUrl": ""
+    }
+  }
+}
