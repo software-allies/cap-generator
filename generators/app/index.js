@@ -5,16 +5,17 @@ const yosay = require('yosay');
 const clientPackages = require('../../utils/client-packages')
 
 module.exports = class extends Generator {
+
   prompting() {
     // Have Yeoman greet the user.
     this.log(
-      yosay(`${chalk.red('Connected Apps Platform Generartor\n Build amazing apps faster and better')}`)
+      yosay(`${chalk.red('Connected Apps Platform Generator\n Build amazing apps faster and better')}`)
     );
 
     const prompts = [
       {
         type: 'list',
-        name: 'appType',
+        name: 'app.type',
         message: 'What type of app are you going to build?',
         choices: [
           {
@@ -28,11 +29,17 @@ module.exports = class extends Generator {
         ]
       },
       {
+        type: 'input',
+        name: 'app.name',
+        message: 'What\'s the name of your application?',
+        default : this.appname
+      },
+      {
         type: 'checkbox',
         name: 'client.modules',
-        message: 'Select the modules you want to include',
+        message: 'Select the modules you want to include: ',
         choices: clientPackages,
-        when: (ctx) => ctx.appType === 'client'
+        when: (ctx) => ctx.app.type === 'client'
       }
     ];
 
@@ -40,5 +47,22 @@ module.exports = class extends Generator {
       // To access props later use this.props.someAnswer;
       this.props = props;
     });
+  }
+
+  writing() {
+    switch (this.props.app.type) {
+      case 'api':
+        this.fs.copyTpl(
+          this.templatePath('api/**'),
+          this.destinationPath(this.props.app.name)
+        );
+        break;
+    
+      case 'client':
+        break;
+      
+      // No default
+    }
+    
   }
 };
