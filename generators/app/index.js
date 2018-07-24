@@ -59,6 +59,10 @@ module.exports = class extends Generator {
         break;
     
       case 'client':
+        this.fs.copyTpl(
+          this.templatePath('client-sidemenu/**'),
+          this.destinationPath(this.props.app.name)
+        );
         break;
       
       // No default
@@ -68,6 +72,6 @@ module.exports = class extends Generator {
 
   end() {
     this.log(yosay(chalk.bgGreen('Happy coding')))
-    this.log(`Next steps: \n cd ${chalk.blue(`${this.appname}`)} \n\n ${chalk.blue('npm install')} \n\n ${chalk.blue('npm start')}`)
+    this.log(`Next steps: \n cd ${chalk.blue(`${this.props.app.name}`)} \n\n ${chalk.blue('npm install')} \n\n ${chalk.blue('npm start')}`)
   }
 };
