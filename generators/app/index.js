@@ -9,7 +9,7 @@ module.exports = class extends Generator {
   prompting() {
     // Have Yeoman greet the user.
     this.log(
-      yosay(`${chalk.red('Connected Apps Platform Generator\n Build amazing apps faster and better')}`)
+      yosay(`${chalk.red('CAP Generator\n Build amazing apps faster and better')}`)
     );
 
     const prompts = [
@@ -64,5 +64,10 @@ module.exports = class extends Generator {
       // No default
     }
     
+  }
+
+  end() {
+    this.log(yosay(chalk.bgGreen('Happy coding')))
+    this.log(`Next steps: \n cd ${chalk.blue(`${this.appname}`)} \n\n ${chalk.blue('npm install')} \n\n ${chalk.blue('npm start')}`)
   }
 };
