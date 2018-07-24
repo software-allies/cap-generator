@@ -59,9 +59,16 @@ module.exports = class extends Generator {
         break;
     
       case 'client':
+        const modules = this.props.client.modules.map( (m, i) => {
+          return `"${m.name}": "${m.version}"${i + 1 === this.props.client.modules.length ? '' : ','}`
+        });
+      
         this.fs.copyTpl(
           this.templatePath('client-sidemenu/**'),
-          this.destinationPath(this.props.app.name)
+          this.destinationPath(this.props.app.name), {
+            name: this.props.app.name,
+            deps: modules.join('\n\t\t')
+          }
         );
         break;
       
