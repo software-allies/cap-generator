@@ -64,7 +64,7 @@ module.exports = class extends Generator {
         });
       
         this.fs.copyTpl(
-          this.templatePath('client-sidemenu/**'),
+          this.templatePath('client/**'),
           this.destinationPath(this.props.app.name), {
             name: this.props.app.name,
             deps: modules.join('\n\t\t')

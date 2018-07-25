@@ -1,0 +1,68 @@
+ion-content {
+     background-image: url('../assets/imgs/galaxy_md.png');
+     background-position: bottom !important;
+     background-repeat: no-repeat;
+     background-size: cover;
+}
+
+.img-logo {
+    height: 42px;
+}
+
+// RULES FOR WEB SCREEN
+ion-footer {
+    display: none;
+}
+
+ion-footer ion-title {
+    text-align: center;
+    height: 90px;
+}
+
+ion-footer ion-title .toolbar-title-md {
+    font-weight: 300px;
+    font-size: 1.5rem;
+}
+
+@media (min-width: 820px) {
+    
+    ion-content { 
+        background-image: url('../assets/imgs/galaxy.png');
+        .web-fab {
+            display: none;
+        }
+    }
+
+    ion-footer {
+        display: block;
+    }
+}
+
+// RULES FOR THE SIDE MENU IN WEB SCREEN
+.split-pane-side {
+   border-right: 0px !important;
+}
+
+.menu-container {
+   background-color: color($colors, dark);
+}
+
+.transparent {
+   background: transparent;
+}
+
+.list-item {
+   color: #ffffff;
+   margin-bottom: 10px;
+   font-size: 2rem;
+}
+
+:hover.list-item {
+   background: #222;
+}
+
+.scroll-content{
+   overflow: hidden;
+   margin-right: -17px;
+   overflow-y: scroll;
+}
