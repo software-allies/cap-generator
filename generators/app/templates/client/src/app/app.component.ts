@@ -1,18 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-// import { LocalNotificationsPage } from './../pages/local-notifications/local-notifications';
-// import { PhotoListPage } from './../pages/photo-list/photo-list';
-// import { PhotoUploadPage } from './../pages/photo-upload/photo-upload';
-// import { NotificacionesPage } from './../pages/notificaciones/notificaciones';
-// import { ChangePasswordPage } from './../pages/change-password/change-password';
-// import { RegisterPage } from './../pages/register/register';
-// import { LoginPage } from './../pages/login/login';
-
 
 @Component({
   templateUrl: 'app.html'
