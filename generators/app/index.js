@@ -78,6 +78,11 @@ module.exports = class extends Generator {
               imports: modules.imports
             }
           );
+
+          // Subgenerator
+          this.props.client.modules.forEach(m => {
+            this.composeWith(require.resolve(`../${m.name}`), { name: this.props.app.name })
+          })
         break;
       
       // No default
