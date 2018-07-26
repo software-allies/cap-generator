@@ -8,9 +8,9 @@ module.exports = [
     short: 'CAP Auth'
   },
   {
-    name: 'CAP-Storage-Module',
+    name: 'CAP-Storage-Cloudinary-Module',
     value: {
-      name: 'cap-storage',
+      name: 'cap-storage-cl-module',
       version: '0.0.1'
     },
     short: 'CAP Storage'

@@ -59,17 +59,38 @@ module.exports = class extends Generator {
         break;
     
       case 'client':
-        const modules = this.props.client.modules.map( (m, i) => {
+        const modules = {}
+        modules['packages'] = this.props.client.modules.map( (m, i) => {
           return `"${m.name}": "${m.version}"${i + 1 === this.props.client.modules.length ? '' : ','}`
         });
-      
-        this.fs.copyTpl(
-          this.templatePath('client/**'),
-          this.destinationPath(this.props.app.name), {
-            name: this.props.app.name,
-            deps: modules.join('\n\t\t')
-          }
-        );
+        modules['imports'] = {
+          auth: this.props.client.modules.findIndex( m => m.name === 'cap-auth-module') >= 0
+        }
+
+        if (this.props.client && this.props.client.modules) {
+          this.fs.copyTpl(
+            this.templatePath('client/**'),
+            this.destinationPath(this.props.app.name), {
+              name: this.props.app.name,
+              deps: modules.packages.join('\n\t\t'),
+              imports: modules.imports
+            }
+          );
+
+          this.props.client.modules.forEach(m => {
+            this.fs.copyTpl(
+              this.templatePath(`${m.name}/pages/**`),
+              this.destinationPath(`${this.props.app.name}/src/pages/${m.name}`)
+            );
+          });
+        } else {
+          this.fs.copyTpl(
+            this.templatePath('client/**'),
+            this.destinationPath(this.props.app.name), {
+              name: this.props.app.name
+            }
+          );
+        }
         break;
       
       // No default
