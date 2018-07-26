@@ -1,19 +1,19 @@
 module.exports = [
   {
+    name: 'CAP-Storage-AWS-Module',
+    value: {
+      name: 'cap-storage-aws',
+      version: '1.0.1'
+    },
+    short: 'CAP AWS'
+  },
+  {
     name: 'CAP-Auth-Module',
     value: {
       name: 'cap-auth-module',
       version: '0.0.1'
     },
     short: 'CAP Auth'
-  },
-  {
-    name: 'CAP-Storage-Cloudinary-Module',
-    value: {
-      name: 'cap-storage-cl-module',
-      version: '0.0.1'
-    },
-    short: 'CAP Storage'
   },
   {
     name: 'CAP-Messages',

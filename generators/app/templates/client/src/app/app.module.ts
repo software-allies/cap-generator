@@ -4,13 +4,13 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+<% if (imports.awsStorage) { -%>
+import { CapStorageAWS } from 'cap-storage-aws';
+<% } -%>
+
 import { AppComponent } from './app.component';
 import { HomePage } from '../pages/home/home';
-<% if (imports.auth) { %>
-import { ChangePasswordPage } from '../pages/change-password/change-password';
-import { LoginPage } from '../pages/login/login';
-import { RegisterPage } from '../pages/register/register';
-<% } %>
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +18,16 @@ import { RegisterPage } from '../pages/register/register';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(AppComponent)
+    IonicModule.forRoot(AppComponent)<%- typeof imports !== 'undefined' ? "," : "" -%>
+    <% if (imports.awsStorage) { %>
+    CapStorageAWS.forRoot({
+      bucket: 'your-bocket',
+      accessKeyId: 'your-accessKeyID',
+      secretAccessKey: 'your-secretAccessKey',
+      region: 'your-region',
+      folder: 'your-folder'
+    })
+    <% } %>
   ],
   bootstrap: [IonicApp],
   entryComponents: [
