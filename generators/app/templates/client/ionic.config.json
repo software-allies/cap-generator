@@ -1,5 +1,5 @@
 {
-  "name": "client-sidemenu",
+  "name": "<%= name %>",
   "app_id": "",
   "type": "ionic-angular",
   "integrations": {

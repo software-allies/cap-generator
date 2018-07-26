@@ -1,6 +1,6 @@
 {
-  "name": "Ionic",
-  "short_name": "Ionic",
+  "name": "<%= name %>",
+  "short_name": "<%= name %>",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [{
