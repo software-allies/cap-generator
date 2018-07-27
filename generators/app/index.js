@@ -3,6 +3,7 @@ const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
 const clientPackages = require('../../utils/client-packages')
+const getCAPAwsPrompts = require('../../utils/cap-storage-aws-prompts')
 
 module.exports = class extends Generator {
 
@@ -40,7 +41,8 @@ module.exports = class extends Generator {
         message: 'Select the modules you want to include: ',
         choices: clientPackages,
         when: (ctx) => ctx.app.type === 'client'
-      }
+      },
+      ...getCAPAwsPrompts()
     ];
 
     return this.prompt(prompts).then(props => {
@@ -76,7 +78,8 @@ module.exports = class extends Generator {
             this.destinationPath(this.props.app.name), {
               name: this.props.app.name,
               deps: modules.packages.join('\n\t\t'),
-              imports: modules.imports
+              imports: modules.imports,
+              aws: this.props.client.aws
             }
           );
 

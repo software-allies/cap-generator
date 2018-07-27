@@ -27,11 +27,11 @@ import { HomePage } from '../pages/home/home';
     IonicModule.forRoot(AppComponent)<%- typeof imports !== 'undefined' ? "," : "" -%>
     <% if (imports && imports.awsStorage) { %>
     CapStorageAWS.forRoot({
-      bucket: 'your-bocket',
-      accessKeyId: 'your-accessKeyID',
-      secretAccessKey: 'your-secretAccessKey',
-      region: 'your-region',
-      folder: 'your-folder'
+      bucket: '<%- aws && aws.bucket %>',
+      accessKeyId: '<%- aws && aws.accessKeyId %>',
+      secretAccessKey: '<%- aws && aws.secretAccessKey %>',
+      region: '<%- aws && aws.region %>',
+      folder: '<%- aws && aws.folder %>'
     })
     <% } %>
   ],
