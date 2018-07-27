@@ -5,12 +5,14 @@ const helpers = require('yeoman-test');
 
 describe('generator-cap:app', () => {
   beforeAll(() => {
-    return helpers
-      .run(path.join(__dirname, '../generators/app'))
-      .withPrompts({ someAnswer: true });
+    return helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+      app: {
+        type: 'api'
+      }
+    });
   });
 
   it('creates files', () => {
-    assert.file(['dummyfile.txt']);
+    assert.file(['package.json']);
   });
 });

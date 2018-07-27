@@ -2,11 +2,10 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const clientPackages = require('../../utils/client-packages')
-const getCAPAwsPrompts = require('../../utils/cap-storage-aws-prompts')
+const clientPackages = require('../../utils/client-packages');
+const getCAPAwsPrompts = require('../../utils/cap-storage-aws-prompts');
 
 module.exports = class extends Generator {
-
   prompting() {
     // Have Yeoman greet the user.
     this.log(
@@ -32,15 +31,15 @@ module.exports = class extends Generator {
       {
         type: 'input',
         name: 'app.name',
-        message: 'What\'s the name of your application?',
-        default : this.appname
+        message: "What's the name of your application?",
+        default: this.appname
       },
       {
         type: 'checkbox',
         name: 'client.modules',
         message: 'Select the modules you want to include: ',
         choices: clientPackages,
-        when: (ctx) => ctx.app.type === 'client'
+        when: ctx => ctx.app.type === 'client'
       },
       ...getCAPAwsPrompts()
     ];
@@ -53,49 +52,60 @@ module.exports = class extends Generator {
 
   writing() {
     switch (this.props.app.type) {
-      case 'api':
+      case 'api': {
         this.fs.copyTpl(
           this.templatePath('api/**'),
           this.destinationPath(this.props.app.name)
         );
         break;
-    
-      case 'client':
-          const modules = {}
-          modules['packages'] = []
-          if (this.props.client.modules.length) {
-            modules['packages'] = this.props.client.modules.map( (m, i) => {
-              return `"${m.name}": "${m.version}"${i + 1 === this.props.client.modules.length ? '' : ','}`
-            });
-            modules['imports'] = {
-              auth: this.props.client.modules.findIndex( m => m.name === 'cap-auth-module') >= 0,
-              awsStorage: this.props.client.modules.findIndex( m => m.name === 'cap-storage-aws') >= 0
-            }
+      }
+
+      case 'client': {
+        const modules = {};
+        modules.packages = [];
+        if (this.props.client.modules.length) {
+          modules.packages = this.props.client.modules.map((m, i) => {
+            return `"${m.name}": "${m.version}"${
+              i + 1 === this.props.client.modules.length ? '' : ','
+            }`;
+          });
+          modules.imports = {
+            auth:
+              this.props.client.modules.findIndex(m => m.name === 'cap-auth-module') >= 0,
+            awsStorage:
+              this.props.client.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
+          };
+        }
+
+        this.fs.copyTpl(
+          this.templatePath('client/**'),
+          this.destinationPath(this.props.app.name),
+          {
+            name: this.props.app.name,
+            deps: modules.packages.join('\n\t\t'),
+            imports: modules.imports,
+            aws: this.props.client.aws
           }
+        );
 
-          this.fs.copyTpl(
-            this.templatePath('client/**'),
-            this.destinationPath(this.props.app.name), {
-              name: this.props.app.name,
-              deps: modules.packages.join('\n\t\t'),
-              imports: modules.imports,
-              aws: this.props.client.aws
-            }
-          );
-
-          // Subgenerator
-          this.props.client.modules.forEach(m => {
-            this.composeWith(require.resolve(`../${m.name}`), { name: this.props.app.name })
-          })
+        // Subgenerator
+        this.props.client.modules.forEach(m => {
+          this.composeWith(require.resolve(`../${m.name}`), {
+            name: this.props.app.name
+          });
+        });
         break;
-      
+      }
       // No default
     }
-    
   }
 
   end() {
-    this.log(yosay(chalk.bgGreen('Happy coding')))
-    this.log(`Next steps: \n cd ${chalk.blue(`${this.props.app.name}`)} \n\n ${chalk.blue('npm install')} \n\n ${chalk.blue('npm start')}`)
+    this.log(yosay(chalk.bgGreen('Happy coding')));
+    this.log(
+      `Next steps: \n cd ${chalk.blue(`${this.props.app.name}`)} \n\n ${chalk.blue(
+        'npm install'
+      )} \n\n ${chalk.blue('npm start')}`
+    );
   }
 };
