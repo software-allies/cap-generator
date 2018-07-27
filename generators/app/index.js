@@ -60,6 +60,7 @@ module.exports = class extends Generator {
     
       case 'client':
           const modules = {}
+          modules['packages'] = []
           if (this.props.client.modules.length) {
             modules['packages'] = this.props.client.modules.map( (m, i) => {
               return `"${m.name}": "${m.version}"${i + 1 === this.props.client.modules.length ? '' : ','}`

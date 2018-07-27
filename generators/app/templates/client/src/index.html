@@ -44,5 +44,13 @@
 
   <!-- The main bundle js is generated during the build process -->
   <script src="build/main.js"></script>
+  <% if(imports && imports.awsStorage) { %>
+  <!-- Workaround for AWS Error -->
+  <script>
+    if (global === undefined) {
+      var global = window;
+    }
+  </script>
+  <% } %>
 </body>
 </html>

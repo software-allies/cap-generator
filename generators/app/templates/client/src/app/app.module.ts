@@ -4,22 +4,28 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-<% if (imports.awsStorage) { -%>
+<% if (imports && imports.awsStorage) { -%>
 import { CapStorageAWS } from 'cap-storage-aws';
-<% } -%>
 
+import { PhotoListPage } from '../pages/photo-list/photo-list';
+import { PhotoUploadPage } from '../pages/photo-upload/photo-upload';
+<% } -%>
 import { AppComponent } from './app.component';
 import { HomePage } from '../pages/home/home';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomePage
+    HomePage<%- imports ?  ',' : '' -%>
+    <% if (imports && imports.awsStorage) { %>
+    PhotoListPage,
+    PhotoUploadPage
+    <% } %>
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(AppComponent)<%- typeof imports !== 'undefined' ? "," : "" -%>
-    <% if (imports.awsStorage) { %>
+    <% if (imports && imports.awsStorage) { %>
     CapStorageAWS.forRoot({
       bucket: 'your-bocket',
       accessKeyId: 'your-accessKeyID',
@@ -32,7 +38,11 @@ import { HomePage } from '../pages/home/home';
   bootstrap: [IonicApp],
   entryComponents: [
     AppComponent,
-    HomePage
+    HomePage<%- imports ?  ',' : '' -%>
+    <% if (imports && imports.awsStorage) { %>
+    PhotoListPage,
+    PhotoUploadPage
+    <% } %>
   ],
   providers: [
     StatusBar,
