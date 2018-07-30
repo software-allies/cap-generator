@@ -12,7 +12,7 @@ import { PhotoUploadPage } from '../pages/photo-upload/photo-upload';
 <% } -%>
 
 <% if (imports && imports.auth) { -%>
-import { AuthenticationModule } from 'cap-auth-module';
+import { AuthenticationModule } from 'authmodule-ionic3-angular6';
 
 import { ChangePasswordPage } from './../pages/change-password/change-password';
 import { RegisterPage } from './../pages/register/register';
@@ -30,7 +30,7 @@ import { HomePage } from '../pages/home/home';
     PhotoListPage,
     PhotoUploadPage
     <% } %>
-    <%- imports.awsStorage ?  ',' : '' -%>
+    <%- imports && imports.awsStorage ?  ',' : '' -%>
     <% if (imports && imports.auth) { %>
     ChangePasswordPage,
     RegisterPage,
@@ -49,7 +49,7 @@ import { HomePage } from '../pages/home/home';
       folder: '<%- aws && aws.folder %>'
     })
     <% } %>
-    <%- imports && import.awsStorage ?  ',' : '' -%>
+    <%- imports && imports.awsStorage ?  ',' : '' -%>
     <% if (imports && imports.auth) { %>
     AuthenticationModule.forRoot({
         apiUrl: '<%- auth && auth.apiUrl %>',
