@@ -10,6 +10,15 @@ import { CapStorageAWS } from 'cap-storage-aws';
 import { PhotoListPage } from '../pages/photo-list/photo-list';
 import { PhotoUploadPage } from '../pages/photo-upload/photo-upload';
 <% } -%>
+
+<% if (imports && imports.auth) { -%>
+// import { CapStorageAWS } from 'cap-storage-aws';
+
+import { ChangePasswordPage } from './../pages/change-password/change-password';
+import { RegisterPage } from './../pages/register/register';
+import { LoginPage } from './../pages/login/login';
+<% } -%>
+
 import { AppComponent } from './app.component';
 import { HomePage } from '../pages/home/home';
 
@@ -20,6 +29,12 @@ import { HomePage } from '../pages/home/home';
     <% if (imports && imports.awsStorage) { %>
     PhotoListPage,
     PhotoUploadPage
+    <% } %>
+    <%- imports.awsStorage ?  ',' : '' -%>
+    <% if (imports && imports.auth) { %>
+    ChangePasswordPage,
+    RegisterPage,
+    LoginPage
     <% } %>
   ],
   imports: [
@@ -42,6 +57,12 @@ import { HomePage } from '../pages/home/home';
     <% if (imports && imports.awsStorage) { %>
     PhotoListPage,
     PhotoUploadPage
+    <% } %>
+    <%- imports.awsStorage ?  ',' : '' -%>
+    <% if (imports && imports.auth) { %>
+    ChangePasswordPage,
+    RegisterPage,
+    LoginPage
     <% } %>
   ],
   providers: [

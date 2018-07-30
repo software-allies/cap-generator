@@ -8,6 +8,11 @@ import { HomePage } from '../pages/home/home';
 import { PhotoListPage } from '../pages/photo-list/photo-list';
 import { PhotoUploadPage } from '../pages/photo-upload/photo-upload';
 <% } -%>
+<% if (imports && imports.auth) { -%>
+import { ChangePasswordPage } from './../pages/change-password/change-password';
+import { RegisterPage } from './../pages/register/register';
+import { LoginPage } from './../pages/login/login';
+<% } -%>
 
 @Component({
   templateUrl: 'app.html'
@@ -33,6 +38,13 @@ export class AppComponent {
       <% if (imports && imports.awsStorage)  { %>
       { title: 'photos', component: PhotoListPage },
       { title: 'upload', component: PhotoUploadPage }
+      <% } %>
+      // if imports.awsStorage exists or was chosen then put a comma
+      <%- imports.awsStorage ?  ',' : '' -%>
+      <% if (imports && imports.auth)  { %>
+      { title: 'Login', component: LoginPage },
+      { title: 'Register', component: RegisterPage },
+      { title: 'Change Password', component: ChangePasswordPage }
       <% } %>
     ];
   }
