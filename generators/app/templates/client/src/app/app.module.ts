@@ -10,7 +10,6 @@ import { CapStorageAWS } from 'cap-storage-aws';
 import { PhotoListPage } from '../pages/photo-list/photo-list';
 import { PhotoUploadPage } from '../pages/photo-upload/photo-upload';
 <% } -%>
-
 <% if (imports && imports.auth) { -%>
 import { AuthenticationModule } from 'authmodule-ionic3-angular6';
 
@@ -18,7 +17,6 @@ import { ChangePasswordPage } from './../pages/change-password/change-password';
 import { RegisterPage } from './../pages/register/register';
 import { LoginPage } from './../pages/login/login';
 <% } -%>
-
 import { AppComponent } from './app.component';
 import { HomePage } from '../pages/home/home';
 
@@ -29,7 +27,7 @@ import { HomePage } from '../pages/home/home';
     <% if (imports && imports.awsStorage) { %>
     PhotoListPage,
     PhotoUploadPage
-    <% } %>
+    <% } -%>
     <%- imports && imports.awsStorage ?  ',' : '' -%>
     <% if (imports && imports.auth) { %>
     ChangePasswordPage,
@@ -48,7 +46,7 @@ import { HomePage } from '../pages/home/home';
       region: '<%- aws && aws.region %>',
       folder: '<%- aws && aws.folder %>'
     })
-    <% } %>
+    <% } -%>
     <%- imports && imports.awsStorage ?  ',' : '' -%>
     <% if (imports && imports.auth) { %>
     AuthenticationModule.forRoot({
@@ -64,7 +62,7 @@ import { HomePage } from '../pages/home/home';
     <% if (imports && imports.awsStorage) { %>
     PhotoListPage,
     PhotoUploadPage
-    <% } %>
+    <% } -%>
     <%- imports && imports.awsStorage ?  ',' : '' -%>
     <% if (imports && imports.auth) { %>
     ChangePasswordPage,
