@@ -4,6 +4,7 @@ const chalk = require('chalk');
 const yosay = require('yosay');
 const clientPackages = require('../../utils/client-packages')
 const getCAPAwsPrompts = require('../../utils/cap-storage-aws-prompts')
+const getCAPAuthPrompts = require('../../utils/cap-auth-module-prompts');
 
 module.exports = class extends Generator {
 
@@ -42,7 +43,8 @@ module.exports = class extends Generator {
         choices: clientPackages,
         when: (ctx) => ctx.app.type === 'client'
       },
-      ...getCAPAwsPrompts()
+      ...getCAPAwsPrompts(),
+      ...getCAPAuthPrompts()
     ];
 
     return this.prompt(prompts).then(props => {
@@ -79,7 +81,8 @@ module.exports = class extends Generator {
               name: this.props.app.name,
               deps: modules.packages.join('\n\t\t'),
               imports: modules.imports,
-              aws: this.props.client.aws
+              aws: this.props.client.aws,
+              auth: this.props.client.auth
             }
           );
 

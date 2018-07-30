@@ -12,7 +12,7 @@ import { PhotoUploadPage } from '../pages/photo-upload/photo-upload';
 <% } -%>
 
 <% if (imports && imports.auth) { -%>
-// import { CapStorageAWS } from 'cap-storage-aws';
+import { AuthenticationModule } from 'cap-auth-module';
 
 import { ChangePasswordPage } from './../pages/change-password/change-password';
 import { RegisterPage } from './../pages/register/register';
@@ -49,6 +49,13 @@ import { HomePage } from '../pages/home/home';
       folder: '<%- aws && aws.folder %>'
     })
     <% } %>
+    <%- imports && import.awsStorage ?  ',' : '' -%>
+    <% if (imports && imports.auth) { %>
+    AuthenticationModule.forRoot({
+        apiUrl: '<%- auth && auth.apiUrl %>',
+        loginEndpoint: '<%- auth && auth.loginEndPoint %>'
+    })
+    <% } %>
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -58,7 +65,7 @@ import { HomePage } from '../pages/home/home';
     PhotoListPage,
     PhotoUploadPage
     <% } %>
-    <%- imports.awsStorage ?  ',' : '' -%>
+    <%- imports && imports.awsStorage ?  ',' : '' -%>
     <% if (imports && imports.auth) { %>
     ChangePasswordPage,
     RegisterPage,

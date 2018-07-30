@@ -40,7 +40,7 @@ export class AppComponent {
       { title: 'upload', component: PhotoUploadPage }
       <% } %>
       // if imports.awsStorage exists or was chosen then put a comma
-      <%- imports.awsStorage ?  ',' : '' -%>
+      <%- imports && imports.awsStorage ?  ',' : '' -%>
       <% if (imports && imports.auth)  { %>
       { title: 'Login', component: LoginPage },
       { title: 'Register', component: RegisterPage },
