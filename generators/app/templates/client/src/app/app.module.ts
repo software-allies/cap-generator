@@ -24,7 +24,7 @@ import { HomePage } from '../pages/home/home';
   declarations: [
     AppComponent,
     HomePage<%- imports ?  ',' : '' -%>
-    <% if (imports && imports.awsStorage) { %>
+    <% if (imports && imports.awsStorage) { -%>
     PhotoListPage,
     PhotoUploadPage
     <% } -%>
@@ -45,9 +45,8 @@ import { HomePage } from '../pages/home/home';
       secretAccessKey: '<%- aws && aws.secretAccessKey %>',
       region: '<%- aws && aws.region %>',
       folder: '<%- aws && aws.folder %>'
-    })
-    <% } -%>
-    <%- imports && imports.awsStorage ?  ',' : '' -%>
+    })<%- imports.auth ?  ',' : '' -%>
+    <% } %>
     <% if (imports && imports.auth) { %>
     AuthenticationModule.forRoot({
         apiUrl: '<%- auth && auth.apiUrl %>',

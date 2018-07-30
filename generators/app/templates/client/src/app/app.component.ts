@@ -35,11 +35,10 @@ export class AppComponent {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage }<%- imports ?  ',' : '' -%>
-      <% if (imports && imports.awsStorage)  { -%>
+      <% if (imports && imports.awsStorage)  { %>
       { title: 'photos', component: PhotoListPage },
-      { title: 'upload', component: PhotoUploadPage }
-      <% } -%>
-      <%- imports && imports.awsStorage ?  ',' : '' -%>
+      { title: 'upload', component: PhotoUploadPage }<%- imports.auth ?  ',' : '' -%>
+      <% } %>
       <% if (imports && imports.auth)  { %>
       { title: 'Login', component: LoginPage },
       { title: 'Register', component: RegisterPage },
