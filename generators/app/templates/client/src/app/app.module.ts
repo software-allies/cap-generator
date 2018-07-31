@@ -11,7 +11,7 @@ import { PhotoListPage } from '../pages/photo-list/photo-list';
 import { PhotoUploadPage } from '../pages/photo-upload/photo-upload';
 <% } -%>
 <% if (imports && imports.auth) { -%>
-import { AuthenticationModule } from 'authmodule-ionic3-angular6';
+import { AuthenticationModule } from 'cap-authentication';
 
 import { ChangePasswordPage } from './../pages/change-password/change-password';
 import { RegisterPage } from './../pages/register/register';

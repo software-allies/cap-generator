@@ -10,8 +10,8 @@ module.exports = [
   {
     name: 'CAP-Auth-Module',
     value: {
-      name: 'authmodule-ionic3-angular6',
-      version: '1.1.0'
+      name: 'cap-authentication',
+      version: '0.0.2'
     },
     short: 'CAP Auth'
   },
