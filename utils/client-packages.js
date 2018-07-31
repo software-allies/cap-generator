@@ -10,7 +10,7 @@ module.exports = [
   {
     name: 'CAP-Auth-Module',
     value: {
-      name: 'cap-authentication',
+      name: 'cap-authorization',
       version: '0.0.2'
     },
     short: 'CAP Auth'

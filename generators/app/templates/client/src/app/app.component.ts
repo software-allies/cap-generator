@@ -38,7 +38,7 @@ export class AppComponent {
       <% if (imports && imports.awsStorage)  { %>
       { title: 'photos', component: PhotoListPage },
       { title: 'upload', component: PhotoUploadPage }<%- imports.auth ?  ',' : '' -%>
-      <% } %>
+      <% } -%>
       <% if (imports && imports.auth)  { %>
       { title: 'Login', component: LoginPage },
       { title: 'Register', component: RegisterPage },

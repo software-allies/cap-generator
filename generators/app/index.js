@@ -70,7 +70,7 @@ module.exports = class extends Generator {
               return `"${m.name}": "${m.version}"${i + 1 === this.props.client.modules.length ? '' : ','}`
             });
             modules['imports'] = {
-              auth: this.props.client.modules.findIndex( m => m.name === 'cap-authentication') >= 0,
+              auth: this.props.client.modules.findIndex( m => m.name === 'cap-authorization') >= 0,
               awsStorage: this.props.client.modules.findIndex( m => m.name === 'cap-storage-aws') >= 0
             }
           }
