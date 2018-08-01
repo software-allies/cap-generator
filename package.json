@@ -41,11 +41,14 @@
     "yosay": "^2.0.1"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/generators/app/templates/client/package.json"
+    ]
   },
   "scripts": {
     "prepublishOnly": "nsp check",
-    "pretest": "eslint .",
+    "lint": "eslint .",
     "lint.fix": "eslint . --fix",
     "test": "jest"
   },
