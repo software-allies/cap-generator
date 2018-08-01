@@ -1,3 +1,6 @@
+/**
+ * Prompts for CAP-STORAGE-AWS Module (https://www.npmjs.com/package/cap-storage-aws)
+ */
 module.exports = () => {
   return [
     {

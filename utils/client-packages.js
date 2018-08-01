@@ -1,3 +1,9 @@
+/**
+ * CAP MODULES.
+ * An array with all the modules for cap that can be included with the generator
+ * We use the 'value.name' of each package as the identifier for the subgenerator
+ * so that means, the subgenerator name should be the same string as this field
+ */
 module.exports = [
   {
     name: 'CAP-Storage-AWS-Module',
