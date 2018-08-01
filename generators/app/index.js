@@ -2,8 +2,9 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const clientPackages = require('../../utils/client-packages');
-const getCAPAwsPrompts = require('../../utils/cap-storage-aws-prompts');
+const clientPackages = require('../../utils/client-packages')
+const getCAPAwsPrompts = require('../../utils/cap-storage-aws-prompts')
+const getCAPAuthPrompts = require('../../utils/cap-auth-module-prompts');
 
 module.exports = class extends Generator {
   prompting() {
@@ -41,7 +42,8 @@ module.exports = class extends Generator {
         choices: clientPackages,
         when: ctx => ctx.app.type === 'client'
       },
-      ...getCAPAwsPrompts()
+      ...getCAPAwsPrompts(),
+      ...getCAPAuthPrompts()
     ];
 
     return this.prompt(prompts).then(props => {
@@ -59,23 +61,29 @@ module.exports = class extends Generator {
         );
         break;
       }
-
       case 'client': {
-        const modules = {};
-        modules.packages = [];
-        if (this.props.client.modules.length) {
-          modules.packages = this.props.client.modules.map((m, i) => {
-            return `"${m.name}": "${m.version}"${
-              i + 1 === this.props.client.modules.length ? '' : ','
-            }`;
-          });
-          modules.imports = {
-            auth:
-              this.props.client.modules.findIndex(m => m.name === 'cap-auth-module') >= 0,
-            awsStorage:
-              this.props.client.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
-          };
-        }
+          const modules = {}
+          modules['packages'] = []
+          if (this.props.client.modules.length) {
+            modules['packages'] = this.props.client.modules.map( (m, i) => {
+              return `"${m.name}": "${m.version}"${i + 1 === this.props.client.modules.length ? '' : ','}`
+            });
+            modules['imports'] = {
+              auth: this.props.client.modules.findIndex( m => m.name === 'cap-authorization') >= 0,
+              awsStorage: this.props.client.modules.findIndex( m => m.name === 'cap-storage-aws') >= 0
+            }
+          }
+
+          this.fs.copyTpl(
+            this.templatePath('client/**'),
+            this.destinationPath(this.props.app.name), {
+              name: this.props.app.name,
+              deps: modules.packages.join('\n\t\t'),
+              imports: modules.imports,
+              aws: this.props.client.aws,
+              auth: this.props.client.auth
+            }
+          );
 
         this.fs.copyTpl(
           this.templatePath('client/**'),

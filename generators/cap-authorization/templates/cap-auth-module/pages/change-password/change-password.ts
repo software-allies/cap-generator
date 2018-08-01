@@ -11,7 +11,7 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
 
 @IonicPage()
 @Component({
-  selector: 'page-change-password',
+  selector: '<%= name %>-change-password',
   templateUrl: 'change-password.html',
 })
 export class ChangePasswordPage {
