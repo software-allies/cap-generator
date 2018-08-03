@@ -6,6 +6,15 @@ const helpers = require('yeoman-test');
 describe('[API] - generator-cap:app', () => {
   this.files = [
     'test/server',
+    'test/server/boot',
+    'test/server/boot/authentication.js',
+    'test/server/boot/root.js',
+    'test/server/component-config.json',
+    'test/server/config.json',
+    'test/server/datasources.json',
+    'test/server/middleware.development.json',
+    'test/server/middleware.json',
+    'test/server/model-config.json',
     'test/package.json',
     'test/README.md'
   ]
@@ -21,7 +30,7 @@ describe('[API] - generator-cap:app', () => {
       .withPrompts(answers);
   });
 
-  it('creates files', () => {
+  it('Should create all the files needed for the API', () => {
     assert.file(this.files);
   });
 });
