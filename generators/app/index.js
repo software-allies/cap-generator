@@ -22,7 +22,7 @@ module.exports = class extends Generator {
     const prompts = [
       {
         type: 'list',
-        name: 'app.type',
+        name: 'type',
         message: 'What type of app are you going to build?',
         choices: [
           {
@@ -37,54 +37,19 @@ module.exports = class extends Generator {
       },
       {
         type: 'input',
-        name: 'app.name',
+        name: 'name',
         message: 'What\'s the name of your application?',
         default: this.appname
       },
       {
         type: 'checkbox',
-        name: 'client.modules',
+        name: 'modules',
         message: 'Select the modules you want to include:',
         choices: clientPackages,
-        when: ctx => ctx.app.type === 'client'
+        when: ctx => ctx.type === 'client'
       },
-      // {
-      //   type: 'input',
-      //   name: 'client.aws.bucket',
-      //   message: "What's the name of the bucket?",
-      //   default: '<aws-bucket>',
-      //   when: ctx => ctx.client.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
-      // },
-      // {
-      //   type: 'input',
-      //   name: 'client.aws.accessKeyId',
-      //   message: 'AWS Access Key?',
-      //   default: '<aws-access-key>',
-      //   when: ctx => ctx.client.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
-      // },
-      // {
-      //   type: 'input',
-      //   name: 'client.aws.secretAccessKey',
-      //   message: 'AWS Secret Access Key?',
-      //   default: '<aws-secret-key>',
-      //   when: ctx => ctx.client.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
-      // },
-      // {
-      //   type: 'input',
-      //   name: 'client.aws.region',
-      //   message: "What's the region?",
-      //   default: '<aws-region>',
-      //   when: ctx => ctx.client.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
-      // },
-      // {
-      //   type: 'input',
-      //   name: 'client.aws.folder',
-      //   message: 'S3 Folder name?',
-      //   default: '<aws-folder>',
-      //   when: ctx => ctx.client.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
-      // }
-      // ...getCAPAwsPrompts, // TODO: We should think about moving this to its own subgenerator but somehow *UPDATE* the App Module to include the different imports and configuration
-      // ...getCAPAuthPrompts // TODO: We should think about moving this to its own subgenerator but somehow *UPDATE* the App Module to include the different imports and configuration
+      ...getCAPAwsPrompts, // TODO: We should think about moving this to its own subgenerator but somehow *UPDATE* the App Module to include the different imports and configuration
+      ...getCAPAuthPrompts // TODO: We should think about moving this to its own subgenerator but somehow *UPDATE* the App Module to include the different imports and configuration
     ];
 
     return this.prompt(prompts).then(props => {
@@ -99,11 +64,11 @@ module.exports = class extends Generator {
    * @returns
    */
   writing() {
-    switch (this.props.app.type) {
+    switch (this.props.type) {
       case 'api': {
         this.fs.copyTpl(
           this.templatePath('api/**'),
-          this.destinationPath(this.props.app.name)
+          this.destinationPath(this.props.name)
         );
         break;
       }
@@ -112,32 +77,41 @@ module.exports = class extends Generator {
         modules['packages'] = []
 
         // Create an array of string with format: ['"package": "0.0.1"', '"package2": "0.0.1"', ...] so we can join it to write it to templates/client/package.json
-        if (this.props.client.modules.length) {
-          modules['packages'] = this.props.client.modules.map( (m, i) => {
-            return `"${m.name}": "${m.version}"${i + 1 === this.props.client.modules.length ? '' : ','}`
+        if (this.props.modules.length) {
+          modules['packages'] = this.props.modules.map( (m, i) => {
+            return `"${m.name}": "${m.version}"${i + 1 === this.props.modules.length ? '' : ','}`
           });
           modules['imports'] = {
-            auth: this.props.client.modules.findIndex( m => m.name === 'cap-authorization') >= 0,
-            awsStorage: this.props.client.modules.findIndex( m => m.name === 'cap-storage-aws') >= 0
+            auth: this.props.modules.findIndex( m => m.name === 'cap-authorization') >= 0,
+            awsStorage: this.props.modules.findIndex( m => m.name === 'cap-storage-aws') >= 0
           }
         }
 
         // Copy template
         this.fs.copyTpl(
           this.templatePath('client/**'),
-          this.destinationPath(this.props.app.name), {
-            name: this.props.app.name,
+          this.destinationPath(this.props.name), {
+            name: this.props.name,
             deps: modules.packages.join('\n\t\t'),
             imports: modules.imports,
-            aws: this.props.client.aws,
-            auth: this.props.client.auth
+            aws: {
+              bucket: this.props.awsBucket,
+              accessKeyId: this.props.awsAccessKeyId,
+              secretAccessKey: this.props.awsSecretAccessKey,
+              region: this.props.awsRegion,
+              folder: this.props.awsFolder
+            },
+            auth: {
+              apiUrl: this.props.authApiUrl,
+              loginEndPoint: this.props.authLoginEndPoint
+            }
           }
         );
 
         // Call the subgenerator for each module the user selected
-        this.props.client.modules.forEach(m => {
+        this.props.modules.forEach(m => {
           this.composeWith(require.resolve(`../${m.name}`), {
-            name: this.props.app.name
+            name: this.props.name
           });
         });
         break;
@@ -154,7 +128,7 @@ module.exports = class extends Generator {
   end() {
     this.log(yosay(chalk.bgGreen('Happy coding')));
     this.log(
-      `Next steps: \n cd ${chalk.blue(`${this.props.app.name}`)} \n\n ${chalk.blue(
+      `Next steps: \n cd ${chalk.blue(`${this.props.name}`)} \n\n ${chalk.blue(
         'npm install'
       )} \n\n ${chalk.blue('npm start')}`
     );

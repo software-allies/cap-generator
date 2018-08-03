@@ -4,37 +4,37 @@
 module.exports = [
   {
     type: 'input',
-    name: 'client.aws.bucket',
+    name: 'awsBucket',
     message: "What's the name of the bucket?",
     default: '<aws-bucket>',
-    when: props => props.client.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
+    when: ctx => ctx.modules && ctx.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
   },
   {
     type: 'input',
-    name: 'client.aws.accessKeyId',
+    name: 'awsAccessKeyId',
     message: 'AWS Access Key?',
     default: '<aws-access-key>',
-    when: props => props.client.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
+    when: ctx => ctx.modules && ctx.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
   },
   {
     type: 'input',
-    name: 'client.aws.secretAccessKey',
+    name: 'awsSecretAccessKey',
     message: 'AWS Secret Access Key?',
     default: '<aws-secret-key>',
-    when: props => props.client.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
+    when: ctx => ctx.modules && ctx.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
   },
   {
     type: 'input',
-    name: 'client.aws.region',
+    name: 'awsRegion',
     message: "What's the region?",
     default: '<aws-region>',
-    when: props => props.client.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
+    when: ctx => ctx.modules && ctx.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
   },
   {
     type: 'input',
-    name: 'client.aws.folder',
+    name: 'awsFolder',
     message: 'S3 Folder name?',
     default: '<aws-folder>',
-    when: props => props.client.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
+    when: ctx => ctx.modules && ctx.modules.findIndex(m => m.name === 'cap-storage-aws') >= 0
   }
 ];
