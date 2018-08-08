@@ -91,18 +91,7 @@ module.exports = class extends Generator {
           this.destinationPath(this.props.name), {
             name: this.props.name,
             deps: modules.packages.join('\n\t\t'),
-            imports: modules.imports,
-            aws: {
-              bucket: this.props.awsBucket,
-              accessKeyId: this.props.awsAccessKeyId,
-              secretAccessKey: this.props.awsSecretAccessKey,
-              region: this.props.awsRegion,
-              folder: this.props.awsFolder
-            },
-            auth: {
-              apiUrl: this.props.authApiUrl,
-              loginEndPoint: this.props.authLoginEndPoint
-            }
+            imports: modules.imports
           }
         );
         break;
@@ -118,7 +107,7 @@ module.exports = class extends Generator {
    */
   end() {
     // Call the subgenerator for each module the user selected
-    if (this.props.modules.length) {
+    if (this.props.modules && this.props.modules.length) {
       this.props.modules.forEach(m => {
         this.composeWith(require.resolve(`../${m.name}`), {
           name: this.props.name
