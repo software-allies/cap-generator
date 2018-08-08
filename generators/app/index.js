@@ -4,8 +4,6 @@ const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
 const clientPackages = require('../../utils/client-packages');
-const getCAPAwsPrompts = require('../../utils/cap-storage-aws-prompts');
-const getCAPAuthPrompts = require('../../utils/cap-auth-module-prompts');
 
 module.exports = class extends Generator {
   /**
