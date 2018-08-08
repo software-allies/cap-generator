@@ -26,7 +26,7 @@ It will prompt you a series of question regarding to your project
 This generator automatically includes the sub generators based on the user answers. 
 For more detail about how to use each module we recommend go through their documentation
 
-> For now all subgenerators works only if you use the main generator which will ask the information the subgenerator needs to work correctly.
+> For now all subgenerators works only with the main generator, not alone.
 > Future release will have working this as completly standalone subgenerator
 
 | Module | Subgenerator |
@@ -57,9 +57,18 @@ yo cap
 ```
 > You need to have Yeoman installed globlaly in your computer
 
+
+## Test
+
+To run the test just run
+
+```
+npm test
+```
+
 ## License
 
-MIT © [Software Allies](https://www.softwareallies.com/)
+Apache-2.0  © [Software Allies](https://www.softwareallies.com/)
 
 <!-- 
 [npm-image]: https://badge.fury.io/js/generator-cap.svg
