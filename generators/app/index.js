@@ -47,9 +47,7 @@ module.exports = class extends Generator {
         message: 'Select the modules you want to include:',
         choices: clientPackages,
         when: ctx => ctx.type === 'client'
-      },
-      ...getCAPAwsPrompts, // TODO: We should think about moving this to its own subgenerator but somehow *UPDATE* the App Module to include the different imports and configuration
-      ...getCAPAuthPrompts // TODO: We should think about moving this to its own subgenerator but somehow *UPDATE* the App Module to include the different imports and configuration
+      }
     ];
 
     return this.prompt(prompts).then(props => {
@@ -107,13 +105,6 @@ module.exports = class extends Generator {
             }
           }
         );
-
-        // Call the subgenerator for each module the user selected
-        this.props.modules.forEach(m => {
-          this.composeWith(require.resolve(`../${m.name}`), {
-            name: this.props.name
-          });
-        });
         break;
       }
       // No default
@@ -126,11 +117,15 @@ module.exports = class extends Generator {
    * @returns
    */
   end() {
-    this.log(yosay(chalk.bgGreen('Happy coding')));
-    this.log(
-      `Next steps: \n cd ${chalk.blue(`${this.props.name}`)} \n\n ${chalk.blue(
-        'npm install'
-      )} \n\n ${chalk.blue('npm start')}`
-    );
+    // Call the subgenerator for each module the user selected
+    if (this.props.modules.length) {
+      this.props.modules.forEach(m => {
+        this.composeWith(require.resolve(`../${m.name}`), {
+          name: this.props.name
+        });
+      });
+    } else {
+      // this.log(yosay(chalk.bgGreen('Happy coding')));
+    }
   }
 };
