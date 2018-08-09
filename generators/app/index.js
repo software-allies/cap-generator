@@ -64,7 +64,9 @@ module.exports = class extends Generator {
       case 'api': {
         this.fs.copyTpl(
           this.templatePath('api/**'),
-          this.destinationPath(this.props.name)
+          this.destinationPath(this.props.name), {
+            name: this.props.name
+          }
         );
         break;
       }
