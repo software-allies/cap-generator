@@ -14,7 +14,7 @@ npm install -g generator-cap
 
 ## Usage 
 
-To generate a new project using CAP just run: 
+To generate a new project using CAP just run:
 
 ```bash
 yo cap
