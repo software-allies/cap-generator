@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/">Home</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a id="sign-up-or-login-link" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+          aria-haspopup="true" aria-expanded="false">Authentication </a>
+        <div class="dropdown-menu">
+          <a *ngFor="let page of pages" class="dropdown-item" routerLink="{{page.path}}">{{page.title}}</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

@@ -49,17 +49,17 @@ module.exports = class extends Generator {
     const newText =  file.getText()
       .replace(apiUrlRgx, `apiUrl: '${this.props.authApiUrl}'`)
       .replace(endpointRgx, `loginEndpoint: '${this.props.authLoginEndPoint}'`)
-    
+
     file.removeText(file.getPos(), file.getEnd()); // Remove all the text since we already have the text formed with the correct values
 
     file.insertText(0, newText); // Insert new text
-    
+
     file.saveSync(); // Save all changes
 
     // Finally just copy the pages
     this.fs.copyTpl(
-      this.templatePath('cap-auth-module/pages/**'),
-      this.destinationPath(`${this.options.name}/src/pages/`), {
+      this.templatePath('cap-auth/**'),
+      this.destinationPath(`${this.options.name}/src/app/modules/`), {
         name: this.options.name
       }
     );
