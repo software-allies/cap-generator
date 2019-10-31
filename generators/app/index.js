@@ -28,7 +28,7 @@ module.exports = class extends Generator {
             value: 'api'
           },
           {
-            name: `client (Using ${chalk.red('Ionic')})`,
+            name: `client (Using ${chalk.red('Angular')})`,
             value: 'client'
           }
         ]
