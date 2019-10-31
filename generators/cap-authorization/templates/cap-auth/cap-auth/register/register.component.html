@@ -1,80 +1,84 @@
 <div class="container">
-  <h4>Create a new user</h4>
+  <h4>Create your account</h4>
   <hr>
-  <form (ngSubmit)="createUser()">
-
+  <form [formGroup]="createUserForm" (ngSubmit)="createUser()">
     <div>
-
-      <div class="form-group row" >
-        <label class="col-2 col-form-label">Email Address</label>
+      <div class="form-group row" [ngClass]="{'text-danger':!createUserForm.get('email').valid && createUserForm.get('email').touched}">
+        <label class="col-md-2 col-sm-12 col-form-label">Email Address</label>
         <div class="col-md-8 col-sm-12">
-          <input class="form-control"
-                type="email"
-                placeholder="Email Address">
+          <input  class="form-control"
+                  type="email"
+                  [ngClass]="{'is-invalid':!createUserForm.get('email').valid && createUserForm.get('email').touched}"
+                  placeholder="Email Address"
+                  formControlName="email">
         </div>
       </div>
 
-      <div class="form-group row" >
+      <div class="form-group row" [ngClass]="{'text-danger':!createUserForm.get('password').valid && createUserForm.get('password').touched}">
         <label class="col-md-2 col-sm-12 col-form-label">Password</label>
         <div class="col-md-8 col-sm-12">
-          <input class="form-control"
-                type="password"
-                placeholder="Password">
-                <small id="passwordHelpBlock" class="form-text text-muted">
+          <input  class="form-control"
+                  type="password"
+                  [ngClass]="{'is-invalid':!createUserForm.get('password').valid && createUserForm.get('password').touched}"
+                  placeholder="Password"
+                  formControlName="password">
+                <small *ngIf="!createUserForm.get('password').valid && createUserForm.get('password').touched" id="passwordHelpBlock" class="form-text text-center text-muted">
                   Your password must be 8-20 characters long, contain letters and numbers and the first letter has to be uppercase.
                 </small>
         </div>
       </div>
 
-      <div class="form-group row" >
+      <div class="form-group row" [ngClass]="{'text-danger':!createUserForm.get('firstName').valid && createUserForm.get('firstName').touched}">
         <label class="col-md-2 col-sm-12  col-form-label">First Name</label>
         <div class="col-md-8 col-sm-12">
-          <input class="form-control"
-                type="text"
-                placeholder="First Name">
+          <input  class="form-control"
+                  type="text"
+                  [ngClass]="{'is-invalid':!createUserForm.get('firstName').valid && createUserForm.get('firstName').touched}"
+                  placeholder="First Name"
+                  formControlName="firstName">
         </div>
       </div>
 
-      <div class="form-group row" >
+      <div class="form-group row" [ngClass]="{'text-danger':!createUserForm.get('lastName').valid && createUserForm.get('lastName').touched}">
         <label class="col-md-2 col-sm-12 col-form-label">Last Name</label>
         <div class="col-md-8 col-sm-12">
           <input  class="form-control"
                   type="text"
-                  placeholder="Last Name">
+                  [ngClass]="{'is-invalid':!createUserForm.get('lastName').valid && createUserForm.get('lastName').touched}"
+                  placeholder="Last Name"
+                  formControlName="lastName">
         </div>
       </div>
 
-      <div class="form-group row">
+      <div class="form-group row" [ngClass]="{'text-danger':!createUserForm.get('company').valid && createUserForm.get('company').touched}">
         <label class="col-md-2 col-sm-12 col-form-label">Company</label>
-        <div class="col-md-8">
-          <input class="form-control"
-                type="text"
-                placeholder="Company">
+        <div class="col-md-8 col-sm-12">
+          <input  class="form-control"
+                  type="text"
+                  [ngClass]="{'is-invalid':!createUserForm.get('company').valid && createUserForm.get('company').touched}"
+                  placeholder="Company"
+                  formControlName="company">
         </div>
       </div>
 
       <div class="form-group row">
-        <label class="col-3 col-form-label">I agree to the Terms of Service.</label>
+        <label class="col-4 col-form-label">I agree to the Terms of Service.</label>
         <div form-check>
-          <input class="form-check-input" type="checkbox" >
+          <input class="form-check-input" type="checkbox" formControlName="termsConditions">
         </div>
       </div>
 
-    <!-- Errores -->
-      <!-- <div *ngIf="createUserForm.controls['email'].errors?.minlength" class="form-control-feeback text-danger">
-        minimo 4 caracteres
-      </div> -->
-    <div *ngIf="false"  class="form-control-feeback text-danger text-center">
-      This user already exists, try other alternate data
-    </div>
-    <!-- Errores -->
-
+      <!-- Errores -->
+      <div *ngIf="false"  class="form-control-feeback text-danger text-center">
+        This user already exists, try other alternate data
+      </div>
+      <!-- Errores -->
     </div>
 
     <div class="form-group row">
       <label class="col-2 col-form-label">&nbsp;</label>
       <div class="input-group col-md-8">
-        <button
+        <button [disabled]="!createUserForm.valid"
                 type="submit"
                 class="btn btn-outline-primary">
           Register
