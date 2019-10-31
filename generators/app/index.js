@@ -73,7 +73,6 @@ module.exports = class extends Generator {
       case 'client': {
         const modules = {}
         modules['packages'] = []
-        console.log(modules);
         // Create an array of string with format: ['"package": "0.0.1"', '"package2": "0.0.1"', ...] so we can join it to write it to templates/client/package.json
         if (this.props.modules.length) {
           modules['packages'] = this.props.modules.map( (m, i) => {

@@ -16,18 +16,42 @@ module.exports = class extends Generator {
     `);
     const prompts = [
       {
-        type: 'input',
-        name: 'authApiUrl',
-        message: 'Set your apiUrl: ',
-        default: '<auth-apiUrl>'
+        type: 'list',
+        name: 'modules',
+        message: 'Select the service you want to use to authenticate users:',
+        choices: [
+          {
+            name: `Firebase`,
+            value: 'firebase'
+          },
+          {
+            name: `Auth0`,
+            value: 'auth0'
+          }
+        ],
       },
       {
         type: 'input',
-        name: 'authLoginEndPoint',
-        message: 'Set your loginEndPoint: ',
-        default: '<auth-login-end-point>'
+        name: 'AUTH0_CLIENT_ID',
+        message: 'Set your Auth0 Client ID: ',
+        default: '',
+        when: ctx => ctx.modules === 'auth0'
+      },
+      {
+        type: 'input',
+        name: 'AUTH0_CLIENT_SECRET',
+        message: 'Set your Auth0 Client Secret: ',
+        default: '',
+        when: ctx => ctx.modules === 'auth0'
+      },
+      {
+        type: 'input',
+        name: 'AUTH0_DOMAIN',
+        message: 'Set your Auth0 Domain: ',
+        default: '',
+        when: ctx => ctx.modules === 'auth0'
       }
-    ]
+    ];
 
     return this.prompt(prompts).then(props => {
       // To access props later use this.props.someAnswer;
@@ -56,6 +80,17 @@ module.exports = class extends Generator {
 
     file.saveSync(); // Save all changes
 
+    if (this.props.modules = 'auth0'){
+      this.fs.write(this.destinationPath(`${this.options.name}/src/environments/environment.ts`),
+      `export const environment = {
+        production: false,
+        AUTH0_DOMAIN: '${this.props.AUTH0_DOMAIN}',
+        AUTH0_CLIENT_ID: '${this.props.AUTH0_CLIENT_ID}',
+        AUTH0_CLIENT_SECRET: '${this.props.AUTH0_CLIENT_SECRET}'
+      };`)
+    } else if (this.props.modules = 'firebase'){
+      console.log('Firebase');
+    }
     // Finally just copy the pages
     this.fs.copyTpl(
       this.templatePath('cap-auth/**'),
