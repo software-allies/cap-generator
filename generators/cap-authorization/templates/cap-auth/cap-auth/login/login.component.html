@@ -1,3 +1,39 @@
-<p>
-  login works!
-</p>
+<div class="container">
+  <h4>Sign in to ...</h4>
+  <hr>
+  <form [formGroup]="loginUserForm" (ngSubmit)="loginUser()">
+    <div>
+      <div class="form-group row" [ngClass]="{'text-danger':!loginUserForm.get('email').valid && loginUserForm.get('email').touched}">
+        <label class="col-2 col-form-label">Email</label>
+        <div class="col-8">
+          <input  class="form-control"
+                  [ngClass]="{'is-invalid':!loginUserForm.get('email').valid && loginUserForm.get('email').touched}"
+                  type="email"
+                  placeholder="User Name"
+                  formControlName="email">
+        </div>
+      </div>
+      <div class="form-group row" [ngClass]="{'text-danger':!loginUserForm.get('password').valid && loginUserForm.get('password').touched}">
+        <label class="col-2 col-form-label">Password</label>
+        <div class="col-8">
+          <input  class="form-control"
+                  type="password"
+                  [ngClass]="{'is-invalid':!loginUserForm.get('password').valid && loginUserForm.get('password').touched}"
+                  placeholder="Password"
+                  formControlName="password">
+        </div>
+      </div>
+      <div *ngIf="userNotValid" class="form-control-feeback text-danger text-center">
+        invalid email or password
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-2 col-form-label">&nbsp;</label>
+      <div class="input-group col-md-8">
+        <button [disabled]="!loginUserForm.valid" type="submit" class="btn btn-outline-primary">
+          Log in
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

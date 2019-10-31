@@ -1,3 +1,21 @@
-<p>
-  forgot works!
-</p>
+<div class="container">
+  <h4>Reset your password</h4>
+  <hr>
+  <form (ngSubmit)="forgorPassword()">
+    <div class="form-group d-flex justify-content-center row">
+      <label class="col-12  text-center col-form-label">
+        Enter your email address and we will send you a link to reset your password.
+      </label>
+      <div class="col-4">
+        <input class="form-control" type="email" placeholder="Enter your email address">
+        <small id="passwordHelpBlock" class="form-text text-center text-muted">
+        </small>
+      </div>
+    </div>
+    <div class="form-group text-center">
+      <button type="submit" class="btn btn-outline-primary">
+        Register
+      </button>
+    </div>
+  </form>
+</div>
