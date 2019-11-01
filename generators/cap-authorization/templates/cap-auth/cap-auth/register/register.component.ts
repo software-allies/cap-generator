@@ -1,5 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
+import { AuthenticationService } from '../authentication.service';
+import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +14,11 @@ export class RegisterComponent implements OnInit {
   createUserForm: FormGroup;
   existingUser: Boolean;
 
-  constructor() {
+  constructor(
+    private authenticationService: AuthenticationService,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId,
+  ) {
     this.existingUser = false;
     this.createUserForm = new FormGroup({
       'email': new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]),
@@ -44,9 +51,23 @@ export class RegisterComponent implements OnInit {
     return null;
   }
 
-
-
   createUser() {
-    console.log(this.createUserForm.value);
+    this.authenticationService.getAuth0Token().subscribe((token: any) => {
+      this.authenticationService.createAuth0User(token, this.createUserForm.value).subscribe((user: any) => {
+        if (user) {
+          this.authenticationService.loginAuth0User(this.createUserForm.value).subscribe((Access_Token: any) => {
+            if (isPlatformBrowser(this.platformId)) {
+              localStorage.setItem('Access_Token', JSON.stringify(Access_Token));
+              this.router.navigate(['/']);
+            }
+          });
+        }
+      }, (error) => {
+        if (error.status === 409) {
+          this.existingUser = true;
+        }
+      });
+    });
   }
+
 }
