@@ -7,11 +7,18 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/">Home</a>
       </li>
-      <li class="nav-item dropdown">
+      <li *ngIf="!user" class="nav-item dropdown">
         <a id="sign-up-or-login-link" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
           aria-haspopup="true" aria-expanded="false">Authentication </a>
         <div class="dropdown-menu">
           <a *ngFor="let page of pages" class="dropdown-item" routerLink="{{page.path}}">{{page.title}}</a>
+        </div>
+      </li>
+      <li *ngIf="user" class="nav-item dropdown">
+        <a id="sign-up-or-login-link" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+          aria-haspopup="true" aria-expanded="false"> {{userName}} </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" (click)="logOutUser()" routerLink="/"> Log Out</a>
         </div>
       </li>
     </ul>
