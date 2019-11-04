@@ -76,4 +76,14 @@ export class AuthenticationService {
     return this.http.post(`${this.Auth0.AUTH0_DOMAIN}/oauth/token`, httpParams, httpOptions);
   }
 
+  getAuth0UserInfo(token:string) {
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.get(`${this.Auth0.AUTH0_DOMAIN}/userinfo`, httpOptions);
+  }
+
 }
