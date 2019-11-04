@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
 import { AuthenticationService } from '../authentication.service';
+import { CommunicationComponentsService } from '../../../shared/services/communication-components.service';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -17,6 +18,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
+    private communicationComponentsService: CommunicationComponentsService,
     @Inject(PLATFORM_ID) private platformId,
   ) {
     this.existingUser = false;
@@ -56,8 +58,11 @@ export class RegisterComponent implements OnInit {
       this.authenticationService.createAuth0User(token, this.createUserForm.value).subscribe((user: any) => {
         if (user) {
           this.authenticationService.loginAuth0User(this.createUserForm.value).subscribe((Access_Token: any) => {
+            Access_Token.user = this.createUserForm.get('firstName').value;
+            Access_Token.email = this.createUserForm.get('email').value;
             if (isPlatformBrowser(this.platformId)) {
-              localStorage.setItem('Access_Token', JSON.stringify(Access_Token));
+              localStorage.setItem('User', JSON.stringify(Access_Token));
+              this.communicationComponentsService.sendUser(true);
               this.router.navigate(['/']);
             }
           });
