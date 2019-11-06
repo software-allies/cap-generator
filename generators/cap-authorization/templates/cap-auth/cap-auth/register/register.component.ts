@@ -53,11 +53,11 @@ export class RegisterComponent implements OnInit {
     return null;
   }
 
-  createUser() {
+  createUser() {<% if (service === 'auth0')  { %>
     this.authenticationService.getAuth0Token().subscribe((token: any) => {
-      this.authenticationService.createAuth0User(token, this.createUserForm.value).subscribe((user: any) => {
+      this.authenticationService.createUser(this.createUserForm.value ,token).subscribe((user: any) => {
         if (user) {
-          this.authenticationService.loginAuth0User(this.createUserForm.value).subscribe((Access_Token: any) => {
+          this.authenticationService.loginUser(this.createUserForm.value).subscribe((Access_Token: any) => {
             Access_Token.user = this.createUserForm.get('firstName').value;
             Access_Token.email = this.createUserForm.get('email').value;
             if (isPlatformBrowser(this.platformId)) {
@@ -72,7 +72,23 @@ export class RegisterComponent implements OnInit {
           this.existingUser = true;
         }
       });
-    });
+    });<% } %>
+    <% if (service === 'firebase')  { %>
+    this.authenticationService.createUser(this.createUserForm.value)
+    .then((response) => {
+      response.user.getIdTokenResult().then((res) => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('User', JSON.stringify({
+            user: response.user.email.split('@', 1)[0],
+            email: response.user.email,
+            refresh_token: response.user.refreshToken,
+            token: res.token
+          }));
+          this.communicationComponentsService.sendUser(true);
+          this.router.navigate(['/']);
+        }
+      });
+    }).catch(error => this.existingUser = true);<% } %>
   }
 
 }
