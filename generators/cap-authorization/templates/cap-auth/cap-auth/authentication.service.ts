@@ -3,14 +3,19 @@ import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { map } from 'rxjs/operators';
-
+<% if (service === 'firebase')  { %>
+import * as firebase from 'firebase/app';
+import { AngularFireAuth } from '@angular/fire/auth';
+<% } %>
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
   readonly Auth0: any;
-  constructor(protected http: HttpClient) {
+  constructor(
+    protected http: HttpClient<%- service==='firebase' ? ",\n\t\tprivate afAuth: AngularFireAuth" : "" %>
+  ) {
     this.Auth0 = environment;
   }
 
@@ -38,7 +43,7 @@ export class AuthenticationService {
       );
   }
 
-  createAuth0User(access_token: string, user: any) {
+  createUser(user: any, access_token?: string) {<% if(service==='auth0'){ %>
     let User = {
       email: `${user.email}`,
       password: `${user.password}`,
@@ -56,10 +61,12 @@ export class AuthenticationService {
         'Authorization': `Bearer ${access_token}`
       })
     };
-    return this.http.post(`${this.Auth0.AUTH0_DOMAIN}/api/v2/users`, User, httpOptions);
+    return this.http.post(`${this.Auth0.AUTH0_DOMAIN}/api/v2/users`, User, httpOptions);<% } %>
+    <%if(service==='firebase'){%>
+      return this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password);<%}%>
   }
 
-  loginAuth0User(user: any) {
+  loginUser(user: any) {<% if(service==='auth0'){ %>
     const httpOptions = {
       headers : new HttpHeaders({
         'content-type': 'application/x-www-form-urlencoded'
@@ -73,7 +80,9 @@ export class AuthenticationService {
                                 .append('client_secret', `${this.Auth0.AUTH0_CLIENT_SECRET}`)
                                 .append('realm', 'employees')
                                 .append('grant_type', 'password');
-    return this.http.post(`${this.Auth0.AUTH0_DOMAIN}/oauth/token`, httpParams, httpOptions);
+    return this.http.post(`${this.Auth0.AUTH0_DOMAIN}/oauth/token`, httpParams, httpOptions);<% } %>
+    <%if(service==='firebase'){%>
+      return this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password)<%}%>
   }
 
   getAuth0UserInfo(token:string) {
