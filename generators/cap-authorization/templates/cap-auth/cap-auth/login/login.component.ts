@@ -30,8 +30,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() { }
 
-  loginUser() {
-    this.authenticationService.loginAuth0User(this.loginUserForm.value).subscribe((user: any) => {
+  loginUser() {<% if (service === 'auth0')  { %>
+    this.authenticationService.loginUser(this.loginUserForm.value).subscribe((user: any) => {
       this.authenticationService.getAuth0UserInfo(user.access_token).subscribe((userInfo: any) => {
         user.user = userInfo.name;
         user.email = userInfo.email;
@@ -43,7 +43,22 @@ export class LoginComponent implements OnInit {
       });
     }, (error) => {
       this.userNotValid = true;
-    });
+    });<% } %>
+    <% if (service === 'firebase')  { %>
+    this.authenticationService.loginUser(this.loginUserForm.value)
+    .then((response) => {
+      response.user.getIdTokenResult().then((res) => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('User', JSON.stringify({
+            user: response.user.email.split('@', 1)[0],
+            email: response.user.email,
+            refresh_token: response.user.refreshToken,
+            token: res.token
+          }));
+          this.communicationComponentsService.sendUser(true);
+          this.router.navigate(['/']);
+        }
+      });
+    }).catch(error => this.userNotValid = true); <% } %>
   }
-
 }
