@@ -50,7 +50,63 @@ module.exports = class extends Generator {
         message: 'Set your Auth0 Domain: ',
         default: '',
         when: ctx => ctx.modules === 'auth0'
-      }
+      },
+      {
+        type: 'input',
+        name: 'apiKey',
+        message: 'Set your ApiKey: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'authDomain',
+        message: 'Set your Auth Domain: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'databaseURL',
+        message: 'Set your data base URL: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'projectId',
+        message: 'Set your Project ID: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'storageBucket',
+        message: 'Set your storage bucket: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'senderId',
+        message: 'Set your message sender ID: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'appId',
+        message: 'Set your app ID: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'measurementId',
+        message: 'Set your measurement ID: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
     ];
 
     return this.prompt(prompts).then(props => {
@@ -80,22 +136,40 @@ module.exports = class extends Generator {
 
     file.saveSync(); // Save all changes
 
-    if (this.props.modules = 'auth0'){
-      this.fs.write(this.destinationPath(`${this.options.name}/src/environments/environment.ts`),
-      `export const environment = {
-        production: false,
-        AUTH0_DOMAIN: '${this.props.AUTH0_DOMAIN}',
-        AUTH0_CLIENT_ID: '${this.props.AUTH0_CLIENT_ID}',
-        AUTH0_CLIENT_SECRET: '${this.props.AUTH0_CLIENT_SECRET}'
-      };`)
+    if (this.props.modules === 'auth0'){
+      this.fs.write(
+        this.destinationPath(`${this.options.name}/src/environments/environment.ts`),
+        `export const environment = {
+          production: false,
+          AUTH0_DOMAIN: '${this.props.AUTH0_DOMAIN}',
+          AUTH0_CLIENT_ID: '${this.props.AUTH0_CLIENT_ID}',
+          AUTH0_CLIENT_SECRET: '${this.props.AUTH0_CLIENT_SECRET}'
+        };`
+      )
     } else if (this.props.modules = 'firebase'){
-      console.log('Firebase');
+      this.fs.write(
+        this.destinationPath(`${this.options.name}/src/environments/environment.ts`),
+        `export const environment = {
+          production: false,
+          firebase: {
+            apiKey: '${this.props.apiKey}',
+            authDomain: '${this.props.authDomain}',
+            databaseURL: '${this.props.databaseURL}',
+            projectId: '${this.props.projectId}',
+            storageBucket: '${this.props.storageBucket}',
+            messagingSenderId: '${this.props.senderId}',
+            appId: '${this.props.appId}',
+            measurementId: '${this.props.measurementId}'
+          }
+        };`
+      )
     }
     // Finally just copy the pages
     this.fs.copyTpl(
       this.templatePath('cap-auth/**'),
       this.destinationPath(`${this.options.name}/src/app/modules/`), {
-        name: this.options.name
+        name: this.options.name,
+        service: this.props.modules
       }
     );
   }
