@@ -91,4 +91,40 @@ export class RegisterComponent implements OnInit {
     }).catch(error => this.existingUser = true);<% } %>
   }
 
+  signUpSocialMedia(socialMedia:boolean) {
+    <%if(service==='firebase'){%>if (socialMedia) {
+      this.authenticationService.authWithFacebook().then((response) => {
+        response.user.getIdTokenResult().then((res) => {
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('User', JSON.stringify({
+              user: response.user.email.split('@', 1)[0],
+              email: response.user.email,
+              refresh_token: response.user.refreshToken,
+              token: res.token
+            }));
+          }
+        }).then(() => {
+          this.communicationComponentsService.sendUser(true);
+          this.router.navigate(['/']);
+        });
+      }).catch(error => this.existingUser = true);
+    } else {
+      this.authenticationService.authWithGoogle().then((response) =>  {
+        response.user.getIdTokenResult().then((res) => {
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('User', JSON.stringify({
+              user: response.user.email.split('@', 1)[0],
+              email: response.user.email,
+              refresh_token: response.user.refreshToken,
+              token: res.token
+            }));
+          }
+        }).then(() => {
+          this.communicationComponentsService.sendUser(true);
+          this.router.navigate(['/']);
+        });
+      }).catch(error => this.existingUser = true);
+    }<%}%>
+  }
+
 }
