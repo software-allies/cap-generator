@@ -86,4 +86,6 @@
       </div>
     </div>
   </form>
+  <%if (service === 'firebase') {%><button type="button" (click)="signUpSocialMedia(true)" class="btn btn-primary btn-block">Sign Up with Facebook</button>
+  <button type="button" (click)="signUpSocialMedia(false)" class="btn btn-danger btn-block">Sign Up with Google</button><%}%>
 </div>
