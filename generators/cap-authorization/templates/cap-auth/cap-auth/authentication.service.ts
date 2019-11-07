@@ -28,7 +28,8 @@ export class AuthenticationService {
     };<%}%>
   }
 
-  getAuth0Token(): Observable<string> {<% if(service==='auth0'){ %>
+  getAuth0Token()<%- service==='auth0' ? ": Observable<string>" : "" %>
+  {<% if(service==='auth0'){ %>
     const httpOptions = {
       headers : new HttpHeaders({
         'content-type': 'application/json'
@@ -43,7 +44,7 @@ export class AuthenticationService {
       );<%}%>
   }
 
-  getAuth0UserInfo(token:string) { <% if(service==='auth0'){ %>
+  getAuth0UserInfo(token: string){<% if(service==='auth0'){%>
     const httpOptions = {
       headers : new HttpHeaders({
         'content-type': 'application/x-www-form-urlencoded',
@@ -53,7 +54,7 @@ export class AuthenticationService {
     return this.http.get(`${this.Auth0.AUTH0_DOMAIN}/userinfo`, httpOptions);<%}%>
   }
 
-  createUser(user: any, access_token?: string) <%-service==='firebase' ? ": Promise<firebase.auth.UserCredential>" : ""%> { <% if(service==='auth0'){ %>
+  createUser(user: any, access_token?: string) <%-service==='firebase' ? ": Promise<firebase.auth.UserCredential>" : ""%> {<% if(service==='auth0'){ %>
       let User = {
       email: `${user.email}`,
       password: `${user.password}`,
@@ -74,7 +75,7 @@ export class AuthenticationService {
     <%if(service==='firebase'){%>return this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password);<%}%>
   }
 
-  loginUser(user: any) <%-service==='firebase' ? ": Promise<firebase.auth.UserCredential>" : ""%> { <% if(service==='auth0'){ %>
+  loginUser(user: any)<%-service==='firebase' ? ": Promise<firebase.auth.UserCredential>" : ""%> { <% if(service==='auth0'){ %>
     const httpOptions = {
       headers : new HttpHeaders({
         'content-type': 'application/x-www-form-urlencoded'
@@ -92,14 +93,14 @@ export class AuthenticationService {
     <%if(service==='firebase'){%>return this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password)<%}%>
   }
 
-  authWithFacebook()<%-service==='firebase' ? ": Promise<firebase.auth.UserCredential>" : ""%>{
-    <%if(service==='firebase'){%>const provider: firebase.auth.FacebookAuthProvider = new firebase.auth.FacebookAuthProvider();
+  authWithFacebook()<%-service==='firebase' ? ": Promise<firebase.auth.UserCredential>" : ""%> {<%if(service==='firebase'){%>
+    const provider: firebase.auth.FacebookAuthProvider = new firebase.auth.FacebookAuthProvider();
     provider.addScope('user_birthday');
     return this.afAuth.auth.signInWithPopup(provider);<%}%>
   }
 
-  authWithGoogle()<%-service==='firebase' ? ": Promise<firebase.auth.UserCredential>" : ""%>{
-    <%if(service==='firebase'){%>const provider: firebase.auth.GoogleAuthProvider = new firebase.auth.GoogleAuthProvider();
+  authWithGoogle()<%-service==='firebase' ? ": Promise<firebase.auth.UserCredential>" : ""%> {<%if(service==='firebase'){%>
+    const provider: firebase.auth.GoogleAuthProvider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
     return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());<%}%>
   }
