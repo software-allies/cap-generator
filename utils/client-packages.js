@@ -9,7 +9,7 @@ module.exports = [
     name: 'CAP-Storage-AWS-Module',
     value: {
       name: 'cap-storage-aws',
-      version: '1.0.1'
+      version: '3.0.3'
     },
     short: 'CAP AWS'
   },
