@@ -7,18 +7,17 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/">Home</a>
       </li>
-      <li *ngIf="!user" class="nav-item dropdown">
+      <li class="nav-item dropdown" *ngFor="let module of modules">
         <a id="sign-up-or-login-link" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-          aria-haspopup="true" aria-expanded="false">Authentication </a>
+          aria-haspopup="true" aria-expanded="false"> {{module.module}} </a>
         <div class="dropdown-menu">
-          <a *ngFor="let page of pages" class="dropdown-item" routerLink="{{page.path}}">{{page.title}}</a>
-        </div>
-      </li>
-      <li *ngIf="user" class="nav-item dropdown">
-        <a id="sign-up-or-login-link" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-          aria-haspopup="true" aria-expanded="false"> {{userName}} </a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" (click)="logOutUser()" routerLink="/"> Log Out</a>
+          <span *ngFor="let page of module.pages">
+            <a *ngIf="!user || module.reference === 'Aws'" class="dropdown-item" routerLink="{{page.path}}">{{page.title}}</a>
+          </span>
+          <%if (imports && imports.auth) {%>
+          <a *ngIf="user && module.module === 'Authentication'" class="dropdown-item" routerLink="/">{{userName}}</a>
+          <a *ngIf="user && module.module === 'Authentication'" class="dropdown-item" (click)="logOutUser()">Log Out</a>
+          <%}%>
         </div>
       </li>
     </ul>
