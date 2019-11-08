@@ -74,19 +74,20 @@ module.exports = class extends Generator {
       .replace(regionRgx, `region: '${this.props.awsRegion}'`)
       .replace(folderRgx, `folder: '${this.props.awsFolder}'`)
 
-    
+
     file.removeText(file.getPos(), file.getEnd()); // Remove all the text since we already have the text formed with the correct values
 
     file.insertText(0, newText); // Insert new text
-    
+
     file.saveSync(); // Save all changes
 
     // Finally just copy the pages
     this.fs.copyTpl(
-      this.templatePath('cap-storage-aws/pages/**'),
-      this.destinationPath(`${this.options.name}/src/pages/`),
+      this.templatePath('cap-aws/**'),
+      this.destinationPath(`${this.options.name}/src/app/modules/`),
       {
-        name: this.options.name
+        name: this.options.name,
+        credentials: this.props
       }
     );
   }
