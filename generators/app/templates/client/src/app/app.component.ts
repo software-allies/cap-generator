@@ -9,7 +9,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class AppComponent implements OnInit {
 
-  pages: Array<{title: string, path: any}>;
+  modules: Array<{module: string, reference: string, pages: Array<{title: string, path: string}>}>;
   user: boolean;
   userName: string;
 
@@ -19,22 +19,35 @@ export class AppComponent implements OnInit {
   ) {
     this.user = false;
     this.userName = null;
-    this.pages = [
-      <% if (imports && imports.auth)  { %>
-      {title: 'Register', path: '/auth/register'},
-      {title: 'LogIn', path: '/auth/login'},
-      {title: 'Change Password', path: '/auth/forgot-password'},
-      <% } %>
+    this.modules = [
+      <% if (imports && imports.auth){ %>{
+        module: 'Authentication',
+        reference: 'Auth',
+        pages: [
+          {title: 'Register', path: '/auth/register'},
+          {title: 'LogIn', path: '/auth/login'},
+          {title: 'Change Password', path: '/auth/forgot-password'},
+        ]
+      },<% } %>
+      <% if (imports && imports.awsStorage) {-%>{
+        module: 'Amazon Web Services',
+        reference: 'Aws',
+        pages: [
+          {title: 'Upload Images', path: '/aws/image-upload'},
+          {title: 'Upload Files', path: '/aws/file-upload'}
+        ]
+      }<% } %>
     ];
     this.isLogin();
   }
 
   ngOnInit() {
+    <% if (imports && imports.auth){ %>
     this.communicationComponentsService.sendMessageObserbable.subscribe((user: boolean) => {
       if (user) {
         this.isLogin();
       }
-    });
+    });<%}%>
   }
 
   isLogin() {
