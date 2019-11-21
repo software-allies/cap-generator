@@ -11,12 +11,14 @@ import { AngularFireAuth } from '@angular/fire/auth';
   providedIn: 'root'
 })
 export class AuthenticationService {
-
+  <%- service === 'firebase' ? "private user: Observable<firebase.User | null>;" : "" %>
   readonly Auth0: any;
+
   constructor(
     protected http: HttpClient<%- service==='firebase' ? ",\n\t\tprivate afAuth: AngularFireAuth" : "" %>
   ) {
     this.Auth0 = environment;
+    <% if(service==='firebase'){ %>this.user = this.afAuth.authState;<%}%>
   }
 
   getAuth0Credentials() {<% if(service==='auth0'){ %>
@@ -28,8 +30,7 @@ export class AuthenticationService {
     };<%}%>
   }
 
-  getAuth0Token()<%- service==='auth0' ? ": Observable<string>" : "" %>
-  {<% if(service==='auth0'){ %>
+  getAuth0Token() <%- service==='auth0' ? ": Observable<string>" : "" %>{<% if(service==='auth0'){ %>
     const httpOptions = {
       headers : new HttpHeaders({
         'content-type': 'application/json'
@@ -44,7 +45,7 @@ export class AuthenticationService {
       );<%}%>
   }
 
-  getAuth0UserInfo(token: string){<% if(service==='auth0'){%>
+  getAuth0UserInfo(token: string) {<% if(service==='auth0'){%>
     const httpOptions = {
       headers : new HttpHeaders({
         'content-type': 'application/x-www-form-urlencoded',
@@ -103,6 +104,53 @@ export class AuthenticationService {
     const provider: firebase.auth.GoogleAuthProvider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
     return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());<%}%>
+  }
+
+  getUser(id: string, token: string) {<%if(service==='auth0'){%>
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.get(`${this.Auth0.AUTH0_DOMAIN}/api/v2/users/${id}`, httpOptions);<%}%>
+  }
+
+  <%-service==='firebase' ? "get currentUser(): Observable<firebase.User | null> " : "currentUser() "%>{<%if(service==='firebase'){%>
+    return this.user;<%}%>
+  }
+
+  updateProfile<%- service==='auth0' ? "(user: any, id: string, token: string) {" : "= (user: any): Promise<void> =>" %><% if(service==='auth0'){ %>
+    const httpParams = new HttpParams() .append('name', `${user.name}`)
+                                        .append('family_name', `${user.family_name}`)
+                                        .append('nickname', `${user.nickname}`);
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.patch(`${this.Auth0.AUTH0_DOMAIN}/api/v2/users/${id}`, httpParams, httpOptions);
+  }<%}%><% if(service==='firebase'){ %>
+    this.afAuth.auth.currentUser
+    ? this.afAuth.auth.currentUser.updateProfile({
+      displayName: user.displayName
+    })
+    : Promise.resolve()
+  <%}%>
+
+  changePassword(user: any)<%-service==='firebase' ? ": Promise<void>" : ""%> { <% if(service==='auth0'){ %>
+    const User = {
+      email: `${user.email}`,
+      connection: 'Username-Password-Authentication',
+    };
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/json',
+      })
+    };
+    return this.http.post(`${this.Auth0.AUTH0_DOMAIN}/dbconnections/change_password`, User, httpOptions);<%}%>
+    <% if(service==='firebase'){ %> return this.afAuth.auth.sendPasswordResetEmail(user.email);<%}%>
   }
 
 }
