@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
 
   loginUserForm: FormGroup;
   userNotValid: boolean;
+  socialMedia: boolean;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
       'password': new FormControl('', [Validators.required])
     });
     this.userNotValid = false;
+    this.socialMedia = false;
   }
 
   ngOnInit() { }
@@ -101,5 +103,9 @@ export class LoginComponent implements OnInit {
         });
       }).catch(error => this.userNotValid = true);
     }<%}%>
+    <%if(service==='auth0'){%>this.socialMedia = true;
+      setTimeout(() => {
+        this.socialMedia = false;
+      }, 3000);<%}%>
   }
 }

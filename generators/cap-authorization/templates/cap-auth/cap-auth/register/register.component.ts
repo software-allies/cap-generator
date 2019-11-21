@@ -14,6 +14,7 @@ export class RegisterComponent implements OnInit {
 
   createUserForm: FormGroup;
   existingUser: Boolean;
+  socialMedia: boolean;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -28,8 +29,8 @@ export class RegisterComponent implements OnInit {
       'firstName': new FormControl('', [Validators.required, Validators.minLength(2)]),
       'lastName': new FormControl('', [Validators.required, Validators.minLength(2)]),
       'company': new FormControl('', [Validators.required, Validators.minLength(2)]),
-      'termsConditions': new FormControl(false, [this.termsAndConditions]),
     });
+    this.socialMedia = false;
   }
 
   ngOnInit() { }
@@ -130,6 +131,10 @@ export class RegisterComponent implements OnInit {
         });
       }).catch(error => this.existingUser = true);
     }<%}%>
+    <%if(service==='auth0'){%>this.socialMedia = true;
+    setTimeout(() => {
+      this.socialMedia = false;
+    }, 3000);<%}%>
   }
 
 }

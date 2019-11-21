@@ -120,7 +120,7 @@ export class AuthenticationService {
     return this.user;<%}%>
   }
 
-  updateProfile<%- service==='auth0' ? "(user: any, id: string, token: string) {" : "= (user: any): Promise<void> =>" %><% if(service==='auth0'){ %>
+  updateProfile<%- service==='auth0' ? "(user: any, id: string, token: string) {" : " = (user: any): Promise<void> =>" %><% if(service==='auth0'){ %>
     const httpParams = new HttpParams() .append('name', `${user.name}`)
                                         .append('family_name', `${user.family_name}`)
                                         .append('nickname', `${user.nickname}`);

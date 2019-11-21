@@ -1,41 +1,53 @@
-<div class="container">
-  <h4>Sign in to ...</h4>
-  <hr>
-  <form [formGroup]="loginUserForm" (ngSubmit)="loginUser()">
-    <div>
-      <div class="form-group row" [ngClass]="{'text-danger':!loginUserForm.get('email').valid && loginUserForm.get('email').touched}">
-        <label class="col-2 col-form-label">Email</label>
-        <div class="col-8">
-          <input  class="form-control"
-                  [ngClass]="{'is-invalid':!loginUserForm.get('email').valid && loginUserForm.get('email').touched}"
-                  type="email"
-                  placeholder="User Name"
-                  formControlName="email">
-        </div>
-      </div>
-      <div class="form-group row" [ngClass]="{'text-danger':!loginUserForm.get('password').valid && loginUserForm.get('password').touched}">
-        <label class="col-2 col-form-label">Password</label>
-        <div class="col-8">
-          <input  class="form-control"
-                  type="password"
-                  [ngClass]="{'is-invalid':!loginUserForm.get('password').valid && loginUserForm.get('password').touched}"
-                  placeholder="Password"
-                  formControlName="password">
-        </div>
-      </div>
-      <div *ngIf="userNotValid" class="form-control-feeback text-danger text-center">
-        invalid email or password
-      </div>
+<div class="container register-form">
+  <div class="form">
+    <div class="header">
+        <p>Sign in</p>
     </div>
-    <div class="form-group row">
-      <label class="col-2 col-form-label">&nbsp;</label>
-      <div class="input-group col-md-8">
-        <button [disabled]="!loginUserForm.valid" type="submit" class="btn btn-outline-primary">
-          Log in
-        </button>
-      </div>
+    <div class="form-content">
+      <form [formGroup]="loginUserForm" (ngSubmit)="loginUser()">
+        <div class="row">
+          <div class="col-md-6">
+              <div class="form-group" >
+                  <input  type="text"
+                          class="form-control"
+                          placeholder="Email address *"
+                          [ngClass]="{'is-invalid':!loginUserForm.get('email').valid && loginUserForm.get('email').touched}"
+                          formControlName="email"/>
+              </div>
+              <div class="form-group">
+                  <input  type="password"
+                          class="form-control"
+                          placeholder="Password *"
+                          [ngClass]="{'is-invalid':!loginUserForm.get('password').valid && loginUserForm.get('password').touched}"
+                          formControlName="password"/>
+                  <small *ngIf="!loginUserForm.get('password').valid && loginUserForm.get('password').touched" class="form-text text-center text-muted">
+                    Your password must be 8-20 characters long, contain letters and numbers and the first letter has to be uppercase.
+                  </small>
+
+                <div *ngIf="userNotValid"  class="form-control-feeback text-danger text-center">
+                  invalid email or password
+                </div>
+                <div *ngIf="socialMedia"  class="form-control-feeback text-danger text-center">
+                  At the moment authentication with Social networks is under development, try by Email
+                </div>
+            </div>
+          </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <button type="submit"
+                        class="btnSubmit"
+                        [disabled]="!loginUserForm.valid">Email</button>
+              </div>
+              <div class="form-group">
+                <button (click)="signInSocialMedia(true)" type="button" class="btnFacebook ">Facebook</button>
+              </div>
+
+              <div class="form-group">
+              <button (click)="signInSocialMedia(false)" type="button" class="btnGoogle ">Google</button>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
-  </form>
-  <%if (service === 'firebase') {%><button type="button" (click)="signInSocialMedia(true)" class="btn btn-primary btn-block">Sign Up with Facebook</button>
-  <button type="button" (click)="signInSocialMedia(false)" class="btn btn-danger btn-block">Sign Up with Google</button><%}%>
+  </div>
 </div>
