@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   loginUserForm: FormGroup;
-  userNotValid: Boolean;
+  userNotValid: boolean;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -31,12 +31,17 @@ export class LoginComponent implements OnInit {
   ngOnInit() { }
 
   loginUser() {<% if (service === 'auth0')  { %>
-    this.authenticationService.loginUser(this.loginUserForm.value).subscribe((user: any) => {
-      this.authenticationService.getAuth0UserInfo(user.access_token).subscribe((userInfo: any) => {
-        user.user = userInfo.name;
-        user.email = userInfo.email;
+    this.authenticationService.loginUser(this.loginUserForm.value).subscribe((token: any) => {
+      this.authenticationService.getAuth0UserInfo(token.access_token).subscribe((user: any) => {
         if (isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('User', JSON.stringify(user));
+          localStorage.setItem('User', JSON.stringify({
+            user: user.name,
+            email: user.email,
+            refresh_token: token.refresh_token,
+            token: token.access_token,
+            token_id: token.id_token,
+            id: user.sub
+          }));
           this.communicationComponentsService.sendUser(true);
           this.router.navigate(['/']);
         }

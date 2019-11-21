@@ -55,13 +55,18 @@ export class RegisterComponent implements OnInit {
 
   createUser() {<% if (service === 'auth0')  { %>
     this.authenticationService.getAuth0Token().subscribe((token: any) => {
-      this.authenticationService.createUser(this.createUserForm.value ,token).subscribe((user: any) => {
+      this.authenticationService.createUser(this.createUserForm.value, token).subscribe((user: any) => {
         if (user) {
-          this.authenticationService.loginUser(this.createUserForm.value).subscribe((Access_Token: any) => {
-            Access_Token.user = this.createUserForm.get('firstName').value;
-            Access_Token.email = this.createUserForm.get('email').value;
+          this.authenticationService.loginUser(this.createUserForm.value).subscribe((AccessToken: any) => {
             if (isPlatformBrowser(this.platformId)) {
-              localStorage.setItem('User', JSON.stringify(Access_Token));
+              localStorage.setItem('User', JSON.stringify({
+                user: user.name,
+                email: user.email,
+                refresh_token: AccessToken.refresh_token,
+                token: AccessToken.access_token,
+                token_id: AccessToken.id_token,
+                id: user.user_id
+              }));
               this.communicationComponentsService.sendUser(true);
               this.router.navigate(['/']);
             }
