@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommunicationComponentsService } from './shared/services/communication-components.service';
 import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private communicationComponentsService: CommunicationComponentsService,
+    private router: Router,
     @Inject(PLATFORM_ID) private platformId
   ) {
     this.user = false;
@@ -26,7 +28,7 @@ export class AppComponent implements OnInit {
         pages: [
           {title: 'Register', path: '/auth/register'},
           {title: 'LogIn', path: '/auth/login'},
-          {title: 'Change Password', path: '/auth/forgot-password'},
+          {title: 'Forgot Password', path: '/auth/forgot-password'},
         ]
       },<% } %>
       <% if (imports && imports.awsStorage) {-%>{
@@ -61,6 +63,7 @@ export class AppComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem('User')) {
         localStorage.removeItem('User');
+        this.router.navigate(['/']);
       }
     }
     this.isLogin();
