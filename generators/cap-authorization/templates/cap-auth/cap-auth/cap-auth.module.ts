@@ -4,6 +4,7 @@ import { RegisterComponent } from './register/register.component';
 import { AuthRoutingModule } from './cap-auth-routing.module';
 import { LoginComponent } from './login/login.component';
 import { ForgotComponent } from './forgot/forgot.component';
+import { ProfileComponent } from './profile/profile.component';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
@@ -16,12 +17,14 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
   declarations: [
     RegisterComponent,
     LoginComponent,
-    ForgotComponent
+    ForgotComponent,
+    ProfileComponent
   ],
   entryComponents:[
     RegisterComponent,
     LoginComponent,
-    ForgotComponent
+    ForgotComponent,
+    ProfileComponent
   ]
 })
 export class CapAuthModule { }
