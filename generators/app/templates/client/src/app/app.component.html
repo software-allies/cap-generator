@@ -15,8 +15,9 @@
             <a *ngIf="!user || module.reference === 'Aws'" class="dropdown-item" routerLink="{{page.path}}">{{page.title}}</a>
           </span>
           <%if (imports && imports.auth) {%>
-          <a *ngIf="user && module.module === 'Authentication'" class="dropdown-item" routerLink="/">{{userName}}</a>
-          <a *ngIf="user && module.module === 'Authentication'" class="dropdown-item" (click)="logOutUser()">Log Out</a>
+            <a *ngIf="user && module.module === 'Authentication'" class="dropdown-item" routerLink="/">{{userName}}</a>
+            <a *ngIf="user && module.module === 'Authentication'" class="dropdown-item" routerLink="/auth/profile">Profile</a>
+            <a *ngIf="user && module.module === 'Authentication'" class="dropdown-item" (click)="logOutUser()">Log Out</a>
           <%}%>
         </div>
       </li>
