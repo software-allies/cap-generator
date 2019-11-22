@@ -16,18 +16,98 @@ module.exports = class extends Generator {
     `);
     const prompts = [
       {
-        type: 'input',
-        name: 'authApiUrl',
-        message: 'Set your apiUrl: ',
-        default: '<auth-apiUrl>'
+        type: 'list',
+        name: 'modules',
+        message: 'Select the service you want to use to authenticate users:',
+        choices: [
+          {
+            name: `Firebase`,
+            value: 'firebase'
+          },
+          {
+            name: `Auth0`,
+            value: 'auth0'
+          }
+        ],
       },
       {
         type: 'input',
-        name: 'authLoginEndPoint',
-        message: 'Set your loginEndPoint: ',
-        default: '<auth-login-end-point>'
-      }
-    ]
+        name: 'AUTH0_CLIENT_ID',
+        message: 'Set your Auth0 Client ID: ',
+        default: '',
+        when: ctx => ctx.modules === 'auth0'
+      },
+      {
+        type: 'input',
+        name: 'AUTH0_CLIENT_SECRET',
+        message: 'Set your Auth0 Client Secret: ',
+        default: '',
+        when: ctx => ctx.modules === 'auth0'
+      },
+      {
+        type: 'input',
+        name: 'AUTH0_DOMAIN',
+        message: 'Set your Auth0 Domain: ',
+        default: '',
+        when: ctx => ctx.modules === 'auth0'
+      },
+      {
+        type: 'input',
+        name: 'apiKey',
+        message: 'Set your ApiKey: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'authDomain',
+        message: 'Set your Auth Domain: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'databaseURL',
+        message: 'Set your data base URL: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'projectId',
+        message: 'Set your Project ID: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'storageBucket',
+        message: 'Set your storage bucket: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'senderId',
+        message: 'Set your message sender ID: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'appId',
+        message: 'Set your app ID: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'measurementId',
+        message: 'Set your measurement ID: ',
+        default: '',
+        when: ctx => ctx.modules === 'firebase'
+      },
+    ];
 
     return this.prompt(prompts).then(props => {
       // To access props later use this.props.someAnswer;
@@ -49,18 +129,47 @@ module.exports = class extends Generator {
     const newText =  file.getText()
       .replace(apiUrlRgx, `apiUrl: '${this.props.authApiUrl}'`)
       .replace(endpointRgx, `loginEndpoint: '${this.props.authLoginEndPoint}'`)
-    
+
     file.removeText(file.getPos(), file.getEnd()); // Remove all the text since we already have the text formed with the correct values
 
     file.insertText(0, newText); // Insert new text
-    
+
     file.saveSync(); // Save all changes
 
+    if (this.props.modules === 'auth0'){
+      this.fs.write(
+        this.destinationPath(`${this.options.name}/src/environments/environment.ts`),
+        `export const environment = {
+          production: false,
+          AUTH0_DOMAIN: '${this.props.AUTH0_DOMAIN}',
+          AUTH0_CLIENT_ID: '${this.props.AUTH0_CLIENT_ID}',
+          AUTH0_CLIENT_SECRET: '${this.props.AUTH0_CLIENT_SECRET}'
+        };`
+      )
+    } else if (this.props.modules = 'firebase'){
+      this.fs.write(
+        this.destinationPath(`${this.options.name}/src/environments/environment.ts`),
+        `export const environment = {
+          production: false,
+          firebase: {
+            apiKey: '${this.props.apiKey}',
+            authDomain: '${this.props.authDomain}',
+            databaseURL: '${this.props.databaseURL}',
+            projectId: '${this.props.projectId}',
+            storageBucket: '${this.props.storageBucket}',
+            messagingSenderId: '${this.props.senderId}',
+            appId: '${this.props.appId}',
+            measurementId: '${this.props.measurementId}'
+          }
+        };`
+      )
+    }
     // Finally just copy the pages
     this.fs.copyTpl(
-      this.templatePath('cap-auth-module/pages/**'),
-      this.destinationPath(`${this.options.name}/src/pages/`), {
-        name: this.options.name
+      this.templatePath('cap-auth/**'),
+      this.destinationPath(`${this.options.name}/src/app/modules/`), {
+        name: this.options.name,
+        service: this.props.modules
       }
     );
   }

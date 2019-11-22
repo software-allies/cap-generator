@@ -1,65 +1,71 @@
-import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-
-import { HomePage } from '../pages/home/home';
-<% if (imports && imports.awsStorage) { -%>
-import { PhotoListPage } from '../pages/photo-list/photo-list';
-import { PhotoUploadPage } from '../pages/photo-upload/photo-upload';
-<% } -%>
-<% if (imports && imports.auth) { -%>
-import { ChangePasswordPage } from './../pages/change-password/change-password';
-import { RegisterPage } from './../pages/register/register';
-import { LoginPage } from './../pages/login/login';
-<% } -%>
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommunicationComponentsService } from './shared/services/communication-components.service';
+import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
-  templateUrl: 'app.html'
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  @ViewChild(Nav) nav: Nav;
+export class AppComponent implements OnInit {
 
-  rootPage: any = HomePage;
-
-  pages: Array<{title: string, component: any}>;
+  modules: Array<{module: string, reference: string, pages: Array<{title: string, path: string}>}>;
+  user: boolean;
+  userName: string;
 
   constructor(
-    public platform: Platform, 
-    public statusBar: StatusBar, 
-    public splashScreen: SplashScreen,
-    ) {
-
-    this.initializeApp();
-
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage }<%- imports ?  ',' : '' -%>
-      <% if (imports && imports.awsStorage)  { %>
-      { title: 'photos', component: PhotoListPage },
-      { title: 'upload', component: PhotoUploadPage }<%- imports.auth ?  ',' : '' -%>
-      <% } -%>
-      <% if (imports && imports.auth)  { %>
-      { title: 'Login', component: LoginPage },
-      { title: 'Register', component: RegisterPage },
-      { title: 'Change Password', component: ChangePasswordPage }
-      <% } %>
+    private communicationComponentsService: CommunicationComponentsService,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId
+  ) {
+    this.user = false;
+    this.userName = null;
+    this.modules = [
+      <% if (imports && imports.auth){ %>{
+        module: 'Authentication',
+        reference: 'Auth',
+        pages: [
+          {title: 'Register', path: '/auth/register'},
+          {title: 'LogIn', path: '/auth/login'},
+          {title: 'Forgot Password', path: '/auth/forgot-password'},
+        ]
+      },<% } %>
+      <% if (imports && imports.awsStorage) {-%>{
+        module: 'Amazon Web Services',
+        reference: 'Aws',
+        pages: [
+          {title: 'Upload Images', path: '/aws/image-upload'},
+          {title: 'Upload Files', path: '/aws/file-upload'}
+        ]
+      }<% } %>
     ];
+    this.isLogin();
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-    });
+  ngOnInit() {
+    <% if (imports && imports.auth){ %>
+    this.communicationComponentsService.sendMessageObserbable.subscribe((user: boolean) => {
+      if (user) {
+        this.isLogin();
+      }
+    });<%}%>
   }
 
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+  isLogin() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.userName = localStorage.getItem('User') ? JSON.parse(localStorage.getItem('User')).user : null;
+      this.user = this.userName ? true : false;
+    }
   }
 
+  logOutUser() {
+    if (isPlatformBrowser(this.platformId)) {
+      if (localStorage.getItem('User')) {
+        localStorage.removeItem('User');
+        this.router.navigate(['/']);
+      }
+    }
+    this.isLogin();
+  }
 }
