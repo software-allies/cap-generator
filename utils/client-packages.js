@@ -22,6 +22,14 @@ module.exports = [
     short: 'CAP Auth'
   },
   {
+    name: 'CAP-Live-Chat',
+    value: {
+      name: 'cap-live-chat',
+      version: '0.0.1'
+    },
+    short: 'CAP LiveChat'
+  },
+  {
     name: 'CAP-Messages',
     value: {
       name: 'cap-messages',
