@@ -80,7 +80,8 @@ module.exports = class extends Generator {
           });
           modules['imports'] = {
             auth: this.props.modules.findIndex( m => m.name === 'cap-authorization') >= 0,
-            awsStorage: this.props.modules.findIndex( m => m.name === 'cap-storage-aws') >= 0
+            awsStorage: this.props.modules.findIndex( m => m.name === 'cap-storage-aws') >= 0,
+            liveChat: this.props.modules.findIndex(m => m.name === 'cap-live-chat' )>= 0
           }
         }
 
