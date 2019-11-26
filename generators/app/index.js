@@ -19,32 +19,109 @@ module.exports = class extends Generator {
 
     const prompts = [
       {
-        type: 'list',
-        name: 'type',
-        message: 'What type of app are you going to build?',
-        choices: [
-          {
-            name: `api (Using ${chalk.red('Loopback')})`,
-            value: 'api'
-          },
-          {
-            name: `client (Using ${chalk.red('Angular')})`,
-            value: 'client'
-          }
-        ]
-      },
-      {
         type: 'input',
         name: 'name',
         message: 'What\'s the name of your application?',
         default: this.appname
       },
       {
+        type: 'list',
+        name: 'authService',
+        message: 'Choose an authentication service',
+        choices: [
+          {
+            name: `Auth0`,
+            value: 'auth0'
+          },
+          {
+            name: `Firebase`,
+            value: 'firebase'
+          }
+        ]
+      },
+      {
+        type: 'input',
+        name: 'AUTH0_CLIENT_ID',
+        message: 'Set your Auth0 Client ID: ',
+        default: '',
+        when: ctx => ctx.authService === 'auth0'
+      },
+      {
+        type: 'input',
+        name: 'AUTH0_CLIENT_SECRET',
+        message: 'Set your Auth0 Client Secret: ',
+        default: '',
+        when: ctx => ctx.authService === 'auth0'
+      },
+      {
+        type: 'input',
+        name: 'AUTH0_DOMAIN',
+        message: 'Set your Auth0 Domain: ',
+        default: '',
+        when: ctx => ctx.authService === 'auth0'
+      },
+      {
+        type: 'input',
+        name: 'apiKey',
+        message: 'Set your ApiKey: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'authDomain',
+        message: 'Set your Auth Domain: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'databaseURL',
+        message: 'Set your data base URL: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'projectId',
+        message: 'Set your Project ID: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'storageBucket',
+        message: 'Set your storage bucket: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'senderId',
+        message: 'Set your message sender ID: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'appId',
+        message: 'Set your app ID: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'measurementId',
+        message: 'Set your measurement ID: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
         type: 'checkbox',
         name: 'modules',
         message: 'Select the modules you want to include:',
         choices: clientPackages,
-        when: ctx => ctx.type === 'client'
+        // when: ctx => ctx.type === 'client'
       }
     ];
 
@@ -60,7 +137,32 @@ module.exports = class extends Generator {
    * @returns
    */
   writing() {
-    switch (this.props.type) {
+    const modules = {}
+    modules['packages'] = []
+    // Create an array of string with format: ['"package": "0.0.1"', '"package2": "0.0.1"', ...] so we can join it to write it to templates/client/package.json
+    if (this.props.modules.length) {
+      modules['packages'] = this.props.modules.map( (m, i) => {
+        return `"${m.name}": "${m.version}"${i + 1 === this.props.modules.length ? '' : ','}`
+      });
+      modules['imports'] = {
+        // auth: this.props.modules.findIndex( m => m.name === 'cap-authorization') >= 0,
+        awsStorage: this.props.modules.findIndex( m => m.name === 'cap-storage-aws') >= 0,
+        liveChat: this.props.modules.findIndex(m => m.name === 'cap-live-chat' )>= 0
+      }
+    }
+
+    // Copy template
+    this.fs.copyTpl(
+      this.templatePath('client/**'),
+      this.destinationPath(this.props.name), {
+        name: this.props.name,
+        authService: this.props.authService,
+        deps: modules.packages.join('\n\t\t'),
+        imports: modules.imports,
+        credentials: this.props
+      }
+    );
+    /*switch (this.props.type) {
       case 'api': {
         this.fs.copyTpl(
           this.templatePath('api/**'),
@@ -97,7 +199,7 @@ module.exports = class extends Generator {
         break;
       }
       // No default
-    }
+    }*/
   }
 
   /**
