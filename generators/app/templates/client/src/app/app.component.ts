@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommunicationComponentsService } from './shared/services/communication-components.service';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthenticationService } from './modules/cap-auth/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -10,41 +11,28 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
 
-  modules: Array<{module: string, reference: string, pages: Array<{title: string, path: string}>}>;
+  authModule: Array<{ title: string, path: string }>;
   user: boolean;
   userName: string;
 
   constructor(
     private communicationComponentsService: CommunicationComponentsService,
+    private authenticationService: AuthenticationService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId
   ) {
     this.user = false;
     this.userName = null;
-    this.modules = [
-      <% if (imports && imports.auth){ %>{
-        module: 'Authentication',
-        reference: 'Auth',
-        pages: [
-          {title: 'Register', path: '/auth/register'},
-          {title: 'LogIn', path: '/auth/login'},
-          {title: 'Forgot Password', path: '/auth/forgot-password'},
-        ]
-      },<% } %>
-      <% if (imports && imports.awsStorage) {-%>{
-        module: 'Amazon Web Services',
-        reference: 'Aws',
-        pages: [
-          {title: 'Upload Images', path: '/aws/image-upload'},
-          {title: 'Upload Files', path: '/aws/file-upload'}
-        ]
-      }<% } %>
+    this.authModule = [
+      {title: 'Register', path: '/register'},
+      {title: 'LogIn', path: '/login'},
+      {title: 'Forgot Password', path: '/forgot-password'},
     ];
     this.isLogin();
   }
 
   ngOnInit() {
-    <% if (imports && imports.auth){ %>
+    <% if (authService === 'auth0'){ %>
     this.communicationComponentsService.sendMessageObserbable.subscribe((user: boolean) => {
       if (user) {
         this.isLogin();
@@ -60,12 +48,8 @@ export class AppComponent implements OnInit {
   }
 
   logOutUser() {
-    if (isPlatformBrowser(this.platformId)) {
-      if (localStorage.getItem('User')) {
-        localStorage.removeItem('User');
-        this.router.navigate(['/']);
-      }
-    }
+    this.authenticationService.signOut();
     this.isLogin();
+    this.router.navigate(['/']);
   }
 }
