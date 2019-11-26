@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded" >
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapseNavBAr" aria-controls="navbarsExample10" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -7,24 +7,24 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/">Home</a>
       </li>
-      <li class="nav-item dropdown" *ngFor="let module of modules">
-        <a id="sign-up-or-login-link" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-          aria-haspopup="true" aria-expanded="false"> {{module.module}} </a>
-        <div class="dropdown-menu">
-          <span *ngFor="let page of module.pages">
-            <a *ngIf="!user || module.reference === 'Aws'" class="dropdown-item" routerLink="{{page.path}}">{{page.title}}</a>
-          </span>
-          <%if (imports && imports.auth) {%>
-            <a *ngIf="user && module.module === 'Authentication'" class="dropdown-item" routerLink="/">{{userName}}</a>
-            <a *ngIf="user && module.module === 'Authentication'" class="dropdown-item" routerLink="/auth/profile">Profile</a>
-            <a *ngIf="user && module.module === 'Authentication'" class="dropdown-item" (click)="logOutUser()">Log Out</a>
-          <%}%>
+    </ul>
+  </div>
+  <div class="collapse navbar-collapse justify-content-md-end mr-5" id="collapseNavBAr">
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown">
+        <a *ngIf="user" class="nav-link dropdown-toggle" id="dropdown10" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{userName}}</a>
+        <a *ngIf="!user" class="nav-link dropdown-toggle" id="dropdown10" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sign In</a>
+        <div *ngIf="!user" class="dropdown-menu" aria-labelledby="dropdown10">
+          <a *ngFor="let module of authModule" class="dropdown-item" routerLink="{{module.path}}">{{module.title}}</a>
+        </div>
+        <div *ngIf="user" class="dropdown-menu" aria-labelledby="dropdown10">
+          <a class="dropdown-item" routerLink="/profile">Profile</a>
+          <a class="dropdown-item" (click)="logOutUser()" >Log out</a>
         </div>
       </li>
     </ul>
   </div>
 </nav>
-
 <div class="mt-5">
   <router-outlet></router-outlet>
 </div>
