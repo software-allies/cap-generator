@@ -13,14 +13,14 @@ module.exports = [
     },
     short: 'CAP AWS'
   },
-  {
+  /*{
     name: 'CAP-Auth-Module',
     value: {
       name: 'cap-authorization',
       version: '0.0.2'
     },
     short: 'CAP Auth'
-  },
+  },*/
   {
     name: 'CAP-Live-Chat',
     value: {
