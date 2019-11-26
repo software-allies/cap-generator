@@ -59,7 +59,7 @@ module.exports = class extends Generator {
    * @returns
    */
   writing() {
-    const tsParser = new Parser()
+    /*const tsParser = new Parser()
     tsParser.addExistingSourceFile(this.destinationPath(`${this.options.name}/src/app/app.module.ts`)); // First add the file to the virtual folder the plugin creates
     const file = tsParser.getSourceFile(this.destinationPath(`${this.options.name}/src/app/app.module.ts`)); // Then we read and parse that file to AST
     const bucketRgx = /bucket: 'aws-bucket'/g
@@ -74,12 +74,9 @@ module.exports = class extends Generator {
       .replace(regionRgx, `region: '${this.props.awsRegion}'`)
       .replace(folderRgx, `folder: '${this.props.awsFolder}'`)
 
-
     file.removeText(file.getPos(), file.getEnd()); // Remove all the text since we already have the text formed with the correct values
-
     file.insertText(0, newText); // Insert new text
-
-    file.saveSync(); // Save all changes
+    file.saveSync(); // Save all changes*/
 
     // Finally just copy the pages
     this.fs.copyTpl(
