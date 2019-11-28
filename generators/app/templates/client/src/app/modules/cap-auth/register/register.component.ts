@@ -15,6 +15,7 @@ export class RegisterComponent implements OnInit {
   createUserForm: FormGroup;
   existingUser: boolean;
   socialMedia: boolean;
+  validatedForm: boolean;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -31,74 +32,70 @@ export class RegisterComponent implements OnInit {
       'company': new FormControl('', [Validators.required, Validators.minLength(2)]),
     });
     this.socialMedia = false;
+    this.validatedForm = false;
   }
 
   ngOnInit() { }
 
-  termsAndConditions(control: FormControl): { [s: string]: boolean } {
-    if (control.value) {
+  capitalLetter(control: FormControl): { [s: string]: boolean } {
+    const letterAscii = control.value.charCodeAt(0);
+    if (control.value && letterAscii > 64 && letterAscii < 91) {
       return null;
     }
     return {
-      termsAndConditions: true
+      capitalLetter: true
     };
   }
 
-  capitalLetter(control: FormControl): { [s: string]: boolean } {
-    const letter = control.value.charAt(0);
-    if (control.value && !(letter === control.value.charAt(0).toUpperCase())) {
-      return {
-        capitalLetter: true
-      };
+  createUser() {
+    if (this.createUserForm.valid) {<% if (authService === 'auth0') { %>
+      this.authenticationService.getAuth0Token().subscribe((token: any) => {
+        this.authenticationService.createUser(this.createUserForm.value, token).subscribe((user: any) => {
+          if (user) {
+            this.authenticationService.loginUser(this.createUserForm.value).subscribe((AccessToken: any) => {
+              if (isPlatformBrowser(this.platformId)) {
+                localStorage.setItem('User', JSON.stringify({
+                  user: user.name,
+                  email: user.email,
+                  refresh_token: AccessToken.refresh_token,
+                  token: AccessToken.access_token,
+                  token_id: AccessToken.id_token,
+                  id: user.user_id
+                }));
+                this.communicationComponentsService.sendUser(true);
+                this.router.navigate(['/']);
+              }
+            });
+          }
+        }, (error) => {
+          if (error.status === 409) {
+            this.existingUser = true;
+          }
+        });
+      });<% } %>
+        <% if (authService === 'firebase') {%>
+          this.authenticationService.createUser(this.createUserForm.value)
+            .then((response) => {
+              response.user.getIdTokenResult().then((res) => {
+                if (isPlatformBrowser(this.platformId)) {
+                  localStorage.setItem('User', JSON.stringify({
+                    user: response.user.email.split('@', 1)[0],
+                    email: response.user.email,
+                    refresh_token: response.user.refreshToken,
+                    token: res.token
+                  }));
+                  this.communicationComponentsService.sendUser(true);
+                  this.router.navigate(['/']);
+                }
+              });
+            }).catch(error => this.existingUser = true);<% } %>
+    } else {
+      this.validatedForm = true;
     }
-    return null;
-  }
-
-  createUser() {<% if (authService === 'auth0')  { %>
-    this.authenticationService.getAuth0Token().subscribe((token: any) => {
-      this.authenticationService.createUser(this.createUserForm.value, token).subscribe((user: any) => {
-        if (user) {
-          this.authenticationService.loginUser(this.createUserForm.value).subscribe((AccessToken: any) => {
-            if (isPlatformBrowser(this.platformId)) {
-              localStorage.setItem('User', JSON.stringify({
-                user: user.name,
-                email: user.email,
-                refresh_token: AccessToken.refresh_token,
-                token: AccessToken.access_token,
-                token_id: AccessToken.id_token,
-                id: user.user_id
-              }));
-              this.communicationComponentsService.sendUser(true);
-              this.router.navigate(['/']);
-            }
-          });
-        }
-      }, (error) => {
-        if (error.status === 409) {
-          this.existingUser = true;
-        }
-      });
-    });<% } %>
-    <% if (authService === 'firebase')  { %>
-    this.authenticationService.createUser(this.createUserForm.value)
-    .then((response) => {
-      response.user.getIdTokenResult().then((res) => {
-        if (isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('User', JSON.stringify({
-            user: response.user.email.split('@', 1)[0],
-            email: response.user.email,
-            refresh_token: response.user.refreshToken,
-            token: res.token
-          }));
-          this.communicationComponentsService.sendUser(true);
-          this.router.navigate(['/']);
-        }
-      });
-    }).catch(error => this.existingUser = true);<% } %>
   }
 
   signUpSocialMedia(socialMedia: boolean) {
-    <%if(authService==='firebase'){%>if (socialMedia) {
+    <%if (authService === 'firebase') {%>if (socialMedia) {
       this.authenticationService.authWithFacebook().then((response) => {
         response.user.getIdTokenResult().then((res) => {
           if (isPlatformBrowser(this.platformId)) {
@@ -115,7 +112,7 @@ export class RegisterComponent implements OnInit {
         });
       }).catch(error => this.existingUser = true);
     } else {
-      this.authenticationService.authWithGoogle().then((response) =>  {
+      this.authenticationService.authWithGoogle().then((response) => {
         response.user.getIdTokenResult().then((res) => {
           if (isPlatformBrowser(this.platformId)) {
             localStorage.setItem('User', JSON.stringify({
@@ -131,10 +128,10 @@ export class RegisterComponent implements OnInit {
         });
       }).catch(error => this.existingUser = true);
     }<%}%>
-    <%if(authService==='auth0'){%>this.socialMedia = true;
-    setTimeout(() => {
-      this.socialMedia = false;
-    }, 3000);<%}%>
+      <%if(authService === 'auth0') {%>this.socialMedia = true;
+        setTimeout(() => {
+          this.socialMedia = false;
+        }, 3000);<%}%>
   }
 
 }
