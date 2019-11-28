@@ -15,7 +15,10 @@ export class ProfileComponent implements OnInit {
   userUpdated: boolean;
   user: any;
   errorUpdate: boolean;
-  <%-authService==='auth0' ? "userId: string;": ""%>
+  verifiedUser: boolean;
+  emailSend: boolean;
+  errorEmailSend: boolean;
+  <%-authService==='auth0' ? "userId: string;": ""-%>
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -27,31 +30,57 @@ export class ProfileComponent implements OnInit {
     }<% } %>
     this.userUpdated = false;
     this.errorUpdate = false;
+    this.verifiedUser = false;
+    this.emailSend = false;
+    this.errorEmailSend = false;
   }
 
   ngOnInit() {
     this.getProfile();
   }
 
+
+  emailToVerifySent() {<% if (authService === 'auth0') { %>
+    this.authenticationService.getAuth0Token().subscribe((token: string) => {
+      this.authenticationService.verifyEmail(this.userId, token).subscribe((status: any) => {
+        if (status) {
+          this.emailSend = true;
+        }
+      }, (error => this.errorEmailSend = true));
+    });<% } %>
+    <% if (authService === 'firebase') { %>this.authenticationService.verifyEmail();
+    this.emailSend = true;<% } %>
+  }
+
+  goToHome() {
+    this.router.navigate(['/']);
+  }
+
   getProfile() {<% if (authService === 'auth0') { %>
     this.authenticationService.getAuth0Token().subscribe((token: string) => {
       this.authenticationService.getUser(this.userId, token).subscribe((user: any) => {
-        if (user) {
+        if (user && user.email_verified) {
           this.user = user;
           this.profileUserForm = new FormGroup({
             'name': new FormControl(user.name, []),
             'family_name': new FormControl(user.family_name, []),
             'nickname': new FormControl(user.nickname, []),
           });
+        } else if (!user.email_verified) {
+          this.verifiedUser = true;
         }
       }, (error => this.router.navigate(['/'])));
     });<% } %>
     <% if (authService === 'firebase') { %>this.authenticationService.currentUser.subscribe((user: any) => {
       if (user) {
-        this.user = user;
-        this.profileUserForm = new FormGroup({
-          'displayName': new FormControl(user.displayName, [Validators.required])
-        });
+        if (user.emailVerified) {
+          this.user = user;
+          this.profileUserForm = new FormGroup({
+            'displayName': new FormControl(user.displayName, [Validators.required])
+          });
+        } else {
+          this.verifiedUser = true;
+        }
       } else {
         this.router.navigate(['/']);
       }
