@@ -150,7 +150,7 @@ export class AuthenticationService {
     : Promise.resolve()
   <%}%>
 
-  changePassword(user: any)<%-authService==='firebase' ? ": Promise<void>" : ""%> { <% if(authService==='auth0'){ %>
+  changePassword(user: any)<%-authService==='firebase' ? ": Promise<void>" : ""%> {<% if(authService==='auth0'){ %>
     const User = {
       email: `${user.email}`,
       connection: 'Username-Password-Authentication',
@@ -162,6 +162,20 @@ export class AuthenticationService {
     };
     return this.http.post(`${this.configService.domain}/dbconnections/change_password`, User, httpOptions);<%}%>
     <% if(authService==='firebase'){ %> return this.afAuth.auth.sendPasswordResetEmail(user.email);<%}%>
+  }
+
+  verifyEmail(<%-authService==='auth0' ? "userId: string, token: string" : ""%>)<%-authService==='firebase' ? ": Promise<void>" : ""%> {<% if(authService==='auth0'){ %>
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    const User = {
+      user_id: `${userId}`,
+    };
+    return this.http.post(`${this.configService.domain}/api/v2/jobs/verification-email`, User, httpOptions);<%}%>
+    <% if(authService==='firebase'){ %>return this.afAuth.auth.currentUser.sendEmailVerification();<%}%>
   }
 
 }
