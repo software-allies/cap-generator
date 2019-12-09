@@ -13,14 +13,6 @@ module.exports = [
     },
     short: 'CAP AWS'
   },
-  /*{
-    name: 'CAP-Auth-Module',
-    value: {
-      name: 'cap-authorization',
-      version: '0.0.2'
-    },
-    short: 'CAP Auth'
-  },*/
   {
     name: 'CAP-Live-Chat',
     value: {
@@ -28,21 +20,13 @@ module.exports = [
       version: '0.0.1'
     },
     short: 'CAP LiveChat'
-  },
-  {
-    name: 'CAP-Messages',
-    value: {
-      name: 'cap-messages',
-      version: '0.0.1'
-    },
-    short: 'CAP Messages'
-  },
-  {
-    name: 'CAP-Push-Notification',
-    value: {
-      name: 'cap-push-notifications',
-      version: '0.0.1'
-    },
-    short: 'CAP Push'
   }
+    /*{
+    name: 'CAP-Auth-Module',
+    value: {
+      name: 'cap-authorization',
+      version: '0.0.2'
+    },
+    short: 'CAP Auth'
+  },*/
 ];
