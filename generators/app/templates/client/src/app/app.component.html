@@ -26,5 +26,8 @@
   </div>
 </nav>
 <div class="mt-5">
+  <% if (imports && imports.liveChat) { %>
+  <cap-live-chat-sf></cap-live-chat-sf>
+  <% } %>
   <router-outlet></router-outlet>
 </div>
