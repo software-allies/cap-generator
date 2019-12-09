@@ -13,6 +13,7 @@ export class ForgotComponent implements OnInit {
   changeform: FormGroup;
   emailSend: boolean;
   errorEmailSend: boolean;
+  validatedForm: boolean;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -20,6 +21,7 @@ export class ForgotComponent implements OnInit {
   ) {
     this.emailSend = false;
     this.errorEmailSend = false;
+    this.validatedForm = false;
   }
   ngOnInit() {
     this.changeform = new FormGroup({
@@ -39,6 +41,8 @@ export class ForgotComponent implements OnInit {
       <% if (authService === 'firebase') { %>this.authenticationService.changePassword(this.changeform.value).then((user: any) => {
         this.emailSend = true;
       }).catch(error => this.errorEmailSend = true);<% } %>
+    } else {
+      this.validatedForm = true;
     }
   }
 
