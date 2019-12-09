@@ -29,7 +29,6 @@ export class RegisterComponent implements OnInit {
       'password': new FormControl('', [Validators.required, Validators.minLength(8), this.capitalLetter]),
       'firstName': new FormControl('', [Validators.required, Validators.minLength(2)]),
       'lastName': new FormControl('', [Validators.required, Validators.minLength(2)]),
-      'company': new FormControl('', [Validators.required, Validators.minLength(2)]),
     });
     this.socialMedia = false;
     this.validatedForm = false;
@@ -73,22 +72,25 @@ export class RegisterComponent implements OnInit {
           }
         });
       });<% } %>
-        <% if (authService === 'firebase') {%>
-          this.authenticationService.createUser(this.createUserForm.value)
-            .then((response) => {
-              response.user.getIdTokenResult().then((res) => {
-                if (isPlatformBrowser(this.platformId)) {
-                  localStorage.setItem('User', JSON.stringify({
-                    user: response.user.email.split('@', 1)[0],
-                    email: response.user.email,
-                    refresh_token: response.user.refreshToken,
-                    token: res.token
-                  }));
-                  this.communicationComponentsService.sendUser(true);
-                  this.router.navigate(['/']);
-                }
-              });
-            }).catch(error => this.existingUser = true);<% } %>
+      <% if (authService === 'firebase') {%>
+        this.authenticationService.createUser(this.createUserForm.value)
+        .then((response) => {
+          response.user.getIdTokenResult().then((res) => {
+            if (isPlatformBrowser(this.platformId)) {
+              localStorage.setItem('User', JSON.stringify({
+                user: response.user.email.split('@', 1)[0],
+                email: response.user.email,
+                refresh_token: response.user.refreshToken,
+                token: res.token
+              }));
+            }
+          }).then(() => {
+            response.user.sendEmailVerification().then(res => {
+              this.communicationComponentsService.sendUser(true);
+              this.router.navigate(['/']);
+            });
+          });
+        }).catch(error => this.existingUser = true);<% } %>
     } else {
       this.validatedForm = true;
     }
