@@ -18,6 +18,7 @@ export class ProfileComponent implements OnInit {
   verifiedUser: boolean;
   emailSend: boolean;
   errorEmailSend: boolean;
+  validatedForm: boolean;
   <%-authService==='auth0' ? "userId: string;": ""-%>
 
   constructor(
@@ -33,6 +34,7 @@ export class ProfileComponent implements OnInit {
     this.verifiedUser = false;
     this.emailSend = false;
     this.errorEmailSend = false;
+    this.validatedForm = false;
   }
 
   ngOnInit() {
@@ -62,9 +64,9 @@ export class ProfileComponent implements OnInit {
         if (user && user.email_verified) {
           this.user = user;
           this.profileUserForm = new FormGroup({
-            'name': new FormControl(user.name, []),
-            'family_name': new FormControl(user.family_name, []),
-            'nickname': new FormControl(user.nickname, []),
+            'name': new FormControl(user.name, [Validators.required]),
+            'family_name': new FormControl(user.family_name, [Validators.required]),
+            'nickname': new FormControl(user.nickname, [Validators.required]),
           });
         } else if (!user.email_verified) {
           this.verifiedUser = true;
@@ -87,34 +89,38 @@ export class ProfileComponent implements OnInit {
     });<% } %>
   }
 
-  editProfile() {<% if (authService === 'auth0') { %>
-    this.authenticationService.getAuth0Token().subscribe((token: string) => {
-      this.authenticationService.updateProfile(this.profileUserForm.value, this.userId, token).subscribe((userUpdated: any) => {
-        if (userUpdated) {
-          this.user = userUpdated;
-          this.userUpdated = true;
+  editProfile() {
+    if (this.profileUserForm.valid) {<% if (authService === 'auth0') { %>
+      this.authenticationService.getAuth0Token().subscribe((token: string) => {
+        this.authenticationService.updateProfile(this.profileUserForm.value, this.userId, token).subscribe((userUpdated: any) => {
+          if (userUpdated) {
+            this.user = userUpdated;
+            this.userUpdated = true;
+            setTimeout(() => {
+              this.userUpdated = false;
+            }, 3000);
+          }
+        }, (error => {
+          this.errorUpdate = true;
           setTimeout(() => {
-            this.userUpdated = false;
+            this.errorUpdate = false;
           }, 3000);
-        }
-      }, (error => {
-        this.errorUpdate = true;
-        setTimeout(() => {
-          this.errorUpdate = false;
+        }));
+      });<% } %>
+      <% if (authService === 'firebase') { %>this.authenticationService.currentUser.subscribe((user: any) => {
+        if ( user ) {
+          this.authenticationService.updateProfile(this.profileUserForm.value).then((response: any) => {
+            this.userUpdated = true;
+            setTimeout(() => {
+              this.userUpdated = false;
         }, 3000);
-      }));
-    });<% } %>
-    <% if (authService === 'firebase') { %>this.authenticationService.currentUser.subscribe((user: any) => {
-      if ( user ) {
-        this.authenticationService.updateProfile(this.profileUserForm.value).then((response: any) => {
-          this.userUpdated = true;
-          setTimeout(() => {
-            this.userUpdated = false;
-       }, 3000);
-        });
-      } else {
-        this.router.navigate(['/']);
-      }
-    });<% } %>
+          });
+        } else {
+          this.router.navigate(['/']);
+        }
+      });<% } %>
+    } else {
+      this.validatedForm = true;
+    }
   }
 }
