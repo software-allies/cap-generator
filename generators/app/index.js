@@ -142,15 +142,16 @@ module.exports = class extends Generator {
     // Create an array of string with format: ['"package": "0.0.1"', '"package2": "0.0.1"', ...] so we can join it to write it to templates/client/package.json
     if (this.props.modules.length) {
       modules['packages'] = this.props.modules.map( (m, i) => {
-        if (m.name != 'cap-live-chat') {
-          return `"${m.name}": "${m.version}"${i + 1 === this.props.modules.length - 1 ? '' : ','}`     // Custom to Live-Chat
+        if (m.name != 'cap-live-chat' && m.name != 'cap-heroku-connect') {
+          return `"${m.name}": "${m.version}"${i + 1 === this.props.modules.length - 1 ? '' : ''}`      // custom
           // return `"${m.name}": "${m.version}"${i + 1 === this.props.modules.length ? '' : ','}`      // Original
         }
       });
       modules['imports'] = {
         // auth: this.props.modules.findIndex( m => m.name === 'cap-authorization') >= 0,
         awsStorage: this.props.modules.findIndex( m => m.name === 'cap-storage-aws') >= 0,
-        liveChat: this.props.modules.findIndex(m => m.name === 'cap-live-chat' )>= 0
+        liveChat: this.props.modules.findIndex(m => m.name === 'cap-live-chat' )>= 0,
+        herokuConnect: this.props.modules.findIndex(m => m.name === 'cap-heroku-connect' )>= 0
       }
     }
 
