@@ -1,11 +1,11 @@
 {
-  "name": "generator-cap",
+  "name": "cap-generator",
   "version": "0.0.0",
   "description": "Cap app generator to build amazing apps",
   "homepage": "",
   "author": {
-    "name": "Cristofer Flores",
-    "email": "cristofer.flort@gmail.com",
+    "name": "Lenin Emmanuel Espinoza",
+    "email": "lenin_emmanuelt@softwareallies.com",
     "url": ""
   },
   "files": [
