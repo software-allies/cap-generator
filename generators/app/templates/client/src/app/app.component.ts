@@ -11,10 +11,19 @@ import { AuthenticationService } from './modules/cap-auth/authentication.service
 })
 export class AppComponent implements OnInit {
 
-  authModule: Array<{ title: string, path: string }>;
   user: boolean;
   userName: string;
-
+  authModule: Array<{ title: string, path: string }> = [
+    {title: 'Register', path: '/register'},
+    {title: 'LogIn', path: '/login'},
+    {title: 'Forgot Password', path: '/forgot-password'},
+  ];
+  <%if(imports && imports.herokuConnect){%>herokuModules: Array<{title: string, path: string }> = [
+    {title: 'Account', path: '/account'},
+    {title: 'Contact', path: '/contact'},
+    {title: 'Lead', path: '/lead'},
+    {title: 'Opportunity', path: '/opportunity'}
+  ];<% } %>
   constructor(
     private communicationComponentsService: CommunicationComponentsService,
     private authenticationService: AuthenticationService,
@@ -23,11 +32,6 @@ export class AppComponent implements OnInit {
   ) {
     this.user = false;
     this.userName = null;
-    this.authModule = [
-      {title: 'Register', path: '/register'},
-      {title: 'LogIn', path: '/login'},
-      {title: 'Forgot Password', path: '/forgot-password'},
-    ];
     this.isLogin();
   }
 

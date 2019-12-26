@@ -7,6 +7,11 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/">Home</a>
       </li>
+      <%if(imports && imports.herokuConnect){%>
+      <li class="nav-item" *ngFor="let herokuModule of herokuModules">
+        <a class="nav-link" routerLink="{{herokuModule.path}}">{{herokuModule.title}}</a>
+      </li>
+      <%}%>
     </ul>
   </div>
   <div class="collapse navbar-collapse justify-content-md-end mr-5" id="collapseNavBAr">

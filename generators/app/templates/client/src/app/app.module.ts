@@ -4,6 +4,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CapAuthModule } from './modules/cap-auth/cap-auth.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
 <% if (authService === 'firebase') { %>
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';<% } -%>
@@ -11,6 +13,9 @@ import { AngularFireModule } from '@angular/fire';<% } -%>
 import { CapLiveChatModule } from './modules/cap-live-chat/cap-live-chat.module';<% } -%>
 <% if(imports && imports.awsStorage){%>
 import { CapAwsModule } from './modules/cap-aws-module/cap-aws.module'<% } -%>
+<% if(imports && imports.herokuConnect){%>
+import { LoopbackModule } from './modules/cap-heroku-connect/loopback.module';
+<% } -%>
 
 @NgModule({
   declarations: [
@@ -19,6 +24,8 @@ import { CapAwsModule } from './modules/cap-aws-module/cap-aws.module'<% } -%>
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
+    CommonModule,
     HttpClientModule,<%if(authService === 'auth0'){%>
     CapAuthModule.forRoot({
       clientId: '<%- credentials ? credentials.AUTH0_CLIENT_ID : "" %>',
@@ -48,7 +55,8 @@ import { CapAwsModule } from './modules/cap-aws-module/cap-aws.module'<% } -%>
       baseLiveAgentURL: 'liveChat-baseLiveAgentURL',
       scriptUrl: 'liveChat-scriptUrl',
     }),<% } %><% if(imports && imports.awsStorage){%>
-    CapAwsModule,<% } %>
+    CapAwsModule,<% } %><% if (imports && imports.herokuConnect) { %>
+    LoopbackModule,<% } %>
   ],
   providers: [],
   bootstrap: [AppComponent],
