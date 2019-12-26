@@ -1,0 +1,566 @@
+{
+  "name": "Account",
+  "plural": "Accounts",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true,
+    "postgresql": {
+      "schema": "salesforce",
+      "table": "account"
+    }
+  },
+  "properties": {
+    "id": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 32,
+      "scale": 0,
+      "postgresql": {
+        "columnName": "id",
+        "dataType": "integer",
+        "dataLength": null,
+        "dataPrecision": 32,
+        "dataScale": 0,
+        "nullable": "NO"
+      }
+    },
+    "UUID__c": {
+      "type": "String",
+      "required": false,
+      "length": 50,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "uuid__c",
+        "dataType": "character varying",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Name": {
+      "type": "String",
+      "required": false,
+      "length": 80,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "name",
+        "dataType": "character varying",
+        "dataLength": 80,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "ParentId": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "parentid",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "AccountNumber": {
+      "type": "String",
+      "required": false,
+      "length": 40,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "accountnumber",
+        "dataType": "character varying",
+        "dataLength": 40,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Site": {
+      "type": "String",
+      "required": false,
+      "length": 80,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "site",
+        "dataType": "character varying",
+        "dataLength": 80,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Type": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "type",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Industry": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "industry",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "AnnualRevenue": {
+      "type": "Number",
+      "required": false,
+      "length": 53,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "annualrevenue",
+        "dataType": "character varying",
+        "dataLength": 53,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Rating": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "rating",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Phone": {
+      "type": "String",
+      "required": false,
+      "length": 40,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "phone",
+        "dataType": "character varying",
+        "dataLength": 40,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Fax": {
+      "type": "String",
+      "required": false,
+      "length": 40,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "fax",
+        "dataType": "character varying",
+        "dataLength": 40,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Website": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "website",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "TickerSymbol": {
+      "type": "String",
+      "required": false,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "tickersymbol",
+        "dataType": "character varying",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Ownership": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "ownership",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "NumberOfEmployees": {
+      "type": "Number",
+      "required": false,
+      "length": 8,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "numberofemployees",
+        "dataType": "character varying",
+        "dataLength": 8,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Sic": {
+      "type": "String",
+      "required": false,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "sic",
+        "dataType": "character varying",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "BillingStreet": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "billingstreet",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "BillingCity": {
+      "type": "String",
+      "required": false,
+      "length": 40,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "billingcity",
+        "dataType": "character varying",
+        "dataLength": 40,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "BillingState": {
+      "type": "String",
+      "required": false,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "billingstate",
+        "dataType": "character varying",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "BillingPostalCode": {
+      "type": "String",
+      "required": false,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "billingpostalcode",
+        "dataType": "character varying",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "BillingCountry": {
+      "type": "String",
+      "required": false,
+      "length": 40,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "billingcountry",
+        "dataType": "character varying",
+        "dataLength": 40,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "ShippingStreet": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "shippingstreet",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "ShippingCity": {
+      "type": "String",
+      "required": false,
+      "length": 40,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "shippingcity",
+        "dataType": "character varying",
+        "dataLength": 40,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "ShippingState": {
+      "type": "String",
+      "required": false,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "shippingstate",
+        "dataType": "character varying",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "ShippingPostalCode": {
+      "type": "String",
+      "required": false,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "shippingpostalcode",
+        "dataType": "character varying",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "ShippingCountry": {
+      "type": "String",
+      "required": false,
+      "length": 40,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "shippingcountry",
+        "dataType": "character varying",
+        "dataLength": 40,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "CustomerPriority__c": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "customerpriority__c",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "SLAExpirationDate__c": {
+      "type": "Date",
+      "required": false,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "slaexpirationdate__c",
+        "dataType": "character varying",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "NumberofLocations__c": {
+      "type": "Number",
+      "required": false,
+      "length": 3,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "numberoflocations__c",
+        "dataType": "character varying",
+        "dataLength": 3,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Active__c": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "active__c",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "SLA__c": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "sla__c",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "SLASerialNumber__c": {
+      "type": "String",
+      "required": false,
+      "length": 10,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "slaserialnumber__c",
+        "dataType": "character varying",
+        "dataLength": 10,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "UpsellOpportunity__c": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "upsellopportunity__c",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Description": {
+      "type": "String",
+      "required": false,
+      "length": 32000,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "description",
+        "dataType": "character varying",
+        "dataLength": 32000,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "SfId": {
+      "type": "String",
+      "required": false,
+      "length": 53,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "sfid",
+        "dataType": "character varying",
+        "dataLength": 53,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}
