@@ -1,0 +1,244 @@
+{
+  "mappings": [
+    {
+      "object_name": "Account",
+      "config": {
+        "indexes": {
+          "UUID__c": {
+            "unique": true
+          },
+          "SystemModstamp": {
+            "unique": false
+          },
+          "Id": {
+            "unique": true
+          }
+        },
+        "sf_max_daily_api_calls": 30000,
+        "access": "read_write",
+        "upsert_field": "UUID__c",
+        "applied_at": "2019-12-10T19:28:08.417788Z",
+        "sf_polling_seconds": 600,
+        "sf_notify_enabled": true,
+        "fields": {
+          "CustomerPriority__c": {},
+          "TickerSymbol": {},
+          "ShippingState": {},
+          "NumberOfEmployees": {},
+          "NumberofLocations__c": {},
+          "ParentId": {},
+          "ShippingPostalCode": {},
+          "BillingCity": {},
+          "Site": {},
+          "ShippingCountry": {},
+          "UUID__c": {},
+          "Name": {},
+          "Sic": {},
+          "Phone": {},
+          "Ownership": {},
+          "IsDeleted": {},
+          "SystemModstamp": {},
+          "ShippingStreet": {},
+          "BillingPostalCode": {},
+          "CreatedDate": {},
+          "BillingState": {},
+          "AccountNumber": {},
+          "ShippingCity": {},
+          "Type": {},
+          "Website": {},
+          "BillingCountry": {},
+          "Id": {},
+          "SLA__c": {},
+          "Description": {},
+          "AnnualRevenue": {},
+          "Rating": {},
+          "UpsellOpportunity__c": {},
+          "Fax": {},
+          "Active__c": {},
+          "SLAExpirationDate__c": {},
+          "Industry": {},
+          "BillingStreet": {},
+          "SLASerialNumber__c": {}
+        }
+      }
+    },
+    {
+      "object_name": "Contact",
+      "config": {
+        "indexes": {
+          "UUID__c": {
+            "unique": true
+          },
+          "SystemModstamp": {
+            "unique": false
+          },
+          "Id": {
+            "unique": true
+          }
+        },
+        "sf_max_daily_api_calls": 30000,
+        "access": "read_write",
+        "upsert_field": "UUID__c",
+        "applied_at": "2019-12-09T19:25:56.366078Z",
+        "sf_polling_seconds": 600,
+        "sf_notify_enabled": true,
+        "fields": {
+          "LastName": {},
+          "OtherState": {},
+          "MailingPostalCode": {},
+          "MailingState": {},
+          "OtherCountry": {},
+          "AccountId": {},
+          "OtherPostalCode": {},
+          "Languages__c": {},
+          "UUID__c": {},
+          "AssistantName": {},
+          "MailingCountry": {},
+          "Name": {},
+          "MobilePhone": {},
+          "Birthdate": {},
+          "Phone": {},
+          "MailingStreet": {},
+          "IsDeleted": {},
+          "HomePhone": {},
+          "AssistantPhone": {},
+          "SystemModstamp": {},
+          "Department": {},
+          "OtherStreet": {},
+          "ReportsToId": {},
+          "CreatedDate": {},
+          "MailingCity": {},
+          "LeadSource": {},
+          "Salutation": {},
+          "Title": {},
+          "OtherCity": {},
+          "Id": {},
+          "FirstName": {},
+          "Email": {},
+          "Description": {},
+          "Fax": {},
+          "OtherPhone": {},
+          "Level__c": {}
+        }
+      }
+    },
+    {
+      "object_name": "Lead",
+      "config": {
+        "indexes": {
+          "UUID__c": {
+            "unique": true
+          },
+          "SystemModstamp": {
+            "unique": false
+          },
+          "Id": {
+            "unique": true
+          }
+        },
+        "sf_max_daily_api_calls": 30000,
+        "access": "read_write",
+        "upsert_field": "UUID__c",
+        "applied_at": "2019-12-09T19:26:18.228454Z",
+        "sf_polling_seconds": 600,
+        "sf_notify_enabled": true,
+        "fields": {
+          "LastName": {},
+          "Primary__c": {},
+          "Street": {},
+          "NumberOfEmployees": {},
+          "NumberofLocations__c": {},
+          "UUID__c": {},
+          "SICCode__c": {},
+          "ProductInterest__c": {},
+          "CurrentGenerators__c": {},
+          "City": {},
+          "Name": {},
+          "MobilePhone": {},
+          "Phone": {},
+          "IsDeleted": {},
+          "SystemModstamp": {},
+          "State": {},
+          "Status": {},
+          "CreatedDate": {},
+          "Country": {},
+          "LeadSource": {},
+          "PostalCode": {},
+          "Salutation": {},
+          "Title": {},
+          "Website": {},
+          "Id": {},
+          "FirstName": {},
+          "Email": {},
+          "Description": {},
+          "Company": {},
+          "AnnualRevenue": {},
+          "Rating": {},
+          "Fax": {},
+          "Industry": {}
+        }
+      }
+    },
+    {
+      "object_name": "Opportunity",
+      "config": {
+        "indexes": {
+          "UUID__c": {
+            "unique": true
+          },
+          "SystemModstamp": {
+            "unique": false
+          },
+          "Id": {
+            "unique": true
+          }
+        },
+        "sf_max_daily_api_calls": 30000,
+        "access": "read_write",
+        "upsert_field": "UUID__c",
+        "applied_at": "2019-12-09T19:26:35.280580Z",
+        "sf_polling_seconds": 600,
+        "sf_notify_enabled": true,
+        "fields": {
+          "DeliveryInstallationStatus__c": {},
+          "TrackingNumber__c": {},
+          "CloseDate": {},
+          "AccountId": {},
+          "UUID__c": {},
+          "StageName": {},
+          "CurrentGenerators__c": {},
+          "CampaignId": {},
+          "Name": {},
+          "OrderNumber__c": {},
+          "IsDeleted": {},
+          "SystemModstamp": {},
+          "Probability": {},
+          "MainCompetitors__c": {},
+          "CreatedDate": {},
+          "LeadSource": {},
+          "Amount": {},
+          "IsPrivate": {},
+          "Type": {},
+          "Id": {},
+          "Description": {},
+          "NextStep": {}
+        }
+      }
+    }
+  ],
+  "connection": {
+    "app_name": "cap-loopback",
+    "organization_id": "00D6g000000tDJoEAM",
+    "exported_at": "2019-12-26T15:58:29.366507+00:00",
+    "features": {
+      "disable_bulk_writes": false,
+      "poll_db_no_merge": true,
+      "poll_external_ids": false,
+      "rest_count_only": false
+    },
+    "api_version": "47.0",
+    "name": "",
+    "logplex_log_enabled": false
+  },
+  "version": 1
+}
