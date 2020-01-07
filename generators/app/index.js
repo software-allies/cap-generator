@@ -216,7 +216,8 @@ module.exports = class extends Generator {
     if (this.props.modules && this.props.modules.length) {
       this.props.modules.forEach(m => {
         this.composeWith(require.resolve(`../${m.name}`), {
-          name: this.props.name
+          name: this.props.name,
+          AuthDomain: this.props.AUTH0_DOMAIN
         });
       });
     } else {
