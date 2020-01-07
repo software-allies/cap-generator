@@ -45,10 +45,10 @@ const createConnection = async () =>
 
 const salesforceAuth = async () => exec(`heroku connect:sf:auth -a ${appName}`);
 
-const mapping = async () =>
-  exec(`heroku connect:import cap-generator/heroku-config.json -a ${appName}`);
+const mapping = async path =>
+  exec(`heroku connect:import ${path}/heroku-config.json -a ${appName}`);
 
-const herokuCLI = async name => {
+const herokuCLI = async (name, jsonPath) => {
   appName = name;
   try {
     let configuration = {};
@@ -62,11 +62,14 @@ const herokuCLI = async name => {
     //              stderr: 'Creating yourherokuapp... done\n'
     // }
 
-    // =====================================================================================================================================================
     let herokuURL = await herokuCreate();
     let HerokuURLs = herokuURL.stdout.split('|');
     configuration.herokuURL = HerokuURLs[0];
     configuration.herokuGit = HerokuURLs[1];
+
+    // =====================================================================================================================================================
+
+    await hrkCreatePostgreSql();
     // Returns and object with the properties stdout and stderr
     // The stdout that contains the Heroku status and the stderr that contains the status of the creation
     // Example:
@@ -79,17 +82,16 @@ const herokuCLI = async name => {
     // }
 
     // =====================================================================================================================================================
-    await hrkCreatePostgreSql();
 
-    // =====================================================================================================================================================
     let credentials = await hrkCredentials();
     let start = credentials.stdout.search('postgres');
     configuration.postgresURl = credentials.stdout.slice(
       start,
       credentials.stdout.length - 1
     );
-
     // =====================================================================================================================================================
+
+    let dbStatus = await hrkConnect();
     // Returns and object with the properties stdout and stderr
     // The stdout that contains the Heroku status and the next command to execute and finish the setup, also the stderr that contains the status of the creation
     // Example:
@@ -101,11 +103,9 @@ const herokuCLI = async name => {
     // }
 
     // =====================================================================================================================================================
-    let dbStatus = await hrkConnect();
-
-    // =====================================================================================================================================================
     // Get the command to execute
     let nextHerokuCommand = dbStatus.stdout.split('`')[1];
+    await setUpConnect(nextHerokuCommand);
     // Returns and object with the properties stdout and stderr
     // The stdout that contains a message that includes the heroku connect URL.
     // Example:
@@ -113,12 +113,13 @@ const herokuCLI = async name => {
     //              stdout: 'Opening https://addons-sso.heroku.com/apps/fdf6dc7f-677c-4812-ab1e-c25d99504389/addons/d7642b8e-e461-449b-a740-d6af6554734e...\n'
     //              stderr: ''
     // }
-    await setUpConnect(nextHerokuCommand);
     // =====================================================================================================================================================
 
     await authConnection();
 
     // =====================================================================================================================================================
+
+    let token = await tokenApplication();
     // Returns and object with the properties stdout and stderr
     // The stdout that contains a message that includes the heroku connect URL.
     // Example:
@@ -126,26 +127,31 @@ const herokuCLI = async name => {
     //              stdout: 'your-token-that-was-generate\n'
     //              stderr: '›   Warning: token will expire 01/01/2021\n ›   Use heroku authorizations:create to generate a long-term token\n' ///Expiration of the token
     // }
-    let token = await tokenApplication();
+
+    // =====================================================================================================================================================
     await curlPost(token.stdout);
 
     // =====================================================================================================================================================
     // Returns the information of the application
     await schemaConnection();
+
     // =====================================================================================================================================================
     await salesforceAuth();
+
     // =====================================================================================================================================================
     await createConnection();
+
     // =====================================================================================================================================================
-    await mapping();
+    await mapping(jsonPath);
+
     // =====================================================================================================================================================
+    return configuration;
     // Object that returns the function
     // urlDataBase: {
     // herokuURL: 'https://your-heroku-app.herokuapp.com/
     //  herokuGit: ' https://git.heroku.com/your-heroku-app.git\n',
     //  postgresURl:'your-postgres-url'
     // }
-    return configuration;
   } catch (error) {
     console.log('error: ', error.stderr);
   }
