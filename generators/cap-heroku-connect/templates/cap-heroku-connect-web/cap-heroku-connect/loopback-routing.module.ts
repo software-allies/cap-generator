@@ -7,20 +7,22 @@ import { ContactSFComponent } from './contact-sf/contact-sf.component';
 import { LeadSFComponent } from './lead-sf/lead-sf.component';
 import { OpportunitySFComponent } from './opportunity-sf/opportunity-sf.component';
 
+import { AuthGuardService } from './canActivate-service';
+
 const routes: Routes = [
-  {path: ':object', component: IndexComponent},
+  {path: ':object', component: IndexComponent, canActivate: [AuthGuardService]},
 
-  {path: 'account/create', component: AccountSFComponent},
-  {path: 'account/:id', component: AccountSFComponent},
+  {path: 'account/create', component: AccountSFComponent, canActivate: [AuthGuardService]},
+  {path: 'account/:id', component: AccountSFComponent, canActivate: [AuthGuardService]},
 
-  {path: 'contact/create', component: ContactSFComponent},
-  {path: 'contact/:id', component: ContactSFComponent},
+  {path: 'contact/create', component: ContactSFComponent, canActivate: [AuthGuardService]},
+  {path: 'contact/:id', component: ContactSFComponent, canActivate: [AuthGuardService]},
 
-  {path: 'lead/create', component: LeadSFComponent},
-  {path: 'lead/:id', component: LeadSFComponent},
+  {path: 'lead/create', component: LeadSFComponent, canActivate: [AuthGuardService]},
+  {path: 'lead/:id', component: LeadSFComponent, canActivate: [AuthGuardService]},
 
-  {path: 'opportunity/create', component: OpportunitySFComponent},
-  {path: 'opportunity/:id', component: OpportunitySFComponent}
+  {path: 'opportunity/create', component: OpportunitySFComponent, canActivate: [AuthGuardService]},
+  {path: 'opportunity/:id', component: OpportunitySFComponent, canActivate: [AuthGuardService]}
 ];
 
 @NgModule({
