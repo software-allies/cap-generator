@@ -85,7 +85,7 @@ const herokuCLI = async (name, jsonPath) => {
 
     let credentials = await hrkCredentials();
     let start = credentials.stdout.search('postgres');
-    configuration.postgresURl = credentials.stdout.slice(
+    configuration.postgresURL = credentials.stdout.slice(
       start,
       credentials.stdout.length - 1
     );

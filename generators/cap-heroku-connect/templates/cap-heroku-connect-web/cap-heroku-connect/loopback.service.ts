@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { AuthenticationService } from '../cap-auth/authentication.service';
 import { map } from "rxjs/operators";
 
 @Injectable({
@@ -8,64 +9,91 @@ import { map } from "rxjs/operators";
 export class LoopbackService {
 
   url: string;
-  accessToken = 'l8fdFvY6FzEnKvHwLDxMY3xlZYlhQwxyzDmCJz43RPd5HpiClrjrts6BVyHdiWmz';
-
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authenticationService: AuthenticationService) {
     this.url = "http://localhost:3000/api";
   }
 
   getAllRequest(tableName: string) {
-    return this.http.get(
-      `${this.url}/${tableName}?access_token=${this.accessToken}`
-    );
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${this.authenticationService.getToken()}`
+      })
+    };
+    return this.http.get(`${this.url}/${tableName}`, httpOptions);
   }
 
   getWithFilter(query: string) {
-    return this.http.get(
-      `${this.url}/${query}&access_token=${this.accessToken}`
-    );
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${this.authenticationService.getToken()}`
+      })
+    };
+    return this.http.get(`${this.url}/${query}`, httpOptions);
   }
 
   getTotalItems(tableName: string) {
-    return this.http
-      .get(
-        `${this.url}/${tableName}/count/?access_token=${this.accessToken}`
-      )
-      .pipe(
-        map((data: any) => {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${this.authenticationService.getToken()}`
+      })
+    };
+    return this.http.get(`${this.url}/${tableName}/count`, httpOptions)
+      .pipe(map( (data: any) => {
           return data.count;
         })
       );
   }
 
   getRecordWithFindOne(tableName: string, sfid: string) {
-    return this.http.get(
-      `${this.url}/${tableName}/findOne?filter={"where":{"SfId":"${sfid}"}}&access_token=${this.accessToken}`
-    );
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${this.authenticationService.getToken()}`
+      })
+    };
+    return this.http.get(`${this.url}/${tableName}/findOne?filter={"where":{"SfId":"${sfid}"}}`, httpOptions);
   }
+
   getRecordRequest(tableName: string, id: number) {
-    return this.http.get(
-      `${this.url}/${tableName}/${id}?access_token=${this.accessToken}`
-    );
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${this.authenticationService.getToken()}`
+      })
+    };
+    return this.http.get(`${this.url}/${tableName}/${id}`, httpOptions);
   }
 
   postRequest(tableName: string, body: object) {
-    return this.http.post(
-      `${this.url}/${tableName}?access_token=${this.accessToken}`,
-      body
-    );
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${this.authenticationService.getToken()}`
+      })
+    };
+    return this.http.post(`${this.url}/${tableName}`, body, httpOptions);
   }
 
   patchRequest(tableName: string, id: number, body: object) {
-    return this.http.patch(
-      `${this.url}/${tableName}/${id}?access_token=${this.accessToken}`,
-      body
-    );
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${this.authenticationService.getToken()}`
+      })
+    };
+    return this.http.patch(`${this.url}/${tableName}/${id}`, body, httpOptions);
   }
 
   deleteItem(tableName: string, id: number) {
-    return this.http.delete(
-      `${this.url}/${tableName}/${id}?access_token=${this.accessToken}`
-    );
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${this.authenticationService.getToken()}`
+      })
+    };
+    return this.http.delete(`${this.url}/${tableName}/${id}`, httpOptions);
   }
 }

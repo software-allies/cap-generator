@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ConfigService } from './config.service';
+import * as jwt_decode from 'jwt-decode';
+
 <% if (authService === 'firebase')  { %>
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -22,6 +24,60 @@ export class AuthenticationService {
   ) {
     <% if(authService==='firebase'){ %>this.user = this.afAuth.authState;<%}%>
   }
+
+  saveCurrentUSer(user: {}) {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('User', JSON.stringify(user));
+    }
+  }
+
+  isUserLoggedIn(): boolean {
+    if (isPlatformBrowser(this.platformId) && localStorage.getItem('User')) {
+      const decoded = jwt_decode(JSON.parse(localStorage.getItem('User')).token);
+      if (decoded.exp < Date.now() ) {
+        return true;
+      } else {
+        this.refreshToken(JSON.parse(localStorage.getItem('User')).refresh_token).subscribe((token: any) => {
+          if (token) {
+            this.saveCurrentUSer({
+              user: JSON.parse(localStorage.getItem('User')).user,
+              email: JSON.parse(localStorage.getItem('User')).email,
+              refresh_token: JSON.parse(localStorage.getItem('User')).refresh_token,
+              token: token.access_token,
+              token_id: token.id_token,
+              id: JSON.parse(localStorage.getItem('User')).id
+            });
+            return true;
+          }
+        }, (error) => {
+          console.log(error);
+          return false;
+        });
+      }
+    } else {
+      return false;
+    }
+  }
+
+  getToken(): string {
+    if (isPlatformBrowser(this.platformId) && localStorage.getItem('User')) {
+      return JSON.parse(localStorage.getItem('User')).token;
+    }
+  }
+
+  refreshToken(refreshToken: string) {
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/x-www-form-urlencoded'
+      })
+    };
+    const httpParams = new HttpParams().append('grant_type', 'refresh_token')
+                                  .append('client_id', `${this.configService.clientId}`)
+                                  .append('client_secret', `${this.configService.clientSecret}`)
+                                  .append('refresh_token', `${refreshToken}`);
+    return this.http.post(`${this.configService.domain}/oauth/token`, httpParams, httpOptions);
+  }
+
 
   getAuth0Credentials() {<% if(authService==='auth0'){ %>
     return {
@@ -99,6 +155,22 @@ export class AuthenticationService {
   signOut()<%-authService==='firebase' ? ": Promise<void>" : ""%> {
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem('User')) {
+        <%if(authService==='auth0'){%>
+          const token = JSON.parse(localStorage.getItem('User')).token;
+          const httpParams = new HttpParams().append('client_id', `${this.configService.clientId}`)
+          .append('returnTo', `http://localhost:4200`);
+
+          this.http.get(`${this.configService.domain}/v2/logout`, {
+            headers: {
+              'content-type': 'application/x-www-form-urlencoded',
+              'Authorization': `Bearer ${token}`
+            },
+            params: httpParams
+          })
+          .subscribe((user: any) => {
+            console.log(user, 'LogOut');
+          });
+        <%}%>
         localStorage.removeItem('User');
       }
     }
