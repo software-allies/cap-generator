@@ -1,13 +1,13 @@
 {
-  "name": "Contact",
-  "plural": "Contacts",
+  "name": "Lead",
+  "plural": "Leads",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true,
     "postgresql": {
       "schema": "salesforce",
-      "table": "contact"
+      "table": "lead"
     }
   },
   "properties": {
@@ -86,16 +86,16 @@
         "nullable": "YES"
       }
     },
-    "AccountId": {
+    "Company": {
       "type": "String",
       "required": false,
-      "length": 40,
+      "length": 255,
       "precision": null,
       "scale": null,
       "postgresql": {
-        "columnName": "accountid",
+        "columnName": "company",
         "dataType": "character varying",
-        "dataLength": 40,
+        "dataLength": 255,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "YES"
@@ -116,51 +116,6 @@
         "nullable": "YES"
       }
     },
-    "Department": {
-      "type": "String",
-      "required": false,
-      "length": 80,
-      "precision": null,
-      "scale": null,
-      "postgresql": {
-        "columnName": "department",
-        "dataType": "character varying",
-        "dataLength": 80,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "YES"
-      }
-    },
-    "Birthdate": {
-      "type": "Date",
-      "required": false,
-      "length": null,
-      "precision": null,
-      "scale": null,
-      "postgresql": {
-        "columnName": "birthdate",
-        "dataType": "character varying",
-        "dataLength": null,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "YES"
-      }
-    },
-    "ReportsToId": {
-      "type": "String",
-      "required": false,
-      "length": 80,
-      "precision": null,
-      "scale": null,
-      "postgresql": {
-        "columnName": "reportstoid",
-        "dataType": "character varying",
-        "dataLength": 80,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "YES"
-      }
-    },
     "LeadSource": {
       "type": "String",
       "required": false,
@@ -171,6 +126,36 @@
         "columnName": "leadsource",
         "dataType": "character varying",
         "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Industry": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "industry",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "AnnualRevenue": {
+      "type": "Number",
+      "required": false,
+      "length": 18,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "annualrevenue",
+        "dataType": "character varying",
+        "dataLength": 18,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "YES"
@@ -191,21 +176,6 @@
         "nullable": "YES"
       }
     },
-    "HomePhone": {
-      "type": "String",
-      "required": false,
-      "length": 40,
-      "precision": null,
-      "scale": null,
-      "postgresql": {
-        "columnName": "homephone",
-        "dataType": "character varying",
-        "dataLength": 40,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "YES"
-      }
-    },
     "MobilePhone": {
       "type": "String",
       "required": false,
@@ -214,21 +184,6 @@
       "scale": null,
       "postgresql": {
         "columnName": "mobilephone",
-        "dataType": "character varying",
-        "dataLength": 40,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "YES"
-      }
-    },
-    "OtherPhone": {
-      "type": "String",
-      "required": false,
-      "length": 40,
-      "precision": null,
-      "scale": null,
-      "postgresql": {
-        "columnName": "otherphone",
         "dataType": "character varying",
         "dataLength": 40,
         "dataPrecision": null,
@@ -254,56 +209,26 @@
     "Email": {
       "type": "String",
       "required": false,
-      "length": 80,
+      "length": 40,
       "precision": null,
       "scale": null,
       "postgresql": {
         "columnName": "email",
         "dataType": "character varying",
-        "dataLength": 80,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "YES"
-      }
-    },
-    "AssistantName": {
-      "type": "String",
-      "required": false,
-      "length": 40,
-      "precision": null,
-      "scale": null,
-      "postgresql": {
-        "columnName": "assistantname",
-        "dataType": "character varying",
         "dataLength": 40,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "YES"
       }
     },
-    "AssistantPhone": {
-      "type": "String",
-      "required": false,
-      "length": 40,
-      "precision": null,
-      "scale": null,
-      "postgresql": {
-        "columnName": "assistantphone",
-        "dataType": "character varying",
-        "dataLength": 40,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "YES"
-      }
-    },
-    "MailingStreet": {
+    "Website": {
       "type": "String",
       "required": false,
       "length": 255,
       "precision": null,
       "scale": null,
       "postgresql": {
-        "columnName": "mailingstreet",
+        "columnName": "website",
         "dataType": "character varying",
         "dataLength": 255,
         "dataPrecision": null,
@@ -311,74 +236,14 @@
         "nullable": "YES"
       }
     },
-    "MailingCity": {
-      "type": "String",
-      "required": false,
-      "length": 40,
-      "precision": null,
-      "scale": null,
-      "postgresql": {
-        "columnName": "mailingcity",
-        "dataType": "character varying",
-        "dataLength": 40,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "YES"
-      }
-    },
-    "MailingState": {
-      "type": "String",
-      "required": false,
-      "length": 20,
-      "precision": null,
-      "scale": null,
-      "postgresql": {
-        "columnName": "mailingstate",
-        "dataType": "character varying",
-        "dataLength": 20,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "YES"
-      }
-    },
-    "MailingPostalCode": {
-      "type": "String",
-      "required": false,
-      "length": 20,
-      "precision": null,
-      "scale": null,
-      "postgresql": {
-        "columnName": "mailingpostalcode",
-        "dataType": "character varying",
-        "dataLength": 20,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "YES"
-      }
-    },
-    "MailingCountry": {
-      "type": "String",
-      "required": false,
-      "length": 40,
-      "precision": null,
-      "scale": null,
-      "postgresql": {
-        "columnName": "mailingcountry",
-        "dataType": "character varying",
-        "dataLength": 40,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "YES"
-      }
-    },
-    "OtherStreet": {
+    "Status": {
       "type": "String",
       "required": false,
       "length": 255,
       "precision": null,
       "scale": null,
       "postgresql": {
-        "columnName": "otherstreet",
+        "columnName": "status",
         "dataType": "character varying",
         "dataLength": 255,
         "dataPrecision": null,
@@ -386,14 +251,59 @@
         "nullable": "YES"
       }
     },
-    "OtherCity": {
+    "Rating": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "rating",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "NumberOfEmployees": {
+      "type": "Number",
+      "required": false,
+      "length": 8,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "numberofemployees",
+        "dataType": "character varying",
+        "dataLength": 8,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Street": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "street",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "City": {
       "type": "String",
       "required": false,
       "length": 40,
       "precision": null,
       "scale": null,
       "postgresql": {
-        "columnName": "othercity",
+        "columnName": "city",
         "dataType": "character varying",
         "dataLength": 40,
         "dataPrecision": null,
@@ -401,14 +311,14 @@
         "nullable": "YES"
       }
     },
-    "OtherState": {
+    "State": {
       "type": "String",
       "required": false,
       "length": 20,
       "precision": null,
       "scale": null,
       "postgresql": {
-        "columnName": "otherstate",
+        "columnName": "state",
         "dataType": "character varying",
         "dataLength": 20,
         "dataPrecision": null,
@@ -416,14 +326,14 @@
         "nullable": "YES"
       }
     },
-    "OtherPostalCode": {
+    "PostalCode": {
       "type": "String",
       "required": false,
       "length": 20,
       "precision": null,
       "scale": null,
       "postgresql": {
-        "columnName": "otherpostalcode",
+        "columnName": "postalcode",
         "dataType": "character varying",
         "dataLength": 20,
         "dataPrecision": null,
@@ -431,14 +341,14 @@
         "nullable": "YES"
       }
     },
-    "OtherCountry": {
+    "Country": {
       "type": "String",
       "required": false,
       "length": 40,
       "precision": null,
       "scale": null,
       "postgresql": {
-        "columnName": "othercountry",
+        "columnName": "country",
         "dataType": "character varying",
         "dataLength": 40,
         "dataPrecision": null,
@@ -446,14 +356,59 @@
         "nullable": "YES"
       }
     },
-    "Languages__c": {
+    "ProductInterest__c": {
+      "type": "String",
+      "required": false,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "productinterest__c",
+        "dataType": "character varying",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "SICCode__c": {
+      "type": "String",
+      "required": false,
+      "length": 15,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "siccode__c",
+        "dataType": "character varying",
+        "dataLength": 15,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "NumberofLocations__c": {
+      "type": "Number",
+      "required": false,
+      "length": 3,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "numberoflocations__c",
+        "dataType": "character varying",
+        "dataLength": 3,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "CurrentGenerators__c": {
       "type": "String",
       "required": false,
       "length": 100,
       "precision": null,
       "scale": null,
       "postgresql": {
-        "columnName": "languages__c",
+        "columnName": "currentgenerators__c",
         "dataType": "character varying",
         "dataLength": 100,
         "dataPrecision": null,
@@ -461,14 +416,14 @@
         "nullable": "YES"
       }
     },
-    "Level__c": {
+    "Primary__c": {
       "type": "String",
       "required": false,
       "length": 255,
       "precision": null,
       "scale": null,
       "postgresql": {
-        "columnName": "level__c",
+        "columnName": "primary__c",
         "dataType": "character varying",
         "dataLength": 255,
         "dataPrecision": null,
@@ -509,13 +464,6 @@
   },
   "validations": [],
   "relations": {},
-  "acls": [
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "$unauthenticated",
-      "permission": "DENY"
-    }
-  ],
+  "acls": [],
   "methods": {}
 }
