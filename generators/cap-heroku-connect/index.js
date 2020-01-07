@@ -199,8 +199,8 @@ module.exports = class extends Generator {
                   {}
                 );
 
-                let urlDataBase = await heroku.herokuCLI(this.props.path);
-
+                // This is the place were Heroku CLI stars to run
+                let urlDataBase = await heroku.herokuCLI(this.props.path, this.templatePath('cap-heroku-connect-api/mapping'));
                 const tsParser = new Parser();
                 const tsParceDB = new Parser();
                 tsParser.addExistingSourceFile(
