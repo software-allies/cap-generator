@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { isPlatformBrowser } from '@angular/common';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
 <% if (service === 'firebase')  { %>
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -15,10 +17,23 @@ export class AuthenticationService {
   readonly Auth0: any;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId,
     protected http: HttpClient<%- service==='firebase' ? ",\n\t\tprivate afAuth: AngularFireAuth" : "" %>
   ) {
     this.Auth0 = environment;
     <% if(service==='firebase'){ %>this.user = this.afAuth.authState;<%}%>
+  }
+
+  saveCurrentUSer(user: {}) {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('User', JSON.stringify(user));
+    }
+  }
+
+  isUserLoggedIn(token?: string): boolean {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('User') ? true : false;
+    }
   }
 
   getAuth0Credentials() {<% if(service==='auth0'){ %>

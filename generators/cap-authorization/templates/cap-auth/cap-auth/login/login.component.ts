@@ -1,8 +1,7 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
 import { AuthenticationService } from '../authentication.service';
 import { CommunicationComponentsService } from '../../../shared/services/communication-components.service';
-import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,7 +19,6 @@ export class LoginComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private router: Router,
     private communicationComponentsService: CommunicationComponentsService,
-    @Inject(PLATFORM_ID) private platformId,
   ) {
     this.loginUserForm = new FormGroup({
       'email': new FormControl('', [Validators.required]),
@@ -35,18 +33,16 @@ export class LoginComponent implements OnInit {
   loginUser() {<% if (service === 'auth0')  { %>
     this.authenticationService.loginUser(this.loginUserForm.value).subscribe((token: any) => {
       this.authenticationService.getAuth0UserInfo(token.access_token).subscribe((user: any) => {
-        if (isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('User', JSON.stringify({
-            user: user.name,
-            email: user.email,
-            refresh_token: token.refresh_token,
-            token: token.access_token,
-            token_id: token.id_token,
-            id: user.sub
-          }));
-          this.communicationComponentsService.sendUser(true);
-          this.router.navigate(['/']);
-        }
+        this.authenticationService.saveCurrentUSer({
+          user: user.name,
+          email: user.email,
+          refresh_token: token.refresh_token,
+          token: token.access_token,
+          token_id: token.id_token,
+          id: user.sub
+        });
+        this.communicationComponentsService.sendUser(true);
+        this.router.navigate(['/']);
       });
     }, (error) => {
       this.userNotValid = true;

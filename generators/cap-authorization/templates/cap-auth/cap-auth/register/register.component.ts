@@ -1,8 +1,7 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
 import { AuthenticationService } from '../authentication.service';
 import { CommunicationComponentsService } from '../../../shared/services/communication-components.service';
-import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,7 +19,6 @@ export class RegisterComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private router: Router,
     private communicationComponentsService: CommunicationComponentsService,
-    @Inject(PLATFORM_ID) private platformId,
   ) {
     this.existingUser = false;
     this.createUserForm = new FormGroup({
@@ -58,18 +56,17 @@ export class RegisterComponent implements OnInit {
       this.authenticationService.createUser(this.createUserForm.value, token).subscribe((user: any) => {
         if (user) {
           this.authenticationService.loginUser(this.createUserForm.value).subscribe((AccessToken: any) => {
-            if (isPlatformBrowser(this.platformId)) {
-              localStorage.setItem('User', JSON.stringify({
-                user: user.name,
-                email: user.email,
-                refresh_token: AccessToken.refresh_token,
-                token: AccessToken.access_token,
-                token_id: AccessToken.id_token,
-                id: user.user_id
-              }));
-              this.communicationComponentsService.sendUser(true);
-              this.router.navigate(['/']);
-            }
+            this.authenticationService.saveCurrentUSer({
+              user: user.name,
+              email: user.email,
+              refresh_token: AccessToken.refresh_token,
+              token: AccessToken.access_token,
+              token_id: AccessToken.id_token,
+              id: user.user_id
+            });
+
+            this.communicationComponentsService.sendUser(true);
+            this.router.navigate(['/']);
           });
         }
       }, (error) => {
