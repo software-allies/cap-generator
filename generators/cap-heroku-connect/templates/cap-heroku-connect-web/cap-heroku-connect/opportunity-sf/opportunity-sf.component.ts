@@ -73,8 +73,8 @@ export class OpportunitySFComponent implements OnInit {
 
     this.opportunity = {};
     this.objectToSend = {};
-    this.lookUpAccount = [];
-    this.lookUpContact = [];
+    this.lookUpAccount = null;
+    this.lookUpContact = null;
   }
 
   ngOnInit() {
@@ -114,8 +114,20 @@ export class OpportunitySFComponent implements OnInit {
     }
   }
 
+  changeFormatDate(formatDate: any) {
+    const date = new Date(formatDate);
+    const day = ('0' + date.getDate()).slice(-2);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    return date.getFullYear() + '-' + month + '-' + day;
+  }
+
+  LookUpAccountName(AccountId: string): string {
+    return  this.lookUpAccount && AccountId ?
+            this.lookUpAccount.find(x => x.SfId === AccountId).Name
+            : '';
+  }
+
   createForm(opportunity?: any) {
-    console.log(opportunity);
     if (opportunity) {
       this.form = new FormGroup({
         id: new FormControl(opportunity.id, [Validators.required]),
@@ -126,7 +138,7 @@ export class OpportunitySFComponent implements OnInit {
         type: new FormControl(opportunity.Type),
         leadSource: new FormControl(opportunity.LeadSource),
         amount: new FormControl(opportunity.Amount, [Validators.pattern('^(\\d*|\\d+\\.\\d{1,2})$')]),
-        closeDate: new FormControl(opportunity.CloseDate, [Validators.required]),
+        closeDate: new FormControl(this.changeFormatDate(opportunity.CloseDate), [Validators.required]),
         nextStep: new FormControl(opportunity.NextStep),
         stageName: new FormControl(opportunity.StageName, [Validators.required]),
         probability: new FormControl(opportunity.Probability, [Validators.pattern('^(\\d{0,3})$')]),

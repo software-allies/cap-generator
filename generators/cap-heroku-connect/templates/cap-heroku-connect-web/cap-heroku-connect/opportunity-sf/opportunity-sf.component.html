@@ -33,7 +33,7 @@
                     <label for="inputOpportunityName">Opportunity Name</label>
                     <input
                       [ngClass]="{
-                        'is-invalid': nameInvalid
+                        'is-invalid': isInvalid && !form.controls.name.value
                       }"
                       type="email"
                       class="form-control"
@@ -117,7 +117,7 @@
                     <label for="inputCloseDate">Close Date</label>
                     <input
                       [ngClass]="{
-                        'is-invalid': closeDateInvalid
+                        'is-invalid': isInvalid && !form.controls.closeDate.value
                       }"
                       type="date"
                       class="form-control"
@@ -141,7 +141,7 @@
                     <label for="inputStage">Stage</label>
                     <select
                       [ngClass]="{
-                        'is-invalid': stageNameInvalid
+                        'is-invalid': isInvalid && !form.controls.stageName.value
                       }"
                       formControlName="stageName"
                       id="inputStage"
@@ -326,10 +326,11 @@
           </div>
         </div>
         <div class="form-row text-center mt-2">
-          <div class="col-12">
+          <div class="col-md-6">
             <button *ngIf="updateOpportunity" (click)="onSubmit(true)" class="btn btn-primary">Submit</button>
             <button *ngIf="createOpportunity" (click)="onSubmit(false)" class="btn btn-primary">Submit</button>
-
+          </div>
+          <div class="col-md-6">
             <button *ngIf="createOpportunity" type="button" (click)="cancelAction(true)" class="btn btn-secondary">Cancel</button>
             <button *ngIf="updateOpportunity" type="button" (click)="cancelAction()" class="btn btn-secondary">Cancel</button>
           </div>
@@ -363,7 +364,7 @@
             </tr>
             <tr>
               <th scope="row">Account Name</th>
-              <td>{{ opportunity.AccountId }}</td>
+              <td >{{ LookUpAccountName(opportunity.AccountId) }}</td>
             </tr>
             <tr>
                 <th scope="row">Type</th>
@@ -379,7 +380,7 @@
             </tr>
             <tr>
               <th scope="row">Close Date</th>
-              <td>{{ opportunity.CloseDate }}</td>
+              <td>{{ opportunity.CloseDate | date :['MM/dd/yyyy']}}</td>
             </tr>
             <tr>
               <th scope="row">Next Step</th>
