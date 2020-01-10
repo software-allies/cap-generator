@@ -4,8 +4,7 @@
       <div class="page-header clearfix">
         <h2 class="pull-left">{{objectAPI}}</h2>
         <a routerLink="/{{objectComponent}}/create" class="btn btn-success pull-right"
-          >Add New Account</a
-        >
+          >Add New {{objectComponent | titlecase}}</a>
       </div>
       <table class="table table-striped mt-3">
         <thead>
@@ -37,7 +36,7 @@
         <tbody>
           <tr *ngFor="let object of listings | paginate: { id: 'pagination', itemsPerPage: 20, currentPage: currentPage, totalItems: totalItems}">
             <td *ngIf="objectComponent === 'account' || objectComponent === 'opportunity'" >{{ object.Name }}</td>
-            <td *ngIf="objectComponent === 'contact' || objectComponent === 'lead' " >{{ object.FirstName }}</td>
+            <td *ngIf="objectComponent === 'contact' || objectComponent === 'lead' " >{{ object.FirstName }} {{object.LastName}}</td>
             <!-- <td *ngIf="objectComponent === 'opportunity' " >{{ object.Name }}</td> -->
             <!-- <td *ngIf="objectComponent === 'lead' " >{{ object.FirstName }}</td> -->
 

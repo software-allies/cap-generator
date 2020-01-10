@@ -10,9 +10,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./index.component.css']
 })
 export class IndexComponent implements OnInit {
-  @ViewChild('PaginationComponentChild', { static: false })
-  paginationComponent: PaginationComponent;
 
+  @ViewChild('PaginationComponentChild', { static: false })paginationComponent: PaginationComponent;
   listings: any;
   currentPage: number;
   skipFilter: number;
@@ -34,7 +33,7 @@ export class IndexComponent implements OnInit {
     private router: Router
   ) {
     this.listings = [];
-    this.skipFilter = null;
+    this.skipFilter = 0;
     this.totalItems = null;
     this.objectAPI = null;
     this.objectComponent = null;
@@ -45,6 +44,7 @@ export class IndexComponent implements OnInit {
       this.object = this.objects.find(x => x.object === params.object);
       this.objectAPI = this.object.api;
       this.objectComponent = this.object.object;
+      this.skipFilter = 0;
       this.search(this.objectAPI);
     });
     this.activateRoute.queryParams.subscribe(queryParams => {
@@ -53,7 +53,7 @@ export class IndexComponent implements OnInit {
   }
 
   search(object: string) {
-    this.loopBackService.getAllRequest(object).subscribe(res => {
+    this.loopBackService.getAllRequest(object, this.skipFilter).subscribe(res => {
       this.listings = res;
       if (object === 'Contacts' || object === 'Opportunitys') {
         let sfIds = [];
@@ -75,11 +75,9 @@ export class IndexComponent implements OnInit {
           });
       }
     });
-    if (!this.totalItems) {
-      this.loopBackService.getTotalItems(object).subscribe(totalitmes => {
-        this.totalItems = totalitmes;
-      });
-    }
+    this.loopBackService.getTotalItems(object).subscribe(totalitmes => {
+      this.totalItems = totalitmes;
+    });
   }
 
   deleteItem(id: number) {
@@ -95,6 +93,12 @@ export class IndexComponent implements OnInit {
         this.listings = this.listings.filter(acc => acc.id !== id);
         this.loopBackService.deleteItem(this.objectAPI, id).subscribe(res => {
           Swal.fire('Deleted!', 'Your record has been deleted.', 'success');
+          this.loopBackService.getTotalItems(this.objectAPI).subscribe(totalitmes => {
+            this.totalItems = totalitmes;
+            if (totalitmes <= 20) {
+              this.actionPage(1);
+            }
+          });
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire('Cancelled', 'Your record is safe :)', 'error');
@@ -103,14 +107,20 @@ export class IndexComponent implements OnInit {
   }
 
   ApplyQueryParams(queryParams) {
-    this.currentPage =
-      queryParams && queryParams.Page ? Number(queryParams.Page) : 1;
+    if (queryParams && queryParams.Page) {
+      this.currentPage = Number(queryParams.Page);
+      this.skipFilter = (this.currentPage - 1) * 20;
+    } else {
+      this.currentPage = 1;
+    }
+    // this.currentPage =queryParams && queryParams.Page ? Number(queryParams.Page) : 1;
   }
 
   actionPage(page: number) {
     this.currentPage = page;
     this.skipFilter = this.currentPage > 1 ? (this.currentPage - 1) * 20 : null;
     const pageQueryParam = this.currentPage === 1 ? null : this.currentPage;
+    this.search(this.objectAPI);
     const navigationExtras: NavigationExtras = {
       queryParams: { Page: pageQueryParam },
       queryParamsHandling: 'merge'

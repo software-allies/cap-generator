@@ -7,20 +7,22 @@ import { map } from "rxjs/operators";
   providedIn: "root"
 })
 export class LoopbackService {
-
   url: string;
+  limit: number;
   constructor(private http: HttpClient, private authenticationService: AuthenticationService) {
-    this.url = "http://localhost:3000/api";
+    this.url = 'http://localhost:3000/api';
+    this.limit = 20;
+
   }
 
-  getAllRequest(tableName: string) {
+  getAllRequest(tableName: string, offset: number = 0) {
     const httpOptions = {
       headers: new HttpHeaders({
         'content-type': 'application/json',
         'Authorization': `Bearer ${this.authenticationService.getToken()}`
       })
     };
-    return this.http.get(`${this.url}/${tableName}`, httpOptions);
+    return this.http.get(`${this.url}/${tableName}?filter={"where":{"UUID__c": {"nlike": "null" }},"order":"Name","limit":${this.limit},"offset":${offset}}`, httpOptions);
   }
 
   getWithFilter(query: string) {
@@ -40,7 +42,7 @@ export class LoopbackService {
         'Authorization': `Bearer ${this.authenticationService.getToken()}`
       })
     };
-    return this.http.get(`${this.url}/${tableName}/count`, httpOptions)
+    return this.http.get(`${this.url}/${tableName}/count?where={"UUID__c": {"nlike": "null" }}`, httpOptions)
       .pipe(map( (data: any) => {
           return data.count;
         })

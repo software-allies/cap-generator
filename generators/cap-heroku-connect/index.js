@@ -39,12 +39,6 @@ module.exports = class extends Generator {
         message: "What's the name of your API?",
         default: this.options.name + '-api',
         when: ctx => ctx.sync === 'HerokuConnect'
-      },
-      {
-        type: 'input',
-        name: 'dataBase',
-        message: "What's the URL data base?",
-        when: ctx => ctx.sync === 'HerokuConnect'
       }
     ];
     return this.prompt(prompts).then(props => {
