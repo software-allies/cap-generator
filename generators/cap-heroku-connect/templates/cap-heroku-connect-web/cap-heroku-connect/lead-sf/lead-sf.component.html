@@ -62,7 +62,7 @@
                     <label for="inputLastName">Last Name</label>
                     <input
                       [ngClass]="{
-                        'is-invalid': lastNameIsInvalid
+                        'is-invalid': isInvalid && !form.controls.lastName.value
                       }"
                       type="text"
                       class="form-control"
@@ -74,7 +74,7 @@
                     <label for="inputCompany">Company</label>
                     <input
                       [ngClass]="{
-                        'is-invalid': companyIsInvalid
+                        'is-invalid': isInvalid && !form.controls.company.value
                       }"
                       type="text"
                       class="form-control"
@@ -211,7 +211,7 @@
                     <label for="inputLeadStatus">Lead Status</label>
                     <select
                       [ngClass]="{
-                        'is-invalid': statusIsInvalid
+                        'is-invalid': isInvalid && !form.controls.status.value
                       }"
                       formControlName="status"
                       id="inputLeadStatus"
@@ -471,11 +471,11 @@
           </div>
         </div>
         <div class="form-row text-center mt-2">
-          <div class="col-12">
-
+          <div class="col-md-6">
             <button *ngIf="updateLead" (click)="onSubmit(true)" class="btn btn-primary">Submit</button>
             <button *ngIf="createLead" (click)="onSubmit(false)" class="btn btn-primary">Submit</button>
-
+          </div>
+          <div class="col-md-6">
             <button *ngIf="createLead" type="button" (click)="cancelAction(true)" class="btn btn-secondary">Cancel</button>
             <button *ngIf="updateLead" type="button" (click)="cancelAction()" class="btn btn-secondary">Cancel</button>
           </div>
