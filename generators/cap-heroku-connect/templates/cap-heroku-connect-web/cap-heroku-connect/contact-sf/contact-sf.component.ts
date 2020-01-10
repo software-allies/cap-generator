@@ -51,8 +51,8 @@ export class ContactSFComponent implements OnInit {
 
     this.objectAPI = 'Contacts';
     this.contact = {};
-    this.lookUpAccount = [];
-    this.lookUpContact = [];
+    this.lookUpAccount = null;
+    this.lookUpContact = null;
   }
 
   ngOnInit() {
@@ -92,6 +92,25 @@ export class ContactSFComponent implements OnInit {
     }
   }
 
+  changeFormatDate(formatDate: any) {
+    const date = new Date(formatDate);
+    const day = ('0' + date.getDate()).slice(-2);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    return date.getFullYear() + '-' + month + '-' + day;
+  }
+
+  LookUpAccountName(AccountId: string): string {
+    return  this.lookUpAccount && AccountId ?
+            this.lookUpAccount.find(x => x.SfId === AccountId).Name
+            : '';
+  }
+
+  LookUpReportsTo(ReportsToId: string): string {
+    return  this.lookUpContact && ReportsToId ?
+            this.lookUpContact.find(x => x.SfId === ReportsToId).FirstName
+            : '';
+  }
+
   createForm(contact?: any) {
     if (contact) {
       this.form = new FormGroup({
@@ -103,7 +122,7 @@ export class ContactSFComponent implements OnInit {
         accountId: new FormControl(contact.AccountId),
         title: new FormControl(contact.Title),
         department: new FormControl(contact.Department),
-        birthdate: new FormControl(contact.Birthdate),
+        birthdate: new FormControl(this.changeFormatDate(contact.Birthdate)),
         reportsToId: new FormControl(contact.ReportsToId),
         leadSource: new FormControl(contact.LeadSource),
         phone: new FormControl(contact.Phone),

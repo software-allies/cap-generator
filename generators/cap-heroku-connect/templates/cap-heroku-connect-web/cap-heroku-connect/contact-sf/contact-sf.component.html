@@ -85,7 +85,7 @@
                     <label for="inputLastName">Last Name</label>
                     <input
                       [ngClass]="{
-                        'is-invalid': isInvalid
+                        'is-invalid': isInvalid && !form.controls.lastName.value
                       }"
                       type="text"
                       class="form-control"
@@ -126,37 +126,24 @@
                 </div>
 
                 <div class="form-row">
-
-
-
-
-
-
-                <div class="form-group col-md-6">
-                  <label for="inputReportsTo">Reports To</label>
-                  <select
-                    formControlName="reportsToId"
-                    id="inputReportsTo"
-                    class="form-control"
-                  >
-                    <option value="" selected disabled hidden
-                      >Choose here</option
-                    >
-                    <option
-                      *ngFor="let contact of lookUpContact"
-                      value="{{ contact.SfId }}"
+                  <div class="form-group col-md-6">
+                    <label for="inputReportsTo">Reports To</label>
+                    <select
+                      formControlName="reportsToId"
+                      id="inputReportsTo"
                       class="form-control"
-                      >{{ contact.Salutation }} {{ contact.FirstName }} {{ contact.LastName }}</option
                     >
-                  </select>
-                </div>
-
-
-
-
-
-
-
+                      <option value="" selected disabled hidden
+                        >Choose here</option
+                      >
+                      <option
+                        *ngFor="let contact of lookUpContact"
+                        value="{{ contact.SfId }}"
+                        class="form-control"
+                        >{{ contact.Salutation }} {{ contact.FirstName }} {{ contact.LastName }}</option
+                      >
+                    </select>
+                  </div>
                   <div class="form-group col-md-6">
                     <label for="inputLeadSource">Lead Source</label>
                     <select
@@ -476,10 +463,11 @@
           </div>
         </div>
         <div class="form-row text-center mt-2">
-          <div class="col-12">
+          <div class="col-md-6">
             <button *ngIf="updateContact" (click)="onSubmit(true)" class="btn btn-primary">Submit</button>
             <button *ngIf="createContact" (click)="onSubmit(false)" class="btn btn-primary">Submit</button>
-
+          </div>
+          <div class="col-md-6">
             <button *ngIf="createContact" type="button" (click)="cancelAction(true)" class="btn btn-secondary">Cancel</button>
             <button *ngIf="updateContact" type="button" (click)="cancelAction()" class="btn btn-secondary">Cancel</button>
           </div>
@@ -500,9 +488,6 @@
         </button>
       </div>
     </div>
-
-
-
     <div class="row mt-2">
       <div class="col-md-6">
         <table class="table table-sm">
@@ -524,7 +509,7 @@
             </tr>
             <tr>
                 <th scope="row">Account Name</th>
-                <td>{{ contact.AccountId }}</td>
+                <td>{{ LookUpAccountName(contact.AccountId) }}</td>
               </tr>
             <tr>
               <th scope="row">Title</th>
@@ -536,11 +521,11 @@
             </tr>
             <tr>
               <th scope="row">Birthdate</th>
-              <td>{{ contact.Birthdate }}</td>
+              <td>{{ contact.Birthdate | date :['MM/dd/yyyy']}}</td>
             </tr>
             <tr>
               <th scope="row">Reports To</th>
-              <td>{{ contact.ReportsToId }}</td>
+              <td>{{ LookUpReportsTo(contact.ReportsToId) }}</td>
             </tr>
             <tr>
               <th scope="row">Lead Source</th>
