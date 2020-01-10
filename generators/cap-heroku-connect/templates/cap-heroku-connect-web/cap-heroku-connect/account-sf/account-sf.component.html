@@ -33,7 +33,7 @@
                     <label for="inputAccountName">Account Name</label>
                     <input
                       [ngClass]="{
-                        'is-invalid': isInvalid
+                        'is-invalid': isInvalid && !form.controls.name.value
                       }"
                       type="email"
                       class="form-control"
@@ -223,7 +223,7 @@
                     />
                   </div>
                   <div class="form-group col-md-4">
-                    <label for="inputSicCode">Sic Code</label>
+                    <label for="inputSicCode">SIC Code</label>
                     <input
                       type="text"
                       class="form-control"
@@ -475,6 +475,7 @@
                       class="form-control"
                       id="inputSlaSerialNumber"
                       formControlName="slaSerialNumber__c"
+                      maxlength="10"
                     />
                   </div>
                   <div class="form-group col-md-3">
@@ -536,9 +537,11 @@
           </div>
         </div>
         <div class="form-row text-center mt-2">
-          <div class="col-12">
+          <div class="col-md-6">
             <button *ngIf="updateAccount" (click)="onSubmit(true)" class="btn btn-primary">Submit</button>
             <button *ngIf="createAccount" (click)="onSubmit(false)" class="btn btn-primary">Submit</button>
+          </div>
+          <div class="col-md-6">
             <button *ngIf="createAccount" type="button" (click)="cancelAction(true)" class="btn btn-secondary">Cancel</button>
             <button *ngIf="updateAccount" type="button" (click)="cancelAction()" class="btn btn-secondary">Cancel</button>
           </div>
@@ -573,7 +576,7 @@
             </tr>
             <tr>
               <th scope="row">Parent Account</th>
-              <td>{{ account.ParentId }}</td>
+              <td>{{ LookUpParentAccount(account.ParentId)}}</td>
             </tr>
             <tr>
               <th scope="row">Account Site</th>
@@ -592,10 +595,6 @@
               <td>{{ account.AnnualRevenue }}</td>
             </tr>
             <tr>
-              <th scope="row">UUID</th>
-              <td>{{ account.UUID__c }}</td>
-            </tr>
-            <tr>
               <th scope="row">Billing Address</th>
               <td>{{ account.BillingStreet }}</td>
             </tr>
@@ -605,7 +604,7 @@
             </tr>
             <tr>
               <th scope="row">SLA Expiration Date</th>
-              <td>{{ account.name }}</td>
+              <td>{{ account.SLAExpirationDate__c | date :['MM/dd/yyyy']}}</td>
             </tr>
             <tr>
               <th scope="row">Number of Locations</th>
@@ -619,15 +618,6 @@
               <th scope="row">Description</th>
               <td>{{ account.Description }}</td>
             </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="col-md 6">
-        <table class="table table-sm">
-          <thead>
-            <tr></tr>
-          </thead>
-          <tbody>
             <tr>
               <th scope="row">Rating</th>
               <td>{{ account.Rating }}</td>
@@ -640,6 +630,15 @@
               <th scope="row">Fax</th>
               <td>{{ account.Fax }}</td>
             </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md 6">
+        <table class="table table-sm">
+          <thead>
+            <tr></tr>
+          </thead>
+          <tbody>
             <tr>
               <th scope="row">Website</th>
               <td>{{ account.Website }}</td>
@@ -653,12 +652,44 @@
               <td>{{ account.Ownership }}</td>
             </tr>
             <tr>
-              <th scope="row">Employee</th>
-              <td>{{ account.numberOfEmployees }}</td>
+              <th scope="row">Employees</th>
+              <td>{{ account.NumberOfEmployees }}</td>
             </tr>
             <tr>
               <th scope="row">SIC Code</th>
               <td>{{ account.Sic }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Billing City</th>
+              <td>{{ account.BillingCity }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Billing State/Province</th>
+              <td>{{ account.BillingState }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Billing Zip/Postal Code</th>
+              <td>{{ account.BillingPostalCode }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Billing Country</th>
+              <td>{{ account.BillingCountry }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Shipping City</th>
+              <td>{{ account.ShippingCity }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Shipping State/Province</th>
+              <td>{{ account.ShippingState }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Shipping Zip/Postal Code</th>
+              <td>{{ account.ShippingPostalCode }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Shipping Country</th>
+              <td>{{ account.ShippingCountry }}</td>
             </tr>
             <tr>
               <th scope="row">Shipping Address</th>

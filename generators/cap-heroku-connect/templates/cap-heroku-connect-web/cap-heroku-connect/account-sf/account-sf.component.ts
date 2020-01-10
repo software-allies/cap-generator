@@ -64,7 +64,7 @@ export class AccountSFComponent implements OnInit {
     this.account = {};
     this.objectToSend = {};
     this.objectAPI = 'Accounts';
-    this.lookUpAccount = [];
+    this.lookUpAccount = null;
   }
 
   ngOnInit() {
@@ -101,6 +101,19 @@ export class AccountSFComponent implements OnInit {
     }
   }
 
+  changeFormatDate(formatDate: any) {
+    const date = new Date(formatDate);
+    const day = ('0' + date.getDate()).slice(-2);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    return date.getFullYear() + '-' + month + '-' + day;
+  }
+
+  LookUpParentAccount(ParentId: string): string {
+    return  this.lookUpAccount && ParentId ?
+            this.lookUpAccount.find(x => x.SfId === ParentId).Name
+            : '';
+  }
+
   createForm(account?: any) {
     if (account) {
       this.form = new FormGroup({
@@ -132,7 +145,7 @@ export class AccountSFComponent implements OnInit {
         shippingPostalCode: new FormControl(account.ShippingPostalCode),
         shippingCountry: new FormControl(account.ShippingCountry),
         customerPriority__c: new FormControl(account.CustomerPriority__c),
-        slaExpirationDate__c: new FormControl(account.SLAExpirationDate__c),
+        slaExpirationDate__c: new FormControl(this.changeFormatDate(account.SLAExpirationDate__c)),
         numberOfLocations__c: new FormControl(account.NumberofLocations__c, [Validators.pattern('^(\\d{0,3})$')]),
         active__c: new FormControl(account.Active__c),
         sla__c: new FormControl(account.SLA__c),
