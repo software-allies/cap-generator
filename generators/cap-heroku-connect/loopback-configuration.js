@@ -1,6 +1,6 @@
 const { exec } = require('promisify-child-process');
 
-const loopbackCLI = async () => {
+const loopbackConfiguration = async () => {
   try {
 
   } catch (error) {
@@ -9,5 +9,5 @@ const loopbackCLI = async () => {
 }
 
 module.exports = {
-  loopbackCLI
+  loopbackConfiguration
 };
