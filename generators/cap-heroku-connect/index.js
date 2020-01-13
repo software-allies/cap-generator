@@ -5,6 +5,7 @@ const Parser = require('ts-simple-ast').default;
 var exec = require('child-process-promise').exec;
 const cp = require('child_process');
 const heroku = require('./heroku-connect');
+const deploy = require('./heroku-deploy');
 
 module.exports = class extends Generator {
   /**
@@ -65,9 +66,7 @@ module.exports = class extends Generator {
             console.log("you don't have Loopback-cli installed, we will install it right away");
             exec("npm install -g loopback-cli", (error, stdout, stderr) => {
               if (error) {
-                console.log(
-                  `name: ${error.name}\nMessage: ${error.message}\nStack: ${error.stack}`
-                );
+                console.log(`name: ${error.name}\nMessage: ${error.message}\nStack: ${error.stack}`);
                 console.log('Loopback could not be installed, try later');
               } else {
                 // console.log('stdout',stdout);
@@ -76,17 +75,6 @@ module.exports = class extends Generator {
                 child.stderr.on("data", (data) => { console.log('warning: incompatibility error') });
                 child.on('exit', async code => {
                   if (code === 0) {
-                    exec(
-                      'npm install --save loopback-connector-postgresql',
-                      { cwd: `./${this.props.path}` },
-                      (error, stdout) => {
-                        if (error) {
-                          console.log('error: error installing postgres dependency');
-                        } else if (stdout) {
-                          console.log('Postgres dependency installed');
-                        }
-                      }
-                    );
                     console.log(`Your REST API has been successfully created ${code}`);
                     this.fs.copyTpl(
                       this.templatePath('cap-heroku-connect-api/**'),
@@ -132,7 +120,6 @@ module.exports = class extends Generator {
                     file.removeText(file.getPos(), file.getEnd()); // Remove all the text since we already have the text formed with the correct values
                     file.insertText(0, newText); // Insert new text
                     file.saveSync(); // Save all changes
-                    console.log('urlDataBase.postgresURL: ', urlDataBase);
 
                     const newTextDB = fileDB.getText().replace(
                       dataSource,
@@ -152,17 +139,9 @@ module.exports = class extends Generator {
             child.stderr.on("data", (data) => { console.log('warning: incompatibility error') });
             child.on('exit', async code => {
               if (code === 0) {
-                exec('npm install --save loopback-connector-postgresql', { cwd: `./${this.props.path}` }, (error, stdout, stderr) => {
-                  if (error) {
-                    console.log('error: error installing postgres dependency')
-                  } else if (stdout) {
-                    console.log('Postgres dependency installed.');
-                  }
-                });
                 console.log(`Your REST API has been successfully created ${code} .`);
 
                 let urlDataBase = await heroku.herokuCLI(this.props.path, this.templatePath('cap-heroku-connect-api/mapping'));
-                console.log('urlDataBase: ', urlDataBase);
                 /**
                  * copyTPL START
                  */
@@ -247,7 +226,8 @@ module.exports = class extends Generator {
                 const newTextDependencies = fileDependencies.getText().replace(dependencies,
                   `"dependencies": {
     "express-jwt": "^5.3.1",
-    "jwks-rsa": "^1.6.0",`);
+    "jwks-rsa": "^1.6.0",
+    "loopback-connector-postgresql": "^3.8.1",`);
                 fileDependencies.removeText(fileDependencies.getPos(), fileDependencies.getEnd());
                 fileDependencies.insertText(0, newTextDependencies);
                 fileDependencies.saveSync();
@@ -291,7 +271,8 @@ module.exports = class extends Generator {
     "public": true
   }
 }`);
-                fileModelConfig.saveSync()
+                fileModelConfig.saveSync();
+                await deploy.herokuCLI(this.props.path);
               }
             });
           }
