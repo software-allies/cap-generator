@@ -10,9 +10,12 @@ export class LoopbackService {
   url: string;
   limit: number;
   constructor(private http: HttpClient, private authenticationService: AuthenticationService) {
+    <% if (deployed) { %>
+    this.url = 'https://<%= apiName %>.herokuapp.com/api'
+    <% } else {-%>
     this.url = 'http://localhost:3000/api';
+    <% } -%>
     this.limit = 20;
-
   }
 
   getAllRequest(tableName: string, offset: number = 0) {
