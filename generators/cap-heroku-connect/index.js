@@ -107,7 +107,9 @@ module.exports = class extends Generator {
 
           await loopbackConfig.loopbackConfiguration(this.props.path, this.destinationPath(`${this.props.path}`), urlDataBase.postgresURL);
 
-          await herokuDeploy.herokuCLI(this.props.path);
+          if (yesNoValidation(this.props.deploy)) {
+            await herokuDeploy.herokuCLI(this.props.path);
+          }
 
         }).catch(function (err) {
           console.error('ERROR: ', err);
