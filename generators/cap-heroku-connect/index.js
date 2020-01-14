@@ -70,44 +70,45 @@ module.exports = class extends Generator {
     switch (this.props.sync) {
       case 'CustomSync':
         console.log('We are working on it');
-        break;
+      break;
 
       case 'HerokuConnect':
         exec('lb --version', async (error, stdout) => {
+
           if (error) {
-            console.log('error, no tienes loopback instalado');
+            console.log('error: you dont have loopback installed, wait a moment we will proceed to install loopback');
+            await loopback.loopbackCLI(this.props.path, true);
           } else {
-
-            await loopback.loopbackCLI(this.props.path);
-
-            let urlDataBase = await heroku.herokuCLI(this.props.path, this.templatePath('cap-heroku-connect-api/mapping'));
-
-            this.fs.copyTpl(
-              this.templatePath('cap-heroku-connect-api/models/**'),
-              this.destinationPath(`${this.props.path}`),
-              {}
-            );
-            this.fs.copyTpl(
-              this.templatePath('cap-heroku-connect-api/auth/**'),
-              this.destinationPath(`${this.props.path}/server/`),
-              {
-                domain: this.options.AuthDomain
-              }
-            );
-            this.fs.copyTpl(
-              this.templatePath('cap-heroku-connect-web/**'),
-              this.destinationPath(`${this.options.name}/src/app/modules/`),
-              {
-                deployed: yesNoValidation(this.props.deploy),
-                apiName: this.props.path
-              }
-            );
-
-            await loopbackConfig.loopbackConfiguration(this.props.path, this.destinationPath(`${this.props.path}`), urlDataBase.postgresURL);
-
-            await herokuDeploy.herokuCLI(this.props.path);
-
+            await loopback.loopbackCLI(this.props.path, false);
           }
+
+          let urlDataBase = await heroku.herokuCLI(this.props.path, this.templatePath('cap-heroku-connect-api/mapping'));
+
+          this.fs.copyTpl(
+            this.templatePath('cap-heroku-connect-api/models/**'),
+            this.destinationPath(`${this.props.path}`),
+            {}
+          );
+          this.fs.copyTpl(
+            this.templatePath('cap-heroku-connect-api/auth/**'),
+            this.destinationPath(`${this.props.path}/server/`),
+            {
+              domain: this.options.AuthDomain
+            }
+          );
+          this.fs.copyTpl(
+            this.templatePath('cap-heroku-connect-web/**'),
+            this.destinationPath(`${this.options.name}/src/app/modules/`),
+            {
+              deployed: yesNoValidation(this.props.deploy),
+              apiName: this.props.path
+            }
+          );
+
+          await loopbackConfig.loopbackConfiguration(this.props.path, this.destinationPath(`${this.props.path}`), urlDataBase.postgresURL);
+
+          await herokuDeploy.herokuCLI(this.props.path);
+
         }).catch(function (err) {
           console.error('ERROR: ', err);
         });
