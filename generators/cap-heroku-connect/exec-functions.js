@@ -46,10 +46,7 @@ const schemaConnection = async name =>
 
 const salesforceAuth = async name => exec(`heroku connect:sf:auth -a ${name}`);
 
-const mapping = async data => {
-  console.log('data: ', data);
-  exec(`heroku connect:import ${data.path}/heroku-config.json -a ${data.name}`);
-};
+const mapping = async data => exec(`heroku connect:import ${data.path}/heroku-config.json -a ${data.name}`);
 
 module.exports = {
   herokuVersionSpawn,
