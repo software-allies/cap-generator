@@ -2,10 +2,7 @@ const { run } = require('./heroku-administrator');
 const commands = require('./exec-functions');
 const loadMessages = require('./load-messages');
 
-// Checking the Heroku version
 exports.herokuCLI = async (appName, path) => {
-  console.log('path: ', path);
-  console.log('appName: ', appName);
   try {
     await run(commands.herokuVersion, loadMessages.herokuV);
 
@@ -28,6 +25,7 @@ exports.herokuCLI = async (appName, path) => {
     );
 
     let startPosition = credentials.stdout.search('postgres');
+
     // DBURL it's going to save the url that it's going to be in Loopback
     const DBURL = credentials.stdout.slice(startPosition, credentials.stdout.length - 1);
     herokuConfiguration.postgresURl = DBURL;

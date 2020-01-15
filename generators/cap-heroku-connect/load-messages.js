@@ -73,7 +73,7 @@ let loadMessages = {
   },
   salesforceAuth: {
     actionMessage: 'Authenticate the connection to your Salesforce Org...',
-    responseMessage: "Successful BD and Schema's configuration.",
+    responseMessage: 'Successful login with Salesforce.',
     errorMessage: 'Error trying to configure the DB and the Schema.'
   },
   mapping: {
