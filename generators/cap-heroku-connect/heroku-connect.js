@@ -1,14 +1,3 @@
-// Const verifyHeroku = async () => await exec(`heroku --version`);
-
-// Const herokuInstallation = async () => await exec(`npm install -g heroku`);
-
-// const login = async () => await exec('heroku login -i');
-
-// const installHerokuC = async () => await exec('heroku plugins:install heroku-connect-plugin');
-
-// Create a Heroku Application
-
-// const herokuScript = require('./script')
 const { run } = require('./heroku-administrator');
 const commands = require('./exec-functions');
 const loadMessages = require('./load-messages');
@@ -21,6 +10,8 @@ exports.herokuCLI = async (appName, path) => {
     await run(commands.herokuVersion, loadMessages.herokuV);
 
     await run(commands.herokuConnectVerification, loadMessages.herokuC);
+
+    await run(commands.checkUser, loadMessages.checkUser);
 
     let herokuConfiguration = {};
     let urls = await run(commands.herokuCreateApp, loadMessages.herokuCreateApp, appName);
@@ -83,6 +74,9 @@ exports.herokuCLI = async (appName, path) => {
     console.log('error: ', error);
     if (error.description === 'Heroku Connect is not installed') {
       await run(commands.herokuConnectInstallation, loadMessages.herokuConnectIns);
+    }
+    if (error.code === 100) {
+      await run(commands.login, loadMessages.login);
     }
   }
 };
