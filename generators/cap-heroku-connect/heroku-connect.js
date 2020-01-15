@@ -28,7 +28,7 @@ exports.herokuCLI = async (appName, path) => {
 
     // DBURL it's going to save the url that it's going to be in Loopback
     const DBURL = credentials.stdout.slice(startPosition, credentials.stdout.length - 1);
-    herokuConfiguration.postgresURl = DBURL;
+    herokuConfiguration.postgresURL = DBURL;
     let dbstatus = await run(
       commands.herokuConnectCreation,
       loadMessages.herokuConnectCreation,
