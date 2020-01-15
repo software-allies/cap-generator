@@ -7,6 +7,15 @@ const herokuConnectVerification = async () => exec('heroku plugins');
 const herokuConnectInstallation = async () =>
   exec('heroku plugins:install heroku-connect-plugin');
 
+const checkUser = async () => exec('heroku whoami');
+
+const login = async () => {
+  const child = exec('heroku login');
+  child.stdin.write('\n');
+  child.stderr.on('data');
+  child.stdin.end();
+  return child;
+};
 // Start a new project
 const herokuCreateApp = async name => exec(`heroku apps:create ${name}`);
 const hrkCreatePostgreSql = async name =>
@@ -48,6 +57,8 @@ module.exports = {
   herokuInstallation,
   herokuConnectVerification,
   herokuConnectInstallation,
+  checkUser,
+  login,
   herokuCreateApp,
   hrkCreatePostgreSql,
   herokuCredentials,
