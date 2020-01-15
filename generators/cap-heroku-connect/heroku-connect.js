@@ -76,5 +76,14 @@ exports.herokuCLI = async (appName, path) => {
     if (error.code === 100) {
       await run(commands.login, loadMessages.login);
     }
+
+    if (error.code === 1) {
+      let install = await run(
+        commands.herokuInstallation,
+        loadMessages.herokuCLIInstallation
+      );
+
+      console.log('install: ', install);
+    }
   }
 };

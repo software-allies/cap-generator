@@ -4,6 +4,11 @@ let loadMessages = {
     responseMessage: 'Heroku CLI is already installed.',
     errorMessage: 'Heroku CLI is not installed.'
   },
+  herokuCLIInstallation: {
+    actionMessage: 'installing Heroku CLI...',
+    responseMessage: 'Heroku CLI is installed.',
+    errorMessage: 'Error trying to install Heroku CLI.'
+  },
   herokuC: {
     actionMessage: 'Searching a Heroku Connect plugin...',
     responseMessage: 'Heroku Connect is already installed.',

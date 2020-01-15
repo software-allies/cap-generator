@@ -30,6 +30,17 @@ exports.run = (promise, messages, appName) => {
     } catch (error) {
       console.log('error from testing: ', error);
       // Reject when the user is not find it
+      // Error when the user doesn't have installed Heroku's CLI
+      if (error.code === 1) {
+        load.stop();
+        load.fail(messages.error_message);
+        let err = {
+          messages: 'Heroku CLI is not installed',
+          code: 1,
+          description: "You don't have installed Heroku CLI"
+        };
+        reject(err);
+      }
       if (error.code === 100) {
         load.stop();
         load.fail(messages.error_message);
