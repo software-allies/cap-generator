@@ -14,6 +14,16 @@ let loadMessages = {
     responseMessage: 'Heroku Connect was installed.',
     errorMessage: 'Error trying to install Heroku Connect plugin.'
   },
+  checkUser: {
+    actionMessage: 'Searching a user on Heroku...',
+    responseMessage: 'An account was found',
+    errorMessage: 'User not found'
+  },
+  login: {
+    actionMessage: 'Login...',
+    responseMessage: 'Successful login',
+    errorMessage: 'Error trying to login.'
+  },
   herokuCreateApp: {
     actionMessage: 'Creating app in Heroku...',
     responseMessage: 'The application was created.',
