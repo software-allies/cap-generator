@@ -29,6 +29,17 @@ exports.run = (promise, messages, appName) => {
       }
     } catch (error) {
       console.log('error from testing: ', error);
+      // Reject when the user is not find it
+      if (error.code === 100) {
+        load.stop();
+        load.fail(messages.error_message);
+        let err = {
+          messages: 'User not found',
+          code: 100,
+          description: "You don't access"
+        };
+        reject(err);
+      }
     }
   });
 };
