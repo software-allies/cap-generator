@@ -36,9 +36,7 @@ const tokenApplication = async () => exec(`heroku auth:token`);
 
 const curlPost = async data =>
   exec(
-    `curl -X POST -H "Authorization: Bearer ${
-      data.token
-    }" https://hc-central.heroku.com/auth/${data.name}`
+    `curl -X POST -H "Authorization: Bearer ${data.token}" "https://hc-central.heroku.com/auth/${data.name}"`
   );
 
 const schemaConnection = async name =>
