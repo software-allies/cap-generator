@@ -1,25 +1,33 @@
-const { run } = require('./heroku-administrator');
-const commands = require('./exec-functions');
+const herokuService = require('./heroku-administrator');
+const command = require('./exec-functions');
 const loadMessages = require('./load-messages');
 
 exports.herokuCLI = async (appName, path) => {
   try {
-    await run(commands.herokuVersion, loadMessages.herokuV);
+    await herokuService.run(command.herokuVersion, loadMessages.herokuV);
 
-    await run(commands.herokuConnectVerification, loadMessages.herokuC);
+    await herokuService.run(command.herokuConnectVerification, loadMessages.herokuC);
 
-    await run(commands.checkUser, loadMessages.checkUser);
+    await herokuService.run(command.checkUser, loadMessages.checkUser);
 
     let herokuConfiguration = {};
-    let urls = await run(commands.herokuCreateApp, loadMessages.herokuCreateApp, appName);
+    let urls = await herokuService.run(
+      command.herokuCreateApp,
+      loadMessages.herokuCreateApp,
+      appName
+    );
     let herokUrls = urls.stdout.split('|');
     herokuConfiguration.herokuURL = herokUrls[0];
     herokuConfiguration.herokuGit = herokUrls[1];
 
-    await run(commands.hrkCreatePostgreSql, loadMessages.herokuCreatePostgres, appName);
+    await herokuService.run(
+      command.hrkCreatePostgreSql,
+      loadMessages.herokuCreatePostgres,
+      appName
+    );
 
-    let credentials = await run(
-      commands.herokuCredentials,
+    let credentials = await herokuService.run(
+      command.herokuCredentials,
       loadMessages.herokuCredentials,
       appName
     );
@@ -29,57 +37,67 @@ exports.herokuCLI = async (appName, path) => {
     // DBURL it's going to save the url that it's going to be in Loopback
     const DBURL = credentials.stdout.slice(startPosition, credentials.stdout.length - 1);
     herokuConfiguration.postgresURL = DBURL;
-    let dbstatus = await run(
-      commands.herokuConnectCreation,
+    let dbstatus = await herokuService.run(
+      command.herokuConnectCreation,
       loadMessages.herokuConnectCreation,
       appName
     );
 
-    let commandSetupConnect = dbstatus.stdout.split('`')[1];
+    let commandetupConnect = dbstatus.stdout.split('`')[1];
 
-    await run(
-      commands.setUpConnect,
+    await herokuService.run(
+      command.setUpConnect,
       loadMessages.herokuConnectSetup,
-      commandSetupConnect
+      commandetupConnect
     );
-    // Let infoConnection = await run(commands.authConnection, loadMessages.authConnection, appName)
+    // Let infoConnection = await run(command.authConnection, loadMessages.authConnection, appName)
     // Let startPositionC = infoConnection.stdout.search('ID') + 13
     // Let endPositionC = infoConnection.stdout.search('Description') - 1
 
     // var connection_id = infoConnection.stdout.slice(startPositionC, endPositionC);
 
-    let token = await run(commands.tokenApplication, loadMessages.tokenApplication);
+    let token = await herokuService.run(
+      command.tokenApplication,
+      loadMessages.tokenApplication
+    );
 
     let config = {
       name: appName,
       token: token.stdout
     };
 
-    await run(commands.curlPost, loadMessages.curlPost, config);
+    await herokuService.run(command.curlPost, loadMessages.curlPost, config);
 
-    await run(commands.schemaConnection, loadMessages.schemaConnection, appName);
+    await herokuService.run(
+      command.schemaConnection,
+      loadMessages.schemaConnection,
+      appName
+    );
 
-    await run(commands.salesforceAuth, loadMessages.salesforceAuth, appName);
+    await herokuService.run(command.salesforceAuth, loadMessages.salesforceAuth, appName);
 
     let map = {
       path: path,
       name: appName
     };
-    // Await run(commands.schemaConnection, loadMessages.schemaConnection, appName)
-    await run(commands.mapping, loadMessages.mapping, map);
+    // Await run(command.schemaConnection, loadMessages.schemaConnection, appName)
+    await herokuService.run(command.mapping, loadMessages.mapping, map);
     return herokuConfiguration;
   } catch (error) {
     console.log('error: ', error);
     if (error.description === 'Heroku Connect is not installed') {
-      await run(commands.herokuConnectInstallation, loadMessages.herokuConnectIns);
+      await herokuService.run(
+        command.herokuConnectInstallation,
+        loadMessages.herokuConnectIns
+      );
     }
     if (error.code === 100) {
-      await run(commands.login, loadMessages.login);
+      await herokuService.run(command.login, loadMessages.login);
     }
 
     if (error.code === 1) {
-      let install = await run(
-        commands.herokuInstallation,
+      let install = await herokuService.run(
+        command.herokuInstallation,
         loadMessages.herokuCLIInstallation
       );
 
