@@ -4,20 +4,10 @@ let loadMessages = {
     responseMessage: 'Heroku CLI is already installed.',
     errorMessage: 'Heroku CLI is not installed.'
   },
-  herokuCLIInstallation: {
-    actionMessage: 'installing Heroku CLI...',
-    responseMessage: 'Heroku CLI is installed.',
-    errorMessage: 'Error trying to install Heroku CLI.'
-  },
   herokuC: {
     actionMessage: 'Searching a Heroku Connect plugin...',
     responseMessage: 'Heroku Connect is already installed.',
     errorMessage: 'Heroku Connect is not installed.'
-  },
-  herokuConnectIns: {
-    actionMessage: 'Installing Heroku Connect plugin...',
-    responseMessage: 'Heroku Connect was installed.',
-    errorMessage: 'Error trying to install Heroku Connect plugin.'
   },
   checkUser: {
     actionMessage: 'Searching a user on Heroku...',
@@ -28,6 +18,16 @@ let loadMessages = {
     actionMessage: 'Login...',
     responseMessage: 'Successful login',
     errorMessage: 'Error trying to login.'
+  },
+  herokuCLIInstallation: {
+    actionMessage: "Installing Heroku's CLI...",
+    responseMessage: 'Heroku CLI was installed.',
+    errorMessage: "Error trying to install Heroku's CLI."
+  },
+  herokuConnectIns: {
+    actionMessage: 'Installing Heroku Connect plugin...',
+    responseMessage: 'Heroku Connect was installed.',
+    errorMessage: 'Error trying to install Heroku Connect plugin.'
   },
   herokuCreateApp: {
     actionMessage: 'Creating app in Heroku...',
@@ -47,7 +47,8 @@ let loadMessages = {
   herokuConnectCreation: {
     actionMessage: 'Connection the Heroku app to Heroku Connect...',
     responseMessage: 'Successful Connection with Heroku Connect.',
-    errorMessage: 'Error trying to connect the Heroku application with Heroku Connect.'
+    errorMessage:
+      'Error trying to connect the Heroku application with Heroku Connect.'
   },
   herokuConnectSetup: {
     actionMessage: 'Finishing the Heroku Connect configuration...',
@@ -78,8 +79,8 @@ let loadMessages = {
   },
   salesforceAuth: {
     actionMessage: 'Authenticate the connection to your Salesforce Org...',
-    responseMessage: 'Successful login with Salesforce.',
-    errorMessage: 'Error trying to configure the DB and the Schema.'
+    responseMessage: 'Successful authentication with Salesforce Org.',
+    errorMessage: 'Error trying to authenticate with Salesforce Org.'
   },
   mapping: {
     actionMessage: 'Importing a mapping configuration...',
