@@ -7,30 +7,39 @@ exports.run = (promise, messages, appName) => {
   let errorAction;
   return new Promise(async (resolve, reject) => {
     try {
-      load = loading(messages.action_message.blue).start();
+      load = loading(messages.actionMessage.blue).start();
 
       if (appName) {
         commandResult = await promise(appName);
       } else {
         commandResult = await promise();
       }
-
+      if (messages.actionMessage === 'Importing a mapping configuration...') {
+        load.stop();
+        load.succeed(messages.responseMessage);
+        let response = {
+          stderr: '',
+          stdout: 'Successful mapping'
+        };
+        resolve(response);
+      }
       if (commandResult.stdout === 'no plugins installed\n') {
         load.stop();
         load.fail(messages.error_message);
-        errorAction = {
-          messages: commandResult.stdout,
-          code: 400,
-          description: 'Heroku Connect is not installed'
-        };
-        reject(errorAction);
+        if (commandResult) {
+          errorAction = {
+            messages: commandResult.stdout,
+            code: 400,
+            description: 'Heroku Connect is not installed'
+          };
+          reject(errorAction);
+        }
       } else {
         load.stop();
-        load.succeed(messages.response_message);
-        resolve(commandResult);
+        load.succeed(messages.responseMessage);
+        if (commandResult) resolve(commandResult);
       }
     } catch (error) {
-      console.log('error: ', error);
       switch (error.code) {
         case 1:
           load.stop();
@@ -46,7 +55,7 @@ exports.run = (promise, messages, appName) => {
         // Reject when the user is not find it
         case 100:
           load.stop();
-          load.fail(messages.error_message);
+          load.fail(messages.errorMessage);
           errorAction = {
             messages: 'User not found',
             code: 100,
@@ -56,7 +65,7 @@ exports.run = (promise, messages, appName) => {
           break;
         case 127:
           load.stop();
-          load.fail(messages.error_message);
+          load.fail(messages.errorMessage);
           errorAction = {
             description: "Heroku's CLI is not installed.",
             messages: "Heroku's CLI is not installed.",

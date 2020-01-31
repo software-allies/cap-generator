@@ -152,14 +152,13 @@ const startConfigurationApp = async (name, path) => {
       loadMessages.schemaConnection,
       name
     );
-    await herokuService.run(command.mapping, loadMessages.mapping, map)
+    await herokuService.run(command.mapping, loadMessages.mapping, map);
   } catch (error) {
-    console.log('error: ', error);
+    console.log('error:  connect', error);
   }
 };
 
 exports.herokuCLI = async (appName, path) => {
-
   try {
     await verifyInstallation();
     let newName = await appsCreation(appName);

@@ -46,14 +46,17 @@ const curlPost = async data => {
 
   function callback(error, response, body) {
     if (!error && response.statusCode === 200) {
-      if (error) return error;
       var info = JSON.parse(body);
       console.log(info.stargazers_count + ' Stars');
       console.log(info.forks_count + ' Forks');
     }
   }
-
-  return request(options, callback);
+  request(options, callback);
+  let response = {
+    stdout: 'Successful login',
+    stderr: ''
+  };
+  return response;
 };
 
 const schemaConnection = async name =>

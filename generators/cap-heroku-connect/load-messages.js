@@ -47,8 +47,7 @@ let loadMessages = {
   herokuConnectCreation: {
     actionMessage: 'Connection the Heroku app to Heroku Connect...',
     responseMessage: 'Successful Connection with Heroku Connect.',
-    errorMessage:
-      'Error trying to connect the Heroku application with Heroku Connect.'
+    errorMessage: 'Error trying to connect the Heroku application with Heroku Connect.'
   },
   herokuConnectSetup: {
     actionMessage: 'Finishing the Heroku Connect configuration...',
