@@ -13,7 +13,7 @@ const checkUser = async () => exec('heroku whoami');
 const login = async () => {
   const child = exec('heroku login');
   child.stdin.write('\n');
-  child.stderr.on('data');
+  child.stderr.on('data', data => {});
   child.stdin.end();
   return child;
 };
