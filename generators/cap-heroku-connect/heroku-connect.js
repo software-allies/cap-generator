@@ -27,7 +27,20 @@ const verifyInstallation = async () => {
         await herokuService.run(command.login, loadMessages.login);
         break;
       // Code 400
+
+      case 400:
+        await herokuService.run(
+          command.herokuConnectInstallation,
+          loadMessages.herokuConnectIns
+        );
+        await herokuService.run(command.login, loadMessages.login);
+        break;
+
       default:
+        await herokuService.run(
+          command.herokuInstallation,
+          loadMessages.herokuCLIInstallation
+        );
         await herokuService.run(
           command.herokuConnectInstallation,
           loadMessages.herokuConnectIns
