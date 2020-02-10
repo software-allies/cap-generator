@@ -45,6 +45,13 @@ module.exports = class extends Generator {
       },
       {
         type: 'input',
+        name: 'authDomain',
+        message: "what is your auth0 domain to configure backEnd authentication",
+        default: 'https://<your-domain>.auth0.com',
+        when: ctx => ctx.sync === 'HerokuConnect'
+      },
+      {
+        type: 'input',
         name: 'deploy',
         message: `Do you want to deploy on Heroku? [y/n]`,
         default: 'n',
@@ -93,15 +100,7 @@ module.exports = class extends Generator {
             this.templatePath('cap-heroku-connect-api/auth/**'),
             this.destinationPath(`${this.props.path}/server/`),
             {
-              domain: this.options.AuthDomain
-            }
-          );
-          this.fs.copyTpl(
-            this.templatePath('cap-heroku-connect-web/**'),
-            this.destinationPath(`${this.options.name}/src/app/modules/`),
-            {
-              deployed: yesNoValidation(this.props.deploy),
-              apiName: this.props.path
+              domain: this.props.authDomain
             }
           );
 
@@ -110,6 +109,16 @@ module.exports = class extends Generator {
           if (yesNoValidation(this.props.deploy)) {
             await herokuDeploy.herokuCLI(this.props.path);
           }
+
+          this.spawnCommandSync('npm', ['i', '-g', 'cap-angular-schematic-sfcore']);
+
+          this.spawnCommandSync(
+            'ng',
+            [ 'g', 'cap-angular-schematic-sfcore:cap-angular-schematic-sfcore'],
+            {
+              cwd: this.destinationPath(this.options.name)
+            }
+          )
 
         }).catch(function (err) {
           console.error('ERROR: ', err);
