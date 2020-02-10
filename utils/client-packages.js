@@ -22,6 +22,14 @@ module.exports = [
     short: 'CAP LiveChat'
   },
   {
+    name: 'CAP-Auth-Module',
+    value: {
+      name: 'cap-authorization',
+      version: '0.0.2'
+    },
+    short: 'CAP Auth'
+  },
+  {
     name: 'CAP-Heroku-Connect',
     value: {
       name: 'cap-heroku-connect',
@@ -29,12 +37,4 @@ module.exports = [
     },
     short: 'CAP HerokuConnect'
   }
-    /*{
-    name: 'CAP-Auth-Module',
-    value: {
-      name: 'cap-authorization',
-      version: '0.0.2'
-    },
-    short: 'CAP Auth'
-  },*/
 ];
