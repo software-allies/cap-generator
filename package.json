@@ -1,0 +1,23 @@
+{
+  "name": "generator-cap",
+  "version": "1.0.0",
+  "description": "cap generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Software Allies",
+  "license": "ISC",
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^4.4.0"
+  },
+  "files": [
+    "generators"
+  ],
+  "devDependencies": {
+    "underscore.string": "^3.3.5"
+  }
+}
