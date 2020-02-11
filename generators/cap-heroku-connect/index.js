@@ -4,7 +4,7 @@ const chalk = require('chalk');
 const Parser = require('ts-simple-ast').default;
 var exec = require('child-process-promise').exec;
 const cp = require('child_process');
-const heroku = require('./heroku-connect');
+const HerokuConnect = require('./heroku-connect');
 const herokuDeploy = require('./heroku-deploy');
 const loopback = require('./loopback-build');
 const loopbackConfig = require('./loopback-configuration');
@@ -89,7 +89,8 @@ module.exports = class extends Generator {
             await loopback.loopbackCLI(this.props.path, false);
           }
 
-          let urlDataBase = await heroku.herokuCLI(this.props.path, this.templatePath('cap-heroku-connect-api/mapping'));
+          let urlDataBase = await HerokuConnect.herokuCLI(this.props.path,this.templatePath('cap-heroku-connect-api/mapping'));
+          console.log('urlDataBase: ', urlDataBase);
 
           this.fs.copyTpl(
             this.templatePath('cap-heroku-connect-api/models/**'),
@@ -110,15 +111,7 @@ module.exports = class extends Generator {
             await herokuDeploy.herokuCLI(this.props.path);
           }
 
-          this.spawnCommandSync('npm', ['i', '-g', 'cap-angular-schematic-sfcore']);
-
-          this.spawnCommandSync(
-            'ng',
-            [ 'g', 'cap-angular-schematic-sfcore:cap-angular-schematic-sfcore'],
-            {
-              cwd: this.destinationPath(this.options.name)
-            }
-          )
+          this.spawnCommandSync('ng',[ 'add', 'cap-angular-schematic-sfcore'],{cwd: this.destinationPath(this.options.name)})
 
         }).catch(function (err) {
           console.error('ERROR: ', err);

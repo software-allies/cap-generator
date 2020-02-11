@@ -79,7 +79,7 @@ module.exports = class extends Generator {
   install() {
     if (this.props.projecttype === 'create') {
       this.spawnCommandSync('ng', ['new', this.props.appName, '--routing', '--style', 'css']);
-      this.spawnCommandSync('ng', ['add', '@ng-bootstrap/schematics']);
+      this.spawnCommandSync('ng', ['add', '@ng-bootstrap/schematics'], {cwd: this.destinationPath(this.props.appName)});
       const appComponent = new Parser();
       appComponent.addExistingSourceFile(this.destinationPath(`${this.props.appName}/src/app/app.component.html`));
       const fileComponent = appComponent.getSourceFile(this.destinationPath(`${this.props.appName}/src/app/app.component.html`))

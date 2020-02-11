@@ -1,162 +1,195 @@
-const { exec } = require('promisify-child-process');
-let appName = '';
+const herokuService = require('./heroku-administrator');
+const command = require('./exec-functions');
+const loadMessages = require('./load-messages');
+const prompts = require('prompts');
+let herokuConfiguration = {};
 
-// Const verifyHeroku = async () => await exec(`heroku --version`);
-
-// Const herokuInstallation = async () => await exec(`npm install -g heroku`);
-
-// const login = async () => await exec('heroku login -i');
-
-// const installHerokuC = async () => await exec('heroku plugins:install heroku-connect-plugin');
-
-// Create a Heroku Application
-
-const herokuCreate = async () => exec(`heroku apps:create ${appName}`);
-
-// Create a Heroku postgresql database
-const hrkCreatePostgreSql = async () =>
-  exec(`heroku addons:create heroku-postgresql -a ${appName}`);
-
-const hrkCredentials = async () =>
-  exec(`heroku pg:credentials:url DATABASE_URL -a ${appName}`);
-
-// Add Heroku connect into our Heroku application
-const hrkConnect = async () => exec(`heroku addons:create herokuconnect -a ${appName}`);
-
-// Finish the installation of Heroku connect and returns Heroku connect's URL
-const setUpConnect = async command => exec(`${command}`);
-
-const authConnection = async () =>
-  exec(`heroku authorizations:create --description "For use with ${appName}"`);
-
-// Returns a Heroku's token
-const tokenApplication = async () => exec(`heroku auth:token`);
-
-const curlPost = async token =>
-  exec(
-    `curl -X POST -H "Authorization: Bearer ${token}" https://hc-central.heroku.com/auth/${appName}`
-  );
-
-const schemaConnection = async () =>
-  exec(`heroku connect:db:set --schema salesforce --db DATABASE_URL -a ${appName}`);
-
-const createConnection = async () =>
-  exec(`heroku connect:db:set --schema salesforce --db DATABASE_URL -a ${appName}`);
-
-const salesforceAuth = async () => exec(`heroku connect:sf:auth -a ${appName}`);
-
-const mapping = async path =>
-  exec(`heroku connect:import ${path}/heroku-config.json -a ${appName}`);
-
-const herokuCLI = async (name, jsonPath) => {
-  appName = name;
+const verifyInstallation = async () => {
   try {
-    let configuration = {};
+    await herokuService.run(command.herokuVersion, loadMessages.herokuV);
+    await herokuService.run(command.herokuConnectVerification, loadMessages.herokuC);
+    await herokuService.run(command.checkUser, loadMessages.checkUser);
 
-    // =====================================================================================================================================================
-    // Returns and object with the properties stdout and stderr
-    // The stdout that contains the Heroku URL and the stderr that contains the status of the creation
-    // Example:
-    //  herokuApp: {
-    //              stdout: 'https://yourherokuapp.herokuapp.com/ | https://git.heroku.com/yourherokuapp.git\n',
-    //              stderr: 'Creating yourherokuapp... done\n'
-    // }
-
-    let herokuURL = await herokuCreate();
-    let HerokuURLs = herokuURL.stdout.split('|');
-    configuration.herokuURL = HerokuURLs[0];
-    configuration.herokuGit = HerokuURLs[1];
-
-    // =====================================================================================================================================================
-
-    await hrkCreatePostgreSql();
-    // Returns and object with the properties stdout and stderr
-    // The stdout that contains the Heroku status and the stderr that contains the status of the creation
-    // Example:
-    //  dbHeroku: {
-    //              stdout: 'Database has been created and is available\n ! This database is empty.
-    //                      If upgrading, you can transfer\n ! data from another database with
-    //                      pg:copy\nCreated postgresql-opaque-XXX as DATABASE_URL\n
-    //                      Use heroku addons:docs heroku-postgresql to view documentation\n',
-    //              stderr: 'Creating heroku-postgresql on yourherokuapp... free\n'
-    // }
-
-    // =====================================================================================================================================================
-
-    let credentials = await hrkCredentials();
-    let start = credentials.stdout.search('postgres');
-    configuration.postgresURL = credentials.stdout.slice(
-      start,
-      credentials.stdout.length - 1
-    );
-    // =====================================================================================================================================================
-
-    let dbStatus = await hrkConnect();
-    // Returns and object with the properties stdout and stderr
-    // The stdout that contains the Heroku status and the next command to execute and finish the setup, also the stderr that contains the status of the creation
-    // Example:
-    //  dbHeroku: {
-    //              stdout: 'Use `heroku addons:open herokuconnect-xxxxxxx-XXXXX -a yourherokuapp` to finish setup\n
-    //                            Created herokuconnect-xxxxxx-XXXXX\n
-    //                            Use heroku addons:docs herokuconnect to view documentation\n'
-    //              stderr: 'Creating heroku-postgresql on yourherokuapp... free\n'
-    // }
-
-    // =====================================================================================================================================================
-    // Get the command to execute
-    let nextHerokuCommand = dbStatus.stdout.split('`')[1];
-    await setUpConnect(nextHerokuCommand);
-    // Returns and object with the properties stdout and stderr
-    // The stdout that contains a message that includes the heroku connect URL.
-    // Example:
-    //  herokuConnect: {
-    //              stdout: 'Opening https://addons-sso.heroku.com/apps/fdf6dc7f-677c-4812-ab1e-c25d99504389/addons/d7642b8e-e461-449b-a740-d6af6554734e...\n'
-    //              stderr: ''
-    // }
-    // =====================================================================================================================================================
-
-    await authConnection();
-
-    // =====================================================================================================================================================
-
-    let token = await tokenApplication();
-    // Returns and object with the properties stdout and stderr
-    // The stdout that contains a message that includes the heroku connect URL.
-    // Example:
-    //  herokuConnect: {
-    //              stdout: 'your-token-that-was-generate\n'
-    //              stderr: '›   Warning: token will expire 01/01/2021\n ›   Use heroku authorizations:create to generate a long-term token\n' ///Expiration of the token
-    // }
-
-    // =====================================================================================================================================================
-    await curlPost(token.stdout);
-
-    // =====================================================================================================================================================
-    // Returns the information of the application
-    await schemaConnection();
-
-    // =====================================================================================================================================================
-    await salesforceAuth();
-
-    // =====================================================================================================================================================
-    await createConnection();
-
-    // =====================================================================================================================================================
-    await mapping(jsonPath);
-
-    // =====================================================================================================================================================
-    return configuration;
-    // Object that returns the function
-    // urlDataBase: {
-    // herokuURL: 'https://your-heroku-app.herokuapp.com/
-    //  herokuGit: ' https://git.heroku.com/your-heroku-app.git\n',
-    //  postgresURl:'your-postgres-url'
-    // }
   } catch (error) {
-    console.log('error: ', error.stderr);
+    switch (error.code) {
+      case 100:
+        await herokuService.run(command.login, loadMessages.login);
+        break;
+      case 127:
+        await herokuService.run(
+          command.herokuInstallation,
+          loadMessages.herokuCLIInstallation
+        );
+        await herokuService.run(
+          command.herokuConnectInstallation,
+          loadMessages.herokuConnectIns
+        );
+        await herokuService.run(command.login, loadMessages.login);
+        break;
+      // Code 400
+
+      case 400:
+        await herokuService.run(
+          command.herokuConnectInstallation,
+          loadMessages.herokuConnectIns
+        );
+        await herokuService.run(command.login, loadMessages.login);
+        break;
+
+      default:
+        await herokuService.run(
+          command.herokuInstallation,
+          loadMessages.herokuCLIInstallation
+        );
+        await herokuService.run(
+          command.herokuConnectInstallation,
+          loadMessages.herokuConnectIns
+        );
+        await herokuService.run(command.login, loadMessages.login);
+        break;
+    }
   }
 };
 
-module.exports = {
-  herokuCLI
+const appsCreation = async appName => {
+  try {
+    let urls = await herokuService.run(
+      command.herokuCreateApp,
+      loadMessages.herokuCreateApp,
+      appName
+    );
+    let herokUrls = urls.stdout.split('|');
+    herokuConfiguration.herokuURL = herokUrls[0];
+    herokuConfiguration.herokuGit = herokUrls[1];
+
+    await herokuService.run(
+      command.hrkCreatePostgreSql,
+      loadMessages.herokuCreatePostgres,
+      appName
+    );
+  } catch (error) {
+    let isNotTheValidName = true;
+    let promptResponse;
+    while (isNotTheValidName) {
+      // eslint-disable-next-line no-await-in-loop
+      promptResponse = await prompts({
+        type: 'text',
+        name: 'newName',
+        message: 'New name: ',
+        validate: newName => newName.length < 5 ? 'You wrote a name with less than 5 characters' : true
+      });
+
+      // eslint-disable-next-line no-negated-condition
+      if (promptResponse.newName !== appName) isNotTheValidName = false;
+      else
+        console.log(`The ${promptResponse.newName} is already taken, write another one`);
+    }
+    if (promptResponse) {
+      let urls = await herokuService.run(
+        command.herokuCreateApp,
+        loadMessages.herokuCreateApp,
+        appName
+      );
+      let herokUrls = urls.stdout.split('|');
+      herokuConfiguration.herokuURL = herokUrls[0];
+      herokuConfiguration.herokuGit = herokUrls[1];
+      await herokuService.run(
+        command.hrkCreatePostgreSql,
+        loadMessages.herokuCreatePostgres,
+        promptResponse.newName
+      );
+      return promptResponse.newName;
+    }
+  }
+};
+
+const startConfigurationApp = async (name, path) => {
+  try {
+    let credentials = await herokuService.run(
+      command.herokuCredentials,
+      loadMessages.herokuCredentials,
+      name
+    );
+
+    let startPosition = credentials.stdout.search('postgres');
+    // // DBURL it's going to save the url that it's going to be saved in Loopback
+    const DBURL = credentials.stdout.slice(startPosition, credentials.stdout.length - 1);
+    herokuConfiguration.postgresURL = DBURL;
+    let dbstatus = await herokuService.run(
+      command.herokuConnectCreation,
+      loadMessages.herokuConnectCreation,
+      name
+    );
+
+    let commandSetupConnect = dbstatus.stdout.split('`')[1];
+
+    await herokuService.run(
+      command.setUpConnect,
+      loadMessages.herokuConnectSetup,
+      commandSetupConnect
+    );
+
+    // Let infoConnection = await herokuService.run(command.authConnection, loadMessages.authConnection, name)
+    // let startPositionC = infoConnection.stdout.search('ID') + 13
+    // let endPositionC = infoConnection.stdout.search('Description') - 1
+
+    // var connection_id = infoConnection.stdout.slice(startPositionC, endPositionC);
+
+    let token = await herokuService.run(
+      command.tokenApplication,
+      loadMessages.tokenApplication
+    );
+
+    let config = {
+      name: name,
+      token: token.stdout
+    };
+
+    await herokuService.run(command.curlPost, loadMessages.curlPost, config);
+
+    await herokuService.run(
+      command.schemaConnection,
+      loadMessages.schemaConnection,
+      name
+    );
+
+    await herokuService.run(command.salesforceAuth, loadMessages.salesforceAuth, name);
+
+    let map = {
+      path: path,
+      name: name
+    };
+
+    await herokuService.run(
+      command.schemaConnection,
+      loadMessages.schemaConnection,
+      name
+    );
+    await herokuService.run(command.mapping, loadMessages.mapping, map);
+  } catch (error) {
+    console.log('error:  connect', error);
+  }
+};
+
+exports.herokuCLI = async (appName, path) => {
+  try {
+    await verifyInstallation();
+    let newName = await appsCreation(appName);
+
+    // eslint-disable-next-line no-unused-expressions
+    newName
+      ? await startConfigurationApp(newName, path)
+      : await startConfigurationApp(appName, path);
+    return herokuConfiguration;
+  } catch (error) {
+    if (error.description === 'Heroku Connect is not installed') {
+      await herokuService.run(
+        command.herokuConnectInstallation,
+        loadMessages.herokuConnectIns
+      );
+    }
+    if (error.code === 100) {
+      await herokuService.run(command.login, loadMessages.login);
+    }
+  }
 };

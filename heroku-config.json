@@ -226,19 +226,5 @@
       }
     }
   ],
-  "connection": {
-    "app_name": "cap-loopback",
-    "organization_id": "00D6g000000tDJoEAM",
-    "exported_at": "2019-12-26T15:58:29.366507+00:00",
-    "features": {
-      "disable_bulk_writes": false,
-      "poll_db_no_merge": true,
-      "poll_external_ids": false,
-      "rest_count_only": false
-    },
-    "api_version": "47.0",
-    "name": "",
-    "logplex_log_enabled": false
-  },
   "version": 1
 }

@@ -46,15 +46,13 @@ module.exports = class extends Generator {
   install() {
     this.log(`${chalk.bgGreen('Installing Authentication Module')}`);
     if (this.props.modules === 'auth0'){
-      this.spawnCommandSync('npm', ['i', '-g', 'cap-angular-schematic-auth-auth0']);
 
-      this.spawnCommandSync('ng',['g', 'cap-angular-schematic-auth-auth0:cap-angular-schematic-auth-auth0'], {cwd:this.destinationPath(this.options.name)});
+      this.spawnCommandSync('ng',['add', 'cap-angular-schematic-auth-auth0'], {cwd:this.destinationPath(this.options.name)});
 
     } else if (this.props.modules = 'firebase'){
 
-      this.spawnCommandSync('npm', ['i', '-g', 'cap-angular-schematic-auth-firebase']);
+      this.spawnCommandSync('ng', ['add', 'cap-angular-schematic-auth-firebase'], {cwd:this.destinationPath(this.options.name)});
 
-      this.spawnCommandSync('ng', ['g', 'cap-angular-schematic-auth-firebase:cap-angular-schematic-auth-firebase'], {cwd:this.destinationPath(this.options.name)});
     }
   }
 }
