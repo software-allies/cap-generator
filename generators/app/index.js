@@ -3,8 +3,8 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const clientPackages = require('../../utils/client-packages');
-const Parser = require('ts-simple-ast').default;
+const newApplication = require('../../utils/new-application');
+const existingApplication = require('../../utils/existing-application');
 
 module.exports = class extends Generator {
   /**
@@ -42,10 +42,40 @@ module.exports = class extends Generator {
         when: ctx => ctx.projecttype === 'create'
       },
       {
+        type: 'list',
+        name: 'authService',
+        message: 'Choose an authentication service',
+        when: ctx => ctx.projecttype === 'create',
+        choices: [
+          {
+            name: `Auth0`,
+            value: 'auth0'
+          },
+          {
+            name: `Firebase`,
+            value: 'firebase'
+          }
+        ]
+      },
+      {
+        type: 'input',
+        name: 'deploy',
+        message: `Do you want to deploy your application in Heroku? [y/n]`,
+        default: 'n',
+      },
+      {
         type: 'checkbox',
         name: 'modules',
         message: 'Select the modules you want to include:',
-        choices: clientPackages,
+        choices: newApplication,
+        when: ctx => ctx.projecttype === 'create'
+      },
+      {
+        type: 'checkbox',
+        name: 'modules',
+        message: 'Select the modules you want to include:',
+        choices: existingApplication,
+        when: ctx => ctx.projecttype === 'modify'
       },
     ];
     return this.prompt(prompts).then(props => {
@@ -56,36 +86,32 @@ module.exports = class extends Generator {
 
   /**
    * @description Create the app based on the user answer, and update the template to include the values from the user inputs
-   * @author Christofer Flores <cristofer@sofwareallies.com>
+   * @author Lenin Emmanuel Espinoza <lenin_emmanuel@sofwareallies.com>
    * @returns
    */
   writing() {
-    const modules = {}
-    modules['packages'] = []
-    // Create an array of string with format: ['"package": "0.0.1"', '"package2": "0.0.1"', ...] so we can join it to write it to templates/client/package.json
-    if (this.props.modules.length) {
-      modules['packages'] = this.props.modules.map( (m, i) => {
-          return `"${m.name}": "${m.version}"${i + 1 === this.props.modules.length ? '' : ','}`      // Original
-      });
-      modules['imports'] = {
-        auth: this.props.modules.findIndex( m => m.name === 'cap-authorization') >= 0,
-        awsStorage: this.props.modules.findIndex( m => m.name === 'cap-storage-aws') >= 0,
-        liveChat: this.props.modules.findIndex(m => m.name === 'cap-live-chat' )>= 0,
-        herokuConnect: this.props.modules.findIndex(m => m.name === 'cap-heroku-connect' )>= 0
-      }
+
+    function yesNoValidation (value) {
+      return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
+    }
+
+    if (yesNoValidation(this.props.deploy)) {
+      this.props.modules.push({name:'cap-deploy'});
     }
   }
 
   install() {
     if (this.props.projecttype === 'create') {
+
       this.spawnCommandSync('ng', ['new', this.props.appName, '--routing', '--style', 'css']);
-      this.spawnCommandSync('ng', ['add', '@ng-bootstrap/schematics'], {cwd: this.destinationPath(this.props.appName)});
-      const appComponent = new Parser();
-      appComponent.addExistingSourceFile(this.destinationPath(`${this.props.appName}/src/app/app.component.html`));
-      const fileComponent = appComponent.getSourceFile(this.destinationPath(`${this.props.appName}/src/app/app.component.html`))
-      fileComponent.removeText(fileComponent.getPos(), fileComponent.getEnd());
-      fileComponent.insertText(0, '<router-outlet></router-outlet>');
-      fileComponent.saveSync();
+
+      if (this.props.authService === 'auth0') {
+        this.spawnCommandSync('ng',['add', 'cap-angular-schematic-auth-auth0'], {cwd:this.destinationPath(this.props.appName)});
+      } else  if (this.props.authService === 'firebase') {
+        this.spawnCommandSync('ng', ['add', 'cap-angular-schematic-auth-firebase'], {cwd:this.destinationPath(this.props.appName)});
+      }
+
+      this.spawnCommandSync('ng', ['add', 'cap-angular-schematic-responsive', this.props.appName, 'https://angular.io/assets/images/logos/angular/logo-nav@2x.png', true], {cwd: this.destinationPath(this.props.appName)});
     }
   }
 
@@ -99,7 +125,7 @@ module.exports = class extends Generator {
     if (this.props.modules && this.props.modules.length) {
       this.props.modules.forEach(m => {
         this.composeWith(require.resolve(`../${m.name}`), {
-          name: this.props.appName ? this.props.appName : '',
+          name: this.props.appName ? this.props.appName : ''
         });
       });
     } else {
