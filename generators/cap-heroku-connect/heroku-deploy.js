@@ -25,13 +25,11 @@ const herokuCLI = async (appName) => {
 
     await herokuGitAdd(appName);
 
-    await herokuCommit(appName)
+    await herokuCommit(appName);
 
     await herokuRemote(appName);
 
     await herokuDeploy(appName);
-
-    await herokuPush(appName);
 
     await herokuPush(appName);
 
