@@ -97,6 +97,14 @@ async function ModelConfig  (destinationPath) {
   "Opportunity": {
     "dataSource": "db",
     "public": true
+  },
+  "CapUserC": {
+    "dataSource": "db",
+    "public": true
+  },
+  "CapFileC": {
+    "dataSource": "db",
+    "public": true
   }
 }`);
   fileModelConfig.saveSync();
