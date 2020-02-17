@@ -10,13 +10,8 @@ module.exports = class extends Generator {
 
     initializing() {
         // Paths definition
-        this.destinationRoot('.')
-        this.log('this.destinationRoot()', this.destinationRoot());
-        this.log('this.destinationPath()', this.destinationPath());
-
-
+        this.destinationRoot('./projects')
         // this.composeWith(require.resolve('../appnew'));
-
     }
 
     async prompting() {
@@ -183,7 +178,7 @@ module.exports = class extends Generator {
             {
                 type: "confirm",
                 name: "appssrtransfer",
-                message: "Would you like to add to your SSR Angular App a Transfer Http State Interceptor?",
+                message: "Would you like to add to your SSR Angular App a Transfer Http State Interceptor with Cache?",
                 required: true,
                 default: this.config.get("appssrtransfer") || false,
                 when: ctx => ctx.projecttype === 'new' && ctx.appssr === true
@@ -301,43 +296,39 @@ module.exports = class extends Generator {
 
         // Install the Angular App
         if (this.answers.appnew) {
+
+            // this.composeWith(require.resolve('../appnew'));
+
             this.log(`\n=========================================\n
             Now lets to add a Angular App with Rounting and SCSS style
             \n==========================================`);
 
             // Create a new Angular App
             this.spawnCommandSync('ng', ['new', this.answers.appname, '--routing', '--style', 'scss']);
-            // Run Angular serve, then open in a browser
-            this.spawnCommand('ng', ['serve', '-o'], {cwd:  this.destinationPath(this.answers.appname)});
         } else {
             this.log('Do not continue');
         }
 
-
-       // Run the Angular Responsive Schematic
+        // Run the Angular Responsive Schematic
         if (this.answers.appresponsive) {
 
             this.log(`\n=========================================\n
             Now lets to add a Responsive feature to you Angular App
             \n==========================================`);
-
-            /*// Temporally, link the local Responsive Schematics
-            this.spawnCommandSync('npm', ['link', this.destinationPath('../../SCHEMATICS/cap-angular-schematic-responsive')], {cwd:  this.destinationPath(this.answers.appname)});
-            */
             
             // Add Schematics-Responsive
             this.spawnCommandSync('ng', [
                 'add', 
                 'cap-angular-schematic-responsive', 
                 this.answers.appname, 
-                this.answers.appresponsivelogo
+                this.answers.appresponsivelogo,
+                true
             ], {cwd:  this.destinationPath(this.answers.appname)});
             
         } else {
             this.log('Do not continue with Responsive feature installation');
         }
         
-
         // Run the Angular SSR Schematic
         if (this.answers.appssr) {
             
@@ -351,7 +342,6 @@ module.exports = class extends Generator {
             this.log('Do not continue with SSR feature installation');
         }
         
-
         // Install the Angular PWA Schematic
         if (this.answers.apppwa) {
 
@@ -360,7 +350,6 @@ module.exports = class extends Generator {
             \n==========================================`);
 
             this.spawnCommandSync('ng', ['add', '@angular/pwa', '--clientProject', this.answers.appname], {cwd:  this.destinationPath(this.answers.appname)});
-
 
             // Install the Angular PWA App-Shell Schematic
             if (this.answers.apppwashell) {
@@ -382,24 +371,48 @@ module.exports = class extends Generator {
                 Now lets add a PWA WebPush feature to you Angular App
                 \n==========================================`);
 
-               /* // Temporally, link the local PWA Schematics
-                this.spawnCommandSync('npm', ['link', this.destinationPath('../../SCHEMATICS/cap-angular-schematic-pwa-webpush')], {cwd:  this.destinationPath(this.answers.appname)});
-                */
+                // Install web-push
+                this.log(`\n
+                ----------- Install web-push -------------
+                \n`);
+
                 
-                // Add Schematics-PWA
+                // this.npmInstall(['web-push'], { g: true },  { cwd:  this.destinationPath(this.answers.appname) });
+
+                this.spawnCommandSync('npm', [
+                    'install', 
+                    'web-push',
+                    '-g'
+                ], {cwd:  this.destinationPath(this.answers.appname)});
+
+
+                // Get Vapid Keys Pair
+                this.log(`\n
+                ----------- Get Vapid Keys Pair -------------
+                \n`);
+
+                const vapidKeys = this.spawnCommand('web-push', [
+                    'generate-vapid-keys', 
+                    '--json'
+                ], { cwd:  this.destinationPath(this.answers.appname), stdio: [process.stderr] });
+
+                console.log('vapidKeys', vapidKeys);
+
+
+                // Add Schematics-Webpush
                 this.spawnCommandSync('ng', [
                     'add', 
                     'cap-angular-schematic-webpush',
                     this.answers.appname,
-                    'http://localhost:4000'
+                    'http://localhost:4000',
+                    vapidKeys.publicKey || 'xxxxxxxxxxxxxxxxxxxxxx',
+                    vapidKeys.privateKey || 'xxxxxxxxxxxxxxxxxxxxxx'
                 ], {cwd:  this.destinationPath(this.answers.appname)});
-                    
             
             } else {
                 this.log('Do not continue with PWA WebPush feature installation');
             }
 
-        
         } else {
             this.log('Do not continue with PWA feature installation');
         }
@@ -416,8 +429,6 @@ module.exports = class extends Generator {
             Now lets to run the Angular Universal App
             \n==========================================`);
 
-            this.spawnCommandSync('npm', ['install'], {cwd:  this.destinationPath(this.answers.appname)});
-
             this.spawnCommandSync('npm', ['run', 'build:ssr'], {cwd:  this.destinationPath(this.answers.appname)});
             this.spawnCommandSync('npm', ['run', 'serve:ssr'], {cwd:  this.destinationPath(this.answers.appname)});
 
@@ -428,5 +439,4 @@ module.exports = class extends Generator {
         this.log('Finish!');
     }
     
-
   };
