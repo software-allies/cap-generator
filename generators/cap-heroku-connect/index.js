@@ -40,7 +40,7 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'path',
         message: "What's the name of your API?",
-        default: this.options.name + '-api',
+        default: this.options.name,
         when: ctx => ctx.sync === 'HerokuConnect'
       },
       {
@@ -68,16 +68,16 @@ module.exports = class extends Generator {
    * @author leninEmmanuel <lenin_emmanuel@sofwareallies.com>
    * @returns
    */
-  writing () {
+  writing() {
 
-    function yesNoValidation (value) {
+    function yesNoValidation(value) {
       return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
     }
 
     switch (this.props.sync) {
       case 'CustomSync':
         console.log('We are working on it');
-      break;
+        break;
 
       case 'HerokuConnect':
         exec('lb --version', async (error, stdout) => {
@@ -89,8 +89,8 @@ module.exports = class extends Generator {
             await loopback.loopbackCLI(this.props.path, false);
           }
 
-          let urlDataBase = await HerokuConnect.herokuCLI(this.props.path,this.templatePath('cap-heroku-connect-api/mapping'));
-          console.log('urlDataBase: ', urlDataBase);
+          let urlDataBase = await HerokuConnect.herokuCLI(this.props.path, this.templatePath('cap-heroku-connect-api/mapping'));
+          // console.log('urlDataBase: ', urlDataBase);
 
           this.fs.copyTpl(
             this.templatePath('cap-heroku-connect-api/models/**'),
@@ -105,18 +105,20 @@ module.exports = class extends Generator {
             }
           );
 
-          await loopbackConfig.loopbackConfiguration(this.props.path, this.destinationPath(`${this.props.path}`), urlDataBase.postgresURL);
+          if(urlDataBase){
+            await loopbackConfig.loopbackConfiguration(this.props.path, this.destinationPath(`${this.props.path}`), urlDataBase.postgresURL);
+          }
 
           if (yesNoValidation(this.props.deploy)) {
             await herokuDeploy.herokuCLI(this.props.path);
           }
 
-          this.spawnCommandSync('ng',[ 'add', 'cap-angular-schematic-sfcore'],{cwd: this.destinationPath(this.options.name)})
+          this.spawnCommandSync('ng', ['add', 'cap-angular-schematic-sfcore'], { cwd: this.destinationPath(this.options.name) })
 
         }).catch(function (err) {
           console.error('ERROR: ', err);
         });
-      break;
+        break;
     }
   }
 };
