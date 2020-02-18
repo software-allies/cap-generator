@@ -19,6 +19,16 @@ let loadMessages = {
     responseMessage: 'Successful login',
     errorMessage: 'Error trying to login.'
   },
+  herokuApps: {
+    actionMessage: 'Verifying number of apps...',
+    responseMessage: 'Verification completed',
+    errorMessage: 'You have more than 5 apps.'
+  },
+  deleteApp: {
+    actionMessage: 'Deleting app...',
+    responseMessage: 'The application was deleted',
+    errorMessage: "We can't delete the application."
+  },
   herokuCLIInstallation: {
     actionMessage: "Installing Heroku's CLI...",
     responseMessage: 'Heroku CLI was installed.',

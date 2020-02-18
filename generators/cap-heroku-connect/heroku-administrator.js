@@ -43,11 +43,14 @@ exports.run = (promise, messages, appName) => {
       switch (error.code) {
         case 1:
           load.stop();
-          load.fail('The application name is already taken.');
+          load.fail(
+            "You've reached the limit of 5 apps for unverified accounts. Delete some apps or add a credit card to verify your Heroku account."
+          );
           errorAction = {
             messages: `${error.stderr}`,
             code: 1,
-            description: 'The application name is already taken.'
+            description:
+              "You've reached the limit of 5 apps for unverified accounts. Delete some apps or add a credit card to verify your Heroku account.."
           };
           reject(errorAction);
           break;

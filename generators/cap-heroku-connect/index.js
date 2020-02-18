@@ -40,7 +40,7 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'path',
         message: "What's the name of your API?",
-        default: this.options.name + '-api',
+        default: `${this.options.name}-api`,
         when: ctx => ctx.sync === 'HerokuConnect'
       },
       {
@@ -61,16 +61,16 @@ module.exports = class extends Generator {
    * @author leninEmmanuel <lenin_emmanuel@sofwareallies.com>
    * @returns
    */
-  writing () {
+  writing() {
 
-    function yesNoValidation (value) {
+    function yesNoValidation(value) {
       return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
     }
 
     switch (this.props.sync) {
       case 'CustomSync':
-      console.log('We are working on it');
-      break;
+        console.log('We are working on it');
+        break;
 
       case 'HerokuConnect':
         exec('lb --version', async (error, stdout) => {
@@ -82,8 +82,8 @@ module.exports = class extends Generator {
             await loopback.loopbackCLI(this.props.path, false);
           }
 
-          let urlDataBase = await HerokuConnect.herokuCLI(this.props.path,this.templatePath('cap-heroku-connect-api/mapping'));
-          console.log('urlDataBase: ', urlDataBase);
+          let urlDataBase = await HerokuConnect.herokuCLI(this.props.path, this.templatePath('cap-heroku-connect-api/mapping'));
+          // console.log('urlDataBase: ', urlDataBase);
 
           this.fs.copyTpl(
             this.templatePath('cap-heroku-connect-api/models/**'),
@@ -98,7 +98,7 @@ module.exports = class extends Generator {
             }
           );
 
-          await loopbackConfig.loopbackConfiguration(this.props.path, this.destinationPath(`${this.props.path}`), urlDataBase.postgresURL);
+          await loopbackConfig.loopbackConfiguration(this.props.path, this.destinationPath(`${this.props.path}`), urlDataBase ? urlDataBase.postgresURL : '');
 
           if (yesNoValidation(this.props.deploy)) {
             await herokuDeploy.herokuCLI(this.props.path);
@@ -113,10 +113,10 @@ module.exports = class extends Generator {
                 `--clientID=${this.options.credentials.AUTH0_CLIENT_ID}`,
                 `--clientSecret=${this.options.credentials.AUTH0_CLIENT_SECRET}`,
                 `--domain=${this.options.credentials.AUTH0_DOMAIN}`,
-                yesNoValidation(this.props.deploy) ? `--endPoint=${urlDataBase.herokuURL.trim()}/api` : '--EndPoint='
+                yesNoValidation(this.props.deploy) ? `--endPoint=${urlDataBase.herokuURL.trim()}/api` : '--endPoint='
               ],
               {
-                cwd:this.destinationPath(this.options.name)
+                cwd: this.destinationPath(this.options.name)
               }
             );
           }
@@ -136,7 +136,7 @@ module.exports = class extends Generator {
         }).catch(function (err) {
           console.error('ERROR: ', err);
         });
-      break;
+        break;
     }
   }
 };
