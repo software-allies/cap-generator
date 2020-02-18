@@ -42,6 +42,13 @@ module.exports = class extends Generator {
         when: ctx => ctx.projecttype === 'create'
       },
       {
+        type: 'input',
+        name: 'deploy',
+        message: `Do you want to deploy your application in Heroku? [y/n]`,
+        default: 'n',
+      },
+
+      {
         type: 'list',
         name: 'authService',
         message: 'Choose an authentication service',
@@ -59,9 +66,82 @@ module.exports = class extends Generator {
       },
       {
         type: 'input',
-        name: 'deploy',
-        message: `Do you want to deploy your application in Heroku? [y/n]`,
-        default: 'n',
+        name: 'AUTH0_CLIENT_ID',
+        message: 'Set your Auth0 Client ID: ',
+        default: '',
+        when: ctx => ctx.authService === 'auth0'
+      },
+      {
+        type: 'input',
+        name: 'AUTH0_CLIENT_SECRET',
+        message: 'Set your Auth0 Client Secret: ',
+        default: '',
+        when: ctx => ctx.authService === 'auth0'
+      },
+      {
+        type: 'input',
+        name: 'AUTH0_DOMAIN',
+        message: 'Set your Auth0 Domain: ',
+        default: '',
+        when: ctx => ctx.authService === 'auth0'
+      },
+
+
+      {
+        type: 'input',
+        name: 'apiKey',
+        message: 'Set your ApiKey: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'authDomain',
+        message: 'Set your Auth Domain: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'databaseURL',
+        message: 'Set your data base URL: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'projectId',
+        message: 'Set your Project ID: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'storageBucket',
+        message: 'Set your storage bucket: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'senderId',
+        message: 'Set your message sender ID: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'appId',
+        message: 'Set your app ID: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
+      },
+      {
+        type: 'input',
+        name: 'measurementId',
+        message: 'Set your measurement ID: ',
+        default: '',
+        when: ctx => ctx.authService === 'firebase'
       },
       {
         type: 'checkbox',
@@ -101,17 +181,63 @@ module.exports = class extends Generator {
   }
 
   install() {
+
     if (this.props.projecttype === 'create') {
 
       this.spawnCommandSync('ng', ['new', this.props.appName, '--routing', '--style', 'css']);
 
-      if (this.props.authService === 'auth0') {
-        this.spawnCommandSync('ng',['add', 'cap-angular-schematic-auth-auth0'], {cwd:this.destinationPath(this.props.appName)});
-      } else  if (this.props.authService === 'firebase') {
-        this.spawnCommandSync('ng', ['add', 'cap-angular-schematic-auth-firebase'], {cwd:this.destinationPath(this.props.appName)});
-      }
+      if (this.props.authService === 'auth0' && !this.props.modules.find(x => x.name === 'cap-heroku-connect')) {
 
-      this.spawnCommandSync('ng', ['add', 'cap-angular-schematic-responsive', this.props.appName, 'https://angular.io/assets/images/logos/angular/logo-nav@2x.png', true], {cwd: this.destinationPath(this.props.appName)});
+       this.spawnCommandSync(
+          'ng',
+          [
+            'add',
+            'cap-angular-schematic-auth-auth0',
+            `--clientID=${this.props.AUTH0_CLIENT_ID}`,
+            `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
+            `--domain=${this.props.AUTH0_DOMAIN}`,
+            `--endPoint=`
+          ],
+          {
+            cwd:this.destinationPath(this.props.appName)
+          }
+        );
+
+      } else  if (this.props.authService === 'firebase') {
+
+        this.spawnCommandSync(
+          'ng',
+          [
+            'add',
+            'cap-angular-schematic-auth-firebase',
+            `--apiKey=${this.props.apiKey}`,
+            `--authDomain=${this.props.authDomain}`,
+            `--databaseURL=${this.props.databaseURL}`,
+            `--projectId=${this.props.projectId}`,
+            `--storageBucket=${this.props.storageBucket}`,
+            `--senderId=${this.props.senderId}`,
+            `--appId=${this.props.appId}`,
+            `--measurementId=${this.props.measurementId}`
+          ],
+          {
+            cwd:this.destinationPath(this.props.appName)
+          }
+        );
+
+      }
+      this.spawnCommandSync(
+        'ng',
+        [
+          'add',
+          'cap-angular-schematic-responsive',
+          this.props.appName,
+          'https://angular.io/assets/images/logos/angular/logo-nav@2x.png',
+          true
+        ],
+        {
+          cwd: this.destinationPath(this.props.appName)
+        }
+      );
     }
   }
 
@@ -125,7 +251,11 @@ module.exports = class extends Generator {
     if (this.props.modules && this.props.modules.length) {
       this.props.modules.forEach(m => {
         this.composeWith(require.resolve(`../${m.name}`), {
-          name: this.props.appName ? this.props.appName : ''
+          name: this.props.appName ? this.props.appName : '',
+          auth: this.props.authService === 'auth0' &&
+                this.props.modules.find(x => x.name === 'cap-heroku-connect') ?
+                true : false,
+          credentials: this.props
         });
       });
     } else {
