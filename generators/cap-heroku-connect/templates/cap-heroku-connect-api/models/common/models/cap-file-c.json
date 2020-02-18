@@ -25,7 +25,7 @@
         "nullable": "NO"
       }
     },
-    "UUID__c": {
+    "SACAP__UUID__c": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -40,7 +40,7 @@
         "nullable": "YES"
       }
     },
-    "CapUser": {
+    "SACAP__CAP_User__c": {
       "type": "String",
       "required": false,
       "length": 255,
@@ -55,7 +55,7 @@
         "nullable": "YES"
       }
     },
-    "URL": {
+    "SACAP__URL__c": {
       "type": "String",
       "required": false,
       "length": 255,
@@ -70,7 +70,7 @@
         "nullable": "YES"
       }
     },
-    "Name": {
+    "SACAP__Name__c": {
       "type": "String",
       "required": false,
       "length": 255,

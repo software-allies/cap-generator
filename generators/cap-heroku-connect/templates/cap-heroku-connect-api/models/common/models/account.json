@@ -26,7 +26,7 @@
         "nullable": "NO"
       }
     },
-    "UUID__c": {
+    "SACAP__UUID__c": {
       "type": "String",
       "required": false,
       "length": 50,
