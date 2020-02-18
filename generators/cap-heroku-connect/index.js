@@ -45,13 +45,6 @@ module.exports = class extends Generator {
       },
       {
         type: 'input',
-        name: 'authDomain',
-        message: "what is your auth0 domain to configure backEnd authentication",
-        default: 'https://<your-domain>.auth0.com',
-        when: ctx => ctx.sync === 'HerokuConnect'
-      },
-      {
-        type: 'input',
         name: 'deploy',
         message: `Do you want to deploy on Heroku? [y/n]`,
         default: 'n',
@@ -76,7 +69,7 @@ module.exports = class extends Generator {
 
     switch (this.props.sync) {
       case 'CustomSync':
-        console.log('We are working on it');
+      console.log('We are working on it');
       break;
 
       case 'HerokuConnect':
@@ -101,7 +94,7 @@ module.exports = class extends Generator {
             this.templatePath('cap-heroku-connect-api/auth/**'),
             this.destinationPath(`${this.props.path}/server/`),
             {
-              domain: this.props.authDomain
+              domain: this.options.credentials.AUTH0_DOMAIN
             }
           );
 
@@ -111,7 +104,34 @@ module.exports = class extends Generator {
             await herokuDeploy.herokuCLI(this.props.path);
           }
 
-          this.spawnCommandSync('ng',[ 'add', 'cap-angular-schematic-sfcore'],{cwd: this.destinationPath(this.options.name)})
+          if (this.options.auth) {
+            this.spawnCommandSync(
+              'ng',
+              [
+                'add',
+                'cap-angular-schematic-auth-auth0',
+                `--clientID=${this.options.credentials.AUTH0_CLIENT_ID}`,
+                `--clientSecret=${this.options.credentials.AUTH0_CLIENT_SECRET}`,
+                `--domain=${this.options.credentials.AUTH0_DOMAIN}`,
+                yesNoValidation(this.props.deploy) ? `--endPoint=${urlDataBase.herokuURL.trim()}/api` : '--EndPoint='
+              ],
+              {
+                cwd:this.destinationPath(this.options.name)
+              }
+            );
+          }
+
+          this.spawnCommandSync(
+            'ng',
+            [
+              'add',
+              'cap-angular-schematic-sfcore',
+              yesNoValidation(this.props.deploy) ? `--apiEndPoint=${urlDataBase.herokuURL.trim()}/api` : '--apiEndPoint=http://localhost:3000/api'
+            ],
+            {
+              cwd: this.destinationPath(this.options.name)
+            }
+          );
 
         }).catch(function (err) {
           console.error('ERROR: ', err);
