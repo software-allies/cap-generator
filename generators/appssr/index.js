@@ -4,13 +4,11 @@ module.exports = class extends Generator {
     
     install() {
         
-        // Install the Angular App
         this.log(`\n=========================================\n
-        Now lets to add a Angular App with Rounting and SCSS style
+        Now lets to add Angular Universal feature
         \n==========================================`);
 
-        // Create a new Angular App
-        this.spawnCommandSync('ng', ['new', this.options.appname, '--routing', '--style', 'scss']);
+        this.spawnCommandSync('ng', ['add', '@nguniversal/express-engine',  '--clientProject', this.options.appname], {cwd:  this.destinationPath(this.options.appname)});
     }
 
 };

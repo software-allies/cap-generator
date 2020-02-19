@@ -1,0 +1,64 @@
+            /*{
+                type: "confirm",
+                name: "appauthloopback",
+                message: "Would you like to add to your Angular App a Authentication with Loopback?",
+                required: true,
+                default: this.config.get("appauthloopback") || false,
+                when: ctx => ctx.projecttype === 'new' && ctx.appauth === true
+            },
+            {
+                type: "confirm",
+                name: "appauthown",
+                message: "Would you like to add to your Angular App a Authentication with external server?",
+                required: true,
+                default: this.config.get("appauthown") || false,
+                when: ctx => ctx.projecttype === 'new' && ctx.appauth === true
+            },
+            {
+                type: "string",
+                name: "appauthserver",
+                message: "Which domain:port should be used for Auth Requests?",
+                required: true,
+                default: this.config.get("appauthserver") || 'http://localhost:8080',
+                when: ctx => ctx.projecttype === 'new' && ctx.appauth === true && ctx.appauthown === true
+            },
+            {
+                type: "string",
+                name: "appauthlogin",
+                message: "Which endpoint should be used for Login POST Request?",
+                required: true,
+                default: this.config.get("appauthlogin") || 'user/login',
+                when: ctx => ctx.projecttype === 'new' && ctx.appauth === true && ctx.appauthown === true
+            },
+            {
+                type: "string",
+                name: "appauthregister",
+                message: "Which endpoint should be used for Register POST Request?",
+                required: true,
+                default: this.config.get("appauthregister") || 'user',
+                when: ctx => ctx.projecttype === 'new' && ctx.appauth === true && ctx.appauthown === true
+            },*/
+            /*{
+                type: "confirm",
+                name: "newpage",
+                message: "Would you like to implement a new Page for your Angular App?",
+                default: this.config.get("newpage") || false,
+                required: true,
+                when: ctx => ctx.projecttype === 'update'
+            },
+            {
+                type: "string",
+                name: "newpagetitle",
+                message: "Which is the title for the page?",
+                default: this.config.get("newpagetitle") || '',
+                required: true,
+                when: ctx => ctx.projecttype === 'update' && ctx.newpage === true
+            },
+            {
+                type: "string",
+                name: "newpagedescription",
+                message: "Which is the description for the page?",
+                default: this.config.get("newpagedescription") || '',
+                required: true,
+                when: ctx => ctx.projecttype === 'update' && ctx.newpage === true
+            }*/
