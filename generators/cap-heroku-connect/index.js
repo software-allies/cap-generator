@@ -62,9 +62,7 @@ module.exports = class extends Generator {
    * @returns
    */
 
-  writing() {}
-
-  install() {
+  writing() {
     function yesNoValidation(value) {
       return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
     }
@@ -103,7 +101,7 @@ module.exports = class extends Generator {
           await loopbackConfig.loopbackConfiguration(this.props.path, this.destinationPath(`${this.props.path}`), urlDataBase ? urlDataBase.postgresURL : '');
 
           if (yesNoValidation(this.props.deploy)) {
-            await herokuDeploy.herokuCLI(this.props.path);
+            await herokuDeploy.herokuCLI(this.props.path, urlDataBase ? urlDataBase.appName : '');
           }
 
           if (this.options.auth) {

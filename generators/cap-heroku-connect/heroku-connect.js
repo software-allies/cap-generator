@@ -210,6 +210,7 @@ exports.herokuCLI = async (appName, path) => {
     await verifyInstallation();
     // let numResponse = await numberApps();
     let newName = await appsCreation(appName);
+    herokuConfiguration.appName= newName;
     if (newName.code === 1) {
       throw new Error({ ...newName });
     } else {
