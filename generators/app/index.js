@@ -232,7 +232,8 @@ module.exports = class extends Generator {
           'cap-angular-schematic-responsive',
           this.props.appName,
           'https://angular.io/assets/images/logos/angular/logo-nav@2x.png',
-          true
+          true,
+          false
         ],
         {
           cwd: this.destinationPath(this.props.appName)

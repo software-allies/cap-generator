@@ -61,8 +61,10 @@ module.exports = class extends Generator {
    * @author leninEmmanuel <lenin_emmanuel@sofwareallies.com>
    * @returns
    */
-  writing() {
 
+  writing() {}
+
+  install() {
     function yesNoValidation(value) {
       return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
     }
