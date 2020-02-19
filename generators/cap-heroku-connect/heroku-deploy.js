@@ -8,7 +8,7 @@ const herokuCommit = async path => exec('git commit -m "First commit"', {cwd: `.
 
 const herokuRemote = async path => exec('git remote -v', {cwd: `./${path}`});
 
-const herokuDeploy = async path => exec(`heroku git:remote -a ${path}`, {cwd: `./${path}`});
+const herokuDeploy = async (path, appHeroku) => exec(`heroku git:remote -a ${appHeroku}`, {cwd: `./${path}`});
 
 // const herokuPush = async  path  => exec('git push heroku master', {cwd: `./${path}`});
 
@@ -19,7 +19,7 @@ async function  herokuPush (path) {
   const { stdout, stderr } = await child;
 }
 
-const herokuCLI = async (appName) => {
+const herokuCLI = async (appName, appHeroku) => {
   try {
     await herokuGitInit(appName);
 
@@ -29,7 +29,7 @@ const herokuCLI = async (appName) => {
 
     await herokuRemote(appName);
 
-    await herokuDeploy(appName);
+    await herokuDeploy(appName, appHeroku);
 
     await herokuPush(appName);
 

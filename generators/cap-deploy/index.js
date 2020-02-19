@@ -4,6 +4,16 @@ const Parser = require('ts-simple-ast').default;
 const chalk = require('chalk');
 
 module.exports = class extends Generator {
+  prompting() {
+    this.log(`=========================================\n
+    Now lets configure the ${chalk.blue('HEROKU CONNECT MODULE')}
+    \n==========================================`);
+    const prompts = [
+    ];
+    return this.prompt(prompts).then(props => {
+      this.props = props;
+    });
+  }
 
   writing() {
     const path = this.destinationPath(this.options.name).split('/')
@@ -55,5 +65,9 @@ module.exports = class extends Generator {
     this.spawnCommandSync('git', ['remote', '-v'], {cwd:this.destinationPath(this.options.name)});
     this.spawnCommandSync('heroku', ['git:remote', '-a', herokuApp], {cwd:this.destinationPath(this.options.name)});
     this.spawnCommandSync('git', ['push', 'heroku', 'master'], {cwd:this.destinationPath(this.options.name)});
+  }
+
+  end() {
+    console.log('cap-deploy-end');
   }
 }
