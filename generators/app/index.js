@@ -42,13 +42,6 @@ module.exports = class extends Generator {
         when: ctx => ctx.projecttype === 'create'
       },
       {
-        type: 'input',
-        name: 'deploy',
-        message: `Do you want to deploy your application in Heroku? [y/n]`,
-        default: 'n',
-      },
-
-      {
         type: 'list',
         name: 'authService',
         message: 'Choose an authentication service',
@@ -157,6 +150,12 @@ module.exports = class extends Generator {
         choices: existingApplication,
         when: ctx => ctx.projecttype === 'modify'
       },
+      {
+        type: 'input',
+        name: 'deploy',
+        message: `Do you want to deploy your application in Heroku? [y/n]`,
+        default: 'n',
+      },
     ];
     return this.prompt(prompts).then(props => {
       // To access props later use this.props.someAnswer;
@@ -181,6 +180,10 @@ module.exports = class extends Generator {
   }
 
   install() {
+
+    function yesNoValidation (value) {
+      return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
+    }
 
     if (this.props.projecttype === 'create') {
 
@@ -223,8 +226,13 @@ module.exports = class extends Generator {
             cwd:this.destinationPath(this.props.appName)
           }
         );
-
       }
+
+      if (yesNoValidation(this.props.deploy)) {
+        this.props.appNameHeroku = this.props.appName+'-'+Date.now();
+        this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
+      }
+
       this.spawnCommandSync(
         'ng',
         [
@@ -248,6 +256,9 @@ module.exports = class extends Generator {
    * @returns
    */
   end() {
+    function yesNoValidation (value) {
+      return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
+    }
     // Call the subgenerator for each module the user selected
     if (this.props.modules && this.props.modules.length) {
       this.props.modules.forEach(m => {
@@ -256,7 +267,9 @@ module.exports = class extends Generator {
           auth: this.props.authService === 'auth0' &&
                 this.props.modules.find(x => x.name === 'cap-heroku-connect') ?
                 true : false,
-          credentials: this.props
+          credentials: this.props,
+          deployFrontEnd: yesNoValidation(this.props.deploy),
+          angularHerokuApp: this.props.appNameHeroku
         });
       });
     } else {
