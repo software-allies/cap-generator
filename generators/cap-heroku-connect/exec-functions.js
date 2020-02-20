@@ -89,7 +89,6 @@ module.exports = {
   checkUser,
   login,
   herokuApps,
-  // deleteApp,
   herokuCreateApp,
   hrkCreatePostgreSql,
   herokuCredentials,
