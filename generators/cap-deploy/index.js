@@ -51,7 +51,8 @@ module.exports = class extends Generator {
   }
 
   install() {
-    const herokuApp = this.options.name ?
+    this.spawnCommandSync('npm', ['install', '--save', 'express', 'path'], {cwd:this.destinationPath(this.options.name)});
+    /*const herokuApp = this.options.name ?
       (this.options.name).replace(/ /g, "-").toLowerCase() + '-' + Date.now() :
       this.determineAppname().replace(/ /g, "-").toLowerCase() + '-' + Date.now();
 
@@ -65,9 +66,6 @@ module.exports = class extends Generator {
     this.spawnCommandSync('git', ['remote', '-v'], {cwd:this.destinationPath(this.options.name)});
     this.spawnCommandSync('heroku', ['git:remote', '-a', herokuApp], {cwd:this.destinationPath(this.options.name)});
     this.spawnCommandSync('git', ['push', 'heroku', 'master'], {cwd:this.destinationPath(this.options.name)});
-  }
-
-  end() {
-    console.log('cap-deploy-end');
+    */
   }
 }

@@ -113,7 +113,7 @@ module.exports = class extends Generator {
                 `--clientID=${this.options.credentials.AUTH0_CLIENT_ID}`,
                 `--clientSecret=${this.options.credentials.AUTH0_CLIENT_SECRET}`,
                 `--domain=${this.options.credentials.AUTH0_DOMAIN}`,
-                yesNoValidation(this.props.deploy) ? `--endPoint=${urlDataBase.herokuURL.trim()}/api` : '--endPoint='
+                yesNoValidation(this.props.deploy) ? `--endPoint=${urlDataBase.herokuURL.trim()}api/CapUserCs` : '--endPoint='
               ],
               {
                 cwd: this.destinationPath(this.options.name)
@@ -126,12 +126,16 @@ module.exports = class extends Generator {
             [
               'add',
               'cap-angular-schematic-sfcore',
-              yesNoValidation(this.props.deploy) ? `--apiEndPoint=${urlDataBase.herokuURL.trim()}/api` : '--apiEndPoint=http://localhost:3000/api'
+              yesNoValidation(this.props.deploy) ? `--apiEndPoint=${urlDataBase.herokuURL.trim()}api` : '--apiEndPoint=http://localhost:3000/api'
             ],
             {
               cwd: this.destinationPath(this.options.name)
             }
           );
+
+          if (this.options.deployFrontEnd) {
+            await herokuDeploy.herokuCLI(this.options.name, this.options.angularHerokuApp);
+          }
 
         }).catch(function (err) {
           console.error('ERROR: ', err);
