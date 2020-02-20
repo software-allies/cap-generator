@@ -12,7 +12,7 @@ module.exports = class extends Generator {
     // Have Yeoman greet the user.
     this
       .log(`=========================================\nNow lets configure the ${chalk.blue(
-    'AWS STORAGE MODULE'
+      'AWS STORAGE MODULE'
     )}\n==========================================
     `);
     const prompts = [
