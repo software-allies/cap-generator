@@ -81,62 +81,6 @@ const appsCreation = async appName => {
   }
 };
 
-const numberApps = async () => {
-  // try {
-  // let appsString = await herokuService.run(command.herokuApps, loadMessages.herokuApps);
-  // console.log('appsString: ', appsString);
-  // let appsName = appsString.stdout.split('\n');
-
-  // let apps = [];
-  // appsName.forEach(name => {
-  //   if (name === '' || name.includes('===') === true || ) { }
-  //   else {
-  //     apps.push({
-  //       title: name,
-  //       value: name
-  //     });
-  //   }
-  // });
-  // if (apps.length >= 5) {
-  // Feature to remove a Heroku Application
-  // const response = await prompts({
-  //   type: 'toggle',
-  //   name: 'value',
-  //   message:
-  //     "You have the free version of Heroku and you can't create more than 5 apps, would you like to remove someone of them?",
-  //   initial: false,
-  //   active: 'YES',
-  //   inactive: 'NO'
-  // });
-
-  // if (response.value) {
-  //   const appToDelete = await prompts({
-  //     type: 'select',
-  //     name: 'value',
-  //     message: 'Select the application to delete: ',
-  //     choices: [...apps],
-  //     initial: 1
-  //   });
-  //   let deleteResponse = await herokuService.run(
-  //     command.deleteApp,
-  //     loadMessages.deleteApp,
-  //     appToDelete.value
-  //   );
-  //   return deleteResponse;
-  // }
-  //   let situation = {
-  //     message:
-  //       'You have too many apps for your free account, please upgrade or remove from apps',
-  //     apps
-  //   };
-  //   return situation;
-  // }
-  // return 'CONTINUES';
-  // } catch (error) {
-  //   console.log('error: ', error);
-  // }
-};
-
 const startConfigurationApp = async (name, path) => {
   try {
     let credentials = await herokuService.run(
@@ -208,13 +152,11 @@ const startConfigurationApp = async (name, path) => {
 exports.herokuCLI = async (appName, path) => {
   try {
     await verifyInstallation();
-    // let numResponse = await numberApps();
     let newName = await appsCreation(appName);
-    herokuConfiguration.appName= newName;
+    herokuConfiguration.appName = newName;
     if (newName.code === 1) {
       throw new Error({ ...newName });
     } else {
-      // if (numResponse === 'CONTINUES') {
       // eslint-disable-next-line no-unused-expressions
       newName
         ? await startConfigurationApp(newName, path)

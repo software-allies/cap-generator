@@ -1,73 +1,81 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
-const Parser = require('ts-simple-ast').default;
 
 module.exports = class extends Generator {
-    /**
+  /**
    * @description Ask the user the configuration information for Live Chat
-   * @author leninEmmanuel <lenin_emmanuel@softwareallies.com>
+   * @author Diego Moreno <diego@softwareallies.com>
    * @returns
    */
   prompting() {
-    this.log(`=========================================\nNow lets configure the ${chalk.blue('LIVE CHAT MODULE')}\n==========================================
+    this
+      .log(`=========================================\nNow lets configure the ${chalk.blue(
+      'LIVE CHAT MODULE'
+    )}\n==========================================
     `);
 
     const prompts = [
       {
         type: 'input',
         name: 'embeddedServiceName',
-        message: "What's the name of the embedded Service Name?",
+        message: 'Name of the embedded Service: ',
         default: ''
       },
       {
         type: 'input',
         name: 'idServiceName',
-        message: "idServiceName?",
+        message: 'iD Service name: ',
         default: ''
       },
       {
         type: 'input',
         name: 'urlSandbox',
-        message: "urlSandbox?",
+        message: 'URL Sandbox: ',
         default: ''
       },
       {
         type: 'input',
         name: 'urlDomain',
-        message: "urlDomain?",
+        message: 'URL Domain: ',
         default: ''
       },
       {
         type: 'input',
         name: 'baseLiveAgentContentURL',
-        message: "baseLiveAgentContentURL?",
+        message: 'Base LiveAgent Content URL: ',
         default: ''
       },
       {
         type: 'input',
         name: 'deploymentId',
-        message: "deploymentId?",
+        message: 'Deployment ID: ',
         default: ''
       },
       {
         type: 'input',
         name: 'buttonId',
-        message: "buttonId?",
+        message: 'Button ID: ',
         default: ''
       },
       {
         type: 'input',
         name: 'baseLiveAgentURL',
-        message: "baseLiveAgentURL?",
+        message: 'Base LiveAgent URL: ',
         default: ''
       },
       {
         type: 'input',
         name: 'scriptUrl',
-        message: "scriptUrl?",
+        message: 'Script URL: ',
         default: ''
       },
+      {
+        type: 'input',
+        name: 'eswLiveAgentDevName',
+        message: 'ESW LiveAgent DevName: ',
+        default: ''
+      }
     ];
     return this.prompt(prompts).then(props => {
       // To access props later use this.props.someAnswer;
@@ -77,45 +85,29 @@ module.exports = class extends Generator {
 
   /**
    * @description Once we get the information update the module to include the configuration.
-   * @author leninEmmanuel <lenin_emmanuel@sofwareallies.com>
+   * @author Diego Moreno <diego@sofwareallies.com>
    * @returns
    */
   writing() {
-    const tsParser = new Parser()
-    tsParser.addExistingSourceFile(this.destinationPath(`${this.options.name}/src/app/app.module.ts`)); // First add the file to the virtual folder the plugin creates
-    const file = tsParser.getSourceFile(this.destinationPath(`${this.options.name}/src/app/app.module.ts`)); // Then we read and parse that file to AST
-    const embeddedServiceName = /embeddedServiceName: 'liveChat-embeddedServiceName'/g
-    const idServiceName = /idServiceName: 'liveChat-idServiceName'/g
-    const urlSandbox = /urlSandbox: 'liveChat-urlSandbox'/g
-    const urlDomain = /urlDomain: 'liveChat-urlDomain'/g
-    const baseLiveAgentContentURL = /baseLiveAgentContentURL: 'liveChat-baseLiveAgentContentURL'/g
-    const deploymentId = /deploymentId: 'liveChat-deploymentId'/g
-    const buttonId = /buttonId: 'liveChat-buttonId'/g
-    const baseLiveAgentURL = /baseLiveAgentURL: 'liveChat-baseLiveAgentURL'/g
-    const scriptUrl = /scriptUrl: 'liveChat-scriptUrl'/g
-
-    const newText =  file.getText()
-      .replace(embeddedServiceName, `embeddedServiceName: '${this.props.embeddedServiceName}'`)
-      .replace(idServiceName, `idServiceName: '${this.props.idServiceName}'`)
-      .replace(urlSandbox, `urlSandbox: '${this.props.urlSandbox}'`)
-      .replace(urlDomain, `urlDomain: '${this.props.urlDomain}'`)
-      .replace(baseLiveAgentContentURL, `baseLiveAgentContentURL: '${this.props.baseLiveAgentContentURL}'`)
-      .replace(deploymentId, `deploymentId: '${this.props.deploymentId}'`)
-      .replace(buttonId, `buttonId: '${this.props.buttonId}'`)
-      .replace(baseLiveAgentURL, `baseLiveAgentURL: '${this.props.baseLiveAgentURL}'`)
-      .replace(scriptUrl, `scriptUrl: '${this.props.scriptUrl}'`)
-
-    file.removeText(file.getPos(), file.getEnd()); // Remove all the text since we already have the text formed with the correct values
-    file.insertText(0, newText); // Insert new text
-    file.saveSync(); // Save all changes
-
-    this.fs.copyTpl(
-      this.templatePath('cap-live-chat/**'),
-      this.destinationPath(`${this.options.name}/src/app/modules/`),
+    this.spawnCommandSync(
+      'ng',
+      [
+        'add',
+        'cap-angular-schematic-livechat',
+        `--embeddedServiceName=${this.props.embeddedServiceName}`,
+        `--idServiceName=${this.props.idServiceName}`,
+        `--urlSandbox=${this.props.urlSandbox}`,
+        `--urlDomain=${this.props.urlDomain}`,
+        `--baseLiveAgentContentURL=${this.props.baseLiveAgentContentURL}`,
+        `--deploymentId=${this.props.deploymentId}`,
+        `--buttonId=${this.props.buttonId}`,
+        `--baseLiveAgentURL=${this.props.baseLiveAgentURL}`,
+        `--scriptUrl=${this.props.scriptUrl}`,
+        `--eswLiveAgentDevName=${this.props.eswLiveAgentDevName}`
+      ],
       {
-        name: this.options.name
+        cwd: this.destinationPath(this.options.name)
       }
     );
-
   }
-}
+};
