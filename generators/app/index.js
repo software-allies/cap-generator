@@ -42,7 +42,7 @@ module.exports = class extends Generator {
             {
                 type: "input",
                 name: "appname",
-                message: "Project name",
+                message: "Project Title",
                 default: this.options.appname || this.config.get("appname"),
                 required: true,
                 when: ctx =>  ctx.projecttype === 'new'
@@ -54,14 +54,6 @@ module.exports = class extends Generator {
                 required: true,
                 default: this.config.get("appresponsive") || false,
                 when: ctx => ctx.projecttype === 'new'
-            },
-            {
-                type: "string",
-                name: "appresponsivelogo",
-                message: "Set the logo url for the header menu?",
-                required: true,
-                default: this.config.get("appresponsivelogo") || 'https://angular.io/assets/images/logos/angular/logo-nav@2x.png',
-                when: ctx => ctx.projecttype === 'new' && ctx.appresponsive === true
             },
 
             {
@@ -136,6 +128,13 @@ module.exports = class extends Generator {
                 default: this.config.get("appauth0domain") || '***********',
                 when: ctx => ctx.projecttype === 'new' && ctx.appauth === true && ctx.appauthservice === 'auth0'
             },
+            {
+                type: 'string',
+                name: 'appauth0endpoint',
+                message: 'Set your Auth0 Domain: ',
+                default: this.config.get("appauth0endpoint") || '***********',
+                when: ctx => ctx.projecttype === 'new' && ctx.appauth === true && ctx.appauthservice === 'auth0'
+            },
 
             {
                 type: "confirm",
@@ -188,6 +187,8 @@ module.exports = class extends Generator {
             }
 
         ]);
+
+        this.props.apptitle = this.props.appname;
         // Dasherize appname
         this.props.appname = dasherize(this.props.appname);
     }
@@ -228,11 +229,11 @@ module.exports = class extends Generator {
         if (this.props.appauth) {
 
             this.composeWith(require.resolve('../appauth'), {
-                appname: this.props.appname ? this.props.appname : '',
                 appauthservice: this.props.appauthservice ? this.props.appauthservice : '',
                 appauth0clientid: this.props.appauth0clientid ? this.props.appauth0clientid : '',
                 appauth0clientsecret: this.props.appauth0clientsecret ? this.props.appauth0clientsecret : '',
-                appauth0domain: this.props.appauth0domain ? this.props.appauth0domain : ''
+                appauth0domain: this.props.appauth0domain ? this.props.appauth0domain : '',
+                appauth0endpoint: this.props.appauth0endpoint ? this.props.appauth0endpoint : ''
             });
 
         } else {
@@ -243,8 +244,12 @@ module.exports = class extends Generator {
         if (this.props.appresponsive) {
 
             this.composeWith(require.resolve('../appresponsive'), {
-                appname: this.props.appname ? this.props.appname : '',
-                appresponsivelogo: this.props.appresponsivelogo ? this.props.appresponsivelogo : ''
+                appname: this.props.appname ? this.props.appname : '', // project name (dasherized)
+                apptitle: this.props.apptitle ? this.props.apptitle : '', // Title for the app
+                appresponsivelogo: 'https://angular.io/assets/images/logos/angular/logo-nav@2x.png', // logo for header menu
+                removeAppComponentHtml: true, // Remove index content
+                auth: true, // Include Authentication options on menu
+                installAuth: false // Install cap-angular-schematic-auth-auth0
             });
 
         } else {

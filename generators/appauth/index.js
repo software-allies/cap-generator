@@ -14,11 +14,10 @@ module.exports = class extends Generator {
             this.spawnCommandSync('ng', [
                 'add', 
                 'cap-angular-schematic-authentication-forked@0.1.2', 
-                this.options.appname,
                 this.options.appauth0clientid,
                 this.options.appauth0clientsecret,
                 this.options.appauth0domain,
-                'xxxxxxxxxx'
+                this.options.appauth0endpoint
             ], { cwd:  this.destinationPath(this.options.appname) });
 
         } else if(this.options.appauthservice === 'firebase') {
