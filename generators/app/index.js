@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const yosay = require('yosay');
 const newApplication = require('../../utils/new-application');
 const existingApplication = require('../../utils/existing-application');
+const herokuConnectScript = require('../cap-heroku-connect/heroku-connect');
 
 module.exports = class extends Generator {
   /**
@@ -13,6 +14,10 @@ module.exports = class extends Generator {
    * @returns
    */
   prompting() {
+
+    function yesNoValidation(value) {
+      return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
+    }
     // Have Yeoman greet the user.
     this.log(
       yosay(`${chalk.red('CAP Generator\n Build amazing apps faster and better')}`)
@@ -37,7 +42,7 @@ module.exports = class extends Generator {
       {
         type: 'input',
         name: 'appName',
-        message: 'What\'s the name of your application?',
+        message: "What's the name of your application?",
         default: this.appname,
         when: ctx => ctx.projecttype === 'create'
       },
@@ -78,8 +83,6 @@ module.exports = class extends Generator {
         default: '',
         when: ctx => ctx.authService === 'auth0'
       },
-
-
       {
         type: 'input',
         name: 'apiKey',
@@ -154,8 +157,28 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'deploy',
         message: `Do you want to deploy your application in Heroku? [y/n]`,
-        default: 'n',
+        default: 'n'
       },
+      {
+        type: 'input',
+        name: 'sync',
+        message: `Do you want to use a synchronization/API service? [y/n]`,
+        default: 'n'
+      },
+      {
+        type: 'input',
+        name: 'email',
+        message: `Email`,
+        default: '',
+        when: ctx => yesNoValidation(ctx.deploy) || yesNoValidation(ctx.sync)
+      },
+      {
+        type: 'password',
+        name: 'password',
+        message: `Password`,
+        default: '',
+        when: ctx => yesNoValidation(ctx.deploy) || yesNoValidation(ctx.sync)
+      }
     ];
     return this.prompt(prompts).then(props => {
       // To access props later use this.props.someAnswer;
@@ -169,29 +192,42 @@ module.exports = class extends Generator {
    * @returns
    */
   writing() {
-
-    function yesNoValidation (value) {
+    function yesNoValidation(value) {
       return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
     }
 
     if (yesNoValidation(this.props.deploy)) {
-      this.props.modules.push({name:'cap-deploy'});
+      this.props.modules.push({ name: 'cap-deploy' });
+    }
+
+    if (yesNoValidation(this.props.sync)) {
+      this.props.modules.push({ name: 'cap-heroku-connect' });
     }
   }
 
-  install() {
-
-    function yesNoValidation (value) {
+  async install() {
+    function yesNoValidation(value) {
       return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
     }
 
+    if (yesNoValidation(this.props.deploy) || yesNoValidation(this.props.sync)) {
+      await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
+    }
+
     if (this.props.projecttype === 'create') {
+      this.spawnCommandSync('ng', [
+        'new',
+        this.props.appName,
+        '--routing',
+        '--style',
+        'css'
+      ]);
 
-      this.spawnCommandSync('ng', ['new', this.props.appName, '--routing', '--style', 'css']);
-
-      if (this.props.authService === 'auth0' && !this.props.modules.find(x => x.name === 'cap-heroku-connect')) {
-
-       this.spawnCommandSync(
+      if (
+        this.props.authService === 'auth0' &&
+        !this.props.modules.find(x => x.name === 'cap-heroku-connect')
+      ) {
+        this.spawnCommandSync(
           'ng',
           [
             'add',
@@ -202,12 +238,10 @@ module.exports = class extends Generator {
             `--endPoint=`
           ],
           {
-            cwd:this.destinationPath(this.props.appName)
+            cwd: this.destinationPath(this.props.appName)
           }
         );
-
-      } else  if (this.props.authService === 'firebase') {
-
+      } else if (this.props.authService === 'firebase') {
         this.spawnCommandSync(
           'ng',
           [
@@ -223,13 +257,13 @@ module.exports = class extends Generator {
             `--measurementId=${this.props.measurementId}`
           ],
           {
-            cwd:this.destinationPath(this.props.appName)
+            cwd: this.destinationPath(this.props.appName)
           }
         );
       }
 
       if (yesNoValidation(this.props.deploy)) {
-        this.props.appNameHeroku = this.props.appName+'-'+Date.now();
+        this.props.appNameHeroku = this.props.appName + '-' + Date.now();
         this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
       }
 
@@ -256,7 +290,7 @@ module.exports = class extends Generator {
    * @returns
    */
   end() {
-    function yesNoValidation (value) {
+    function yesNoValidation(value) {
       return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
     }
     // Call the subgenerator for each module the user selected
@@ -265,8 +299,7 @@ module.exports = class extends Generator {
         this.composeWith(require.resolve(`../${m.name}`), {
           name: this.props.appName ? this.props.appName : '',
           auth: this.props.authService === 'auth0' &&
-                this.props.modules.find(x => x.name === 'cap-heroku-connect') ?
-                true : false,
+            this.props.modules.find(x => x.name === 'cap-heroku-connect') ? true : false,
           credentials: this.props,
           deployFrontEnd: yesNoValidation(this.props.deploy),
           angularHerokuApp: this.props.appNameHeroku

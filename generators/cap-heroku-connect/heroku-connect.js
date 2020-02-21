@@ -3,48 +3,73 @@ const command = require('./exec-functions');
 const loadMessages = require('./load-messages');
 let herokuConfiguration = {};
 
-const verifyInstallation = async () => {
+exports.verifyInstallation = async (email, password) => {
   try {
     await herokuService.run(command.herokuVersion, loadMessages.herokuV);
     await herokuService.run(command.herokuConnectVerification, loadMessages.herokuC);
-    await herokuService.run(command.checkUser, loadMessages.checkUser);
 
+    // eslint-disable-next-line no-unused-expressions
+    await herokuService.run(command.checkUser, loadMessages.checkUser);
   } catch (error) {
+    let credentials = { email: email, password: password };
     switch (error.code) {
+      case 2:
+        try {
+          await herokuService.run(command.login, loadMessages.login, credentials);
+        } catch (error) {
+          await herokuService.run(command.loginPop, loadMessages.loginPop);
+        }
+        break;
       case 100:
-        await herokuService.run(command.login, loadMessages.login);
+        try {
+          await herokuService.run(command.login, loadMessages.login, credentials);
+        } catch (error) {
+          await herokuService.run(command.loginPop, loadMessages.loginPop);
+        }
         break;
       case 127:
-        await herokuService.run(
-          command.herokuInstallation,
-          loadMessages.herokuCLIInstallation
-        );
-        await herokuService.run(
-          command.herokuConnectInstallation,
-          loadMessages.herokuConnectIns
-        );
-        await herokuService.run(command.login, loadMessages.login);
+        try {
+          await herokuService.run(
+            command.herokuInstallation,
+            loadMessages.herokuCLIInstallation
+          );
+          await herokuService.run(
+            command.herokuConnectInstallation,
+            loadMessages.herokuConnectIns
+          );
+          await herokuService.run(command.login, loadMessages.login, credentials);
+        } catch (error) {
+          await herokuService.run(command.loginPop, loadMessages.loginPop);
+        }
         break;
       // Code 400
 
       case 400:
-        await herokuService.run(
-          command.herokuConnectInstallation,
-          loadMessages.herokuConnectIns
-        );
-        await herokuService.run(command.login, loadMessages.login);
+        try {
+          await herokuService.run(
+            command.herokuConnectInstallation,
+            loadMessages.herokuConnectIns
+          );
+          await herokuService.run(command.login, loadMessages.login, credentials);
+        } catch (error) {
+          await herokuService.run(command.loginPop, loadMessages.loginPop);
+        }
         break;
 
       default:
-        await herokuService.run(
-          command.herokuInstallation,
-          loadMessages.herokuCLIInstallation
-        );
-        await herokuService.run(
-          command.herokuConnectInstallation,
-          loadMessages.herokuConnectIns
-        );
-        await herokuService.run(command.login, loadMessages.login);
+        try {
+          await herokuService.run(
+            command.herokuInstallation,
+            loadMessages.herokuCLIInstallation
+          );
+          await herokuService.run(
+            command.herokuConnectInstallation,
+            loadMessages.herokuConnectIns
+          );
+          await herokuService.run(command.login, loadMessages.login, credentials);
+        } catch (error) {
+          await herokuService.run(command.loginPop, loadMessages.loginPop);
+        }
         break;
     }
   }
@@ -151,7 +176,7 @@ const startConfigurationApp = async (name, path) => {
 
 exports.herokuCLI = async (appName, path) => {
   try {
-    await verifyInstallation();
+    await this.verifyInstallation();
     let newName = await appsCreation(appName);
     herokuConfiguration.appName = newName;
     if (newName.code === 1) {
@@ -165,6 +190,7 @@ exports.herokuCLI = async (appName, path) => {
     }
     // }
   } catch (error) {
+    console.log('error: ', error);
     if (error.description === 'Heroku Connect is not installed') {
       await herokuService.run(
         command.herokuConnectInstallation,

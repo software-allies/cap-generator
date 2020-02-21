@@ -8,27 +8,33 @@ const herokuConnectVerification = async () => exec('heroku plugins');
 const herokuConnectInstallation = async () =>
   exec('heroku plugins:install heroku-connect-plugin');
 
-const checkUser = async () => exec('heroku whoami');
-
-const login = async () => {
+const loginPop = async () => {
   const child = exec('heroku login');
-  child.stdin.write('\n');
+  child.stdin.write(`\n`);
   child.stderr.on('data', data => { });
   child.stdin.end();
   return child;
 };
 
-const herokuApps = async () => exec(`heroku apps`);
+const checkUser = async () => exec('heroku whoami');
 
-// const deleteApp = async name => {
-//   const child = exec(`heroku apps:destroy ${name}`);
-//   child.stdin.write(`${name} \n`);
-//   child.stderr.on('data', data => {
-//     // console.log('data: ', data);
-//   });
-//   child.stdin.end();
-//   return child;
-// };
+const login = async credentials => {
+  const child = exec('heroku login -i');
+  child.stderr.on('data', async data => {
+    if (data == 'Email: ') {
+      child.stdin.write(`${credentials.email}`);
+      child.stdin.write(`\n`);
+    }
+    if (data == 'Password: ') {
+      child.stdin.write(`${credentials.password}`);
+      child.stdin.write(`\n`);
+      child.stdin.end();
+    }
+  });
+  return child;
+};
+
+const herokuApps = async () => exec(`heroku apps`);
 
 const herokuCreateApp = async name => exec(`heroku apps:create ${name}`);
 const hrkCreatePostgreSql = async name =>
@@ -88,6 +94,7 @@ module.exports = {
   herokuConnectInstallation,
   checkUser,
   login,
+  loginPop,
   herokuApps,
   herokuCreateApp,
   hrkCreatePostgreSql,

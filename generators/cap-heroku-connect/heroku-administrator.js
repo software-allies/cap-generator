@@ -54,7 +54,16 @@ exports.run = (promise, messages, appName) => {
           };
           reject(errorAction);
           break;
-
+        case 2:
+          load.stop();
+          load.fail(messages.errorMessage);
+          errorAction = {
+            messages: 'User not found',
+            code: 2,
+            description: "You don't a user register jet"
+          };
+          reject(errorAction);
+          break;
         // Reject when the user is not find it
         case 100:
           load.stop();

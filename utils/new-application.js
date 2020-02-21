@@ -14,13 +14,5 @@ module.exports = [
       version: '0.0.1'
     },
     short: 'CAP LiveChat'
-  },
-  {
-    name: 'CAP-Heroku-Connect',
-    value: {
-      name: 'cap-heroku-connect',
-      version: '0.0.1'
-    },
-    short: 'CAP HerokuConnect'
   }
 ];

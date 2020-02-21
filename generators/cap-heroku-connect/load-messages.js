@@ -19,6 +19,11 @@ let loadMessages = {
     responseMessage: 'Successful login',
     errorMessage: 'Error trying to login.'
   },
+  loginPop: {
+    actionMessage: 'Login with emergency windows in to the browser...',
+    responseMessage: 'Successful login',
+    errorMessage: 'Error trying to login.'
+  },
   herokuApps: {
     actionMessage: 'Verifying number of apps...',
     responseMessage: 'Verification completed',
