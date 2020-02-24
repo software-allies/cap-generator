@@ -5,7 +5,7 @@ module.exports = class extends Generator {
     constructor(args, opts) {
       super(args, opts);
 
-      this.argument("appname", { type: String, required: false });
+      this.argument("appName", { type: String, required: false });
     }
 
     initializing() {
@@ -17,7 +17,7 @@ module.exports = class extends Generator {
         this.props = await this.prompt([
             {
                 type: 'list',
-                name: 'projecttype',
+                name: 'projectType',
                 message: 'What do you want to create with CAP today?',
                 choices: [
                     {
@@ -33,68 +33,68 @@ module.exports = class extends Generator {
             
             {
                 type: "confirm",
-                name: "appnew",
+                name: "appNew",
                 message: "Please Confirm that you want to create a new Angular App",
                 required: true,
-                default: this.config.get("appnew") || false,
-                when: ctx => ctx.projecttype === 'new'
+                default: this.config.get("appNew") || false,
+                when: ctx => ctx.projectType === 'new'
             },
             {
                 type: "input",
-                name: "appname",
+                name: "appName",
                 message: "Project Title",
-                default: this.options.appname || this.config.get("appname"),
+                default: this.options.appName || this.config.get("appName"),
                 required: true,
-                when: ctx =>  ctx.projecttype === 'new'
+                when: ctx =>  ctx.projectType === 'new'
             },
-            {
+            /* {
                 type: "confirm",
-                name: "appresponsive",
+                name: "appResponsive",
                 message: "Would you like to add to your Angular App a Responsive feature, a Responsive Header Menu and a Home Module?",
                 required: true,
-                default: this.config.get("appresponsive") || false,
-                when: ctx => ctx.projecttype === 'new'
-            },
+                default: this.config.get("appResponsive") || false,
+                when: ctx => ctx.projectType === 'new'
+            }, */
 
             {
                 type: "confirm",
-                name: "appapi",
+                name: "appApi",
                 message: "Would you like to add to your Angular App a API Service?",
                 required: true,
-                default: this.config.get("appapi") || false,
-                when: ctx => ctx.projecttype === 'new'
+                default: this.config.get("appApi") || false,
+                when: ctx => ctx.projectType === 'new'
             },
             {
                 type: "string",
-                name: "appapiserver",
+                name: "appApiServer",
                 message: "Which api domain should be used by the API Service?",
                 required: true,
-                default: this.config.get("appapiserver") || 'http://localhost:8080/api/v1',
-                when: ctx => ctx.projecttype === 'new' && ctx.appapi === true
+                default: this.config.get("appApiServer") || 'http://localhost:8080/api/v1',
+                when: ctx => ctx.projectType === 'new' && ctx.appApi === true
             },
             {
                 type: "confirm",
-                name: "appcache",
+                name: "appCache",
                 message: "Would you like to add to your Angular App a Chache Http Interceptor?",
                 required: true,
-                default: this.config.get("appcache") || false,
-                when: ctx => ctx.projecttype === 'new'
+                default: this.config.get("appCache") || false,
+                when: ctx => ctx.projectType === 'new'
             },
 
             {
                 type: "confirm",
-                name: "appauth",
+                name: "appAuth",
                 message: "Would you like to add to your Angular App a Authentication Module?",
                 required: true,
-                default: this.config.get("appauth") || false,
-                when: ctx => ctx.projecttype === 'new'
+                default: this.config.get("appAuth") || false,
+                when: ctx => ctx.projectType === 'new'
             },
             {
                 type: "list",
-                name: "appauthservice",
+                name: "appAuthService",
                 message: "Choose an authentication service",
                 required: true,
-                default: this.config.get("appauthservice") || false,
+                default: this.config.get("appAuthService") || false,
                 choices: [
                     {
                         name: `Auth0`,
@@ -105,92 +105,93 @@ module.exports = class extends Generator {
                         value: 'firebase'
                     }
                 ],
-                when: ctx => ctx.projecttype === 'new' && ctx.appauth === true
+                when: ctx => ctx.projectType === 'new' && ctx.appAuth === true
             },
             {
                 type: 'string',
-                name: 'appauth0clientid',
+                name: 'appAuth0ClientId',
                 message: 'Set your Auth0 Client ID: ',
-                default: this.config.get("appauth0clientid") || '***********',
-                when: ctx => ctx.projecttype === 'new' && ctx.appauth === true && ctx.appauthservice === 'auth0'
+                default: this.config.get("appAuth0ClientId") || '***********',
+                when: ctx => ctx.projectType === 'new' && ctx.appAuth === true && ctx.appAuthService === 'auth0'
             },
             {
                 type: 'string',
-                name: 'appauth0clientsecret',
+                name: 'appAuth0ClientSecret',
                 message: 'Set your Auth0 Client Secret: ',
-                default: this.config.get("appauth0clientsecret") || '***********',
-                when: ctx => ctx.projecttype === 'new' && ctx.appauth === true && ctx.appauthservice === 'auth0'
+                default: this.config.get("appAuth0ClientSecret") || '***********',
+                when: ctx => ctx.projectType === 'new' && ctx.appAuth === true && ctx.appAuthService === 'auth0'
             },
             {
                 type: 'string',
-                name: 'appauth0domain',
+                name: 'appAuth0Domain',
                 message: 'Set your Auth0 Domain: ',
-                default: this.config.get("appauth0domain") || '***********',
-                when: ctx => ctx.projecttype === 'new' && ctx.appauth === true && ctx.appauthservice === 'auth0'
+                default: this.config.get("appAuth0Domain") || '***********',
+                when: ctx => ctx.projectType === 'new' && ctx.appAuth === true && ctx.appAuthService === 'auth0'
             },
             {
                 type: 'string',
-                name: 'appauth0endpoint',
+                name: 'appAuth0EndPoint',
                 message: 'Set your Auth0 Domain: ',
-                default: this.config.get("appauth0endpoint") || '***********',
-                when: ctx => ctx.projecttype === 'new' && ctx.appauth === true && ctx.appauthservice === 'auth0'
+                default: this.config.get("appAuth0EndPoint") || '***********',
+                when: ctx => ctx.projectType === 'new' && ctx.appAuth === true && ctx.appAuthService === 'auth0'
             },
 
             {
                 type: "confirm",
-                name: "appssr",
+                name: "appSSR",
                 message: "Would you like to add to your Angular App a SSR feature?",
                 required: true,
-                default: this.config.get("appssr") || false,
-                when: ctx => ctx.projecttype === 'new'
+                default: this.config.get("appSSR") || false,
+                when: ctx => ctx.projectType === 'new'
             },
             {
                 type: "confirm",
-                name: "appssrseo",
+                name: "appSSRSeo",
                 message: "Would you like to add to your SSR Angular App a SEO service?",
                 required: true,
-                default: this.config.get("appssrseo") || false,
-                when: ctx => ctx.projecttype === 'new' && ctx.appssr === true
+                default: this.config.get("appSSRSeo") || false,
+                when: ctx => ctx.projectType === 'new' && ctx.appSSR === true
             },
             {
                 type: "confirm",
-                name: "appssrtransfer",
+                name: "appSSRTransfer",
                 message: "Would you like to add to your SSR Angular App a Transfer Http State Interceptor with Cache?",
                 required: true,
-                default: this.config.get("appssrtransfer") || false,
-                when: ctx => ctx.projecttype === 'new' && ctx.appssr === true
+                default: this.config.get("appSSRTransfer") || false,
+                when: ctx => ctx.projectType === 'new' && ctx.appSSR === true
             },
 
             {
                 type: "confirm",
-                name: "apppwa",
+                name: "appPWA",
                 message: "Would you like to add to your Angular App a PWA feature?",
                 required: true,
-                default: this.config.get("apppwa") || false,
-                when: ctx => ctx.projecttype === 'new'
+                default: this.config.get("appPWA") || false,
+                when: ctx => ctx.projectType === 'new'
             },
             {
                 type: "confirm",
-                name: "apppwashell",
+                name: "appPWAShell",
                 message: "Would you like to add to your PWA Angular App a App-Shell feature?",
                 required: true,
-                default: this.config.get("apppwashell") || false,
-                when: ctx => ctx.projecttype === 'new' && ctx.apppwa === true
+                default: this.config.get("appPWAShell") || false,
+                when: ctx => ctx.projectType === 'new' && ctx.appPWA === true
             },
             {
                 type: "confirm",
-                name: "apppwawebpush",
+                name: "appPWAWebPush",
                 message: "Would you like to add to your PWA Angular App a Web Push feature?",
                 required: true,
-                default: this.config.get("apppwawebpush") || false,
-                when: ctx => ctx.projecttype === 'new' && ctx.apppwa === true
+                default: this.config.get("appPWAWebPush") || false,
+                when: ctx => ctx.projectType === 'new' && ctx.appPWA === true
             }
 
         ]);
 
-        this.props.apptitle = this.props.appname;
-        // Dasherize appname
-        this.props.appname = dasherize(this.props.appname);
+        // Set default options
+        this.props.appName = dasherize(this.props.appName);
+        this.props.appTitle = this.props.appName;
+        this.props.appResponsive = true;
     }
     
     configuring() {
@@ -215,10 +216,10 @@ module.exports = class extends Generator {
     install() {
 
         // Install the Angular App
-        if (this.props.appnew) {
+        if (this.props.appNew) {
 
-            this.composeWith(require.resolve('../appnew'), {
-                appname: this.props.appname ? this.props.appname : ''
+            this.composeWith(require.resolve('../app-new'), {
+                appName: this.props.appName ? this.props.appName : ''
             });
 
         } else {
@@ -226,14 +227,15 @@ module.exports = class extends Generator {
         }
 
         // Run the Angular Authentication Schematic
-        if (this.props.appauth) {
+        if (this.props.appAuth) {
 
-            this.composeWith(require.resolve('../appauth'), {
-                appauthservice: this.props.appauthservice ? this.props.appauthservice : '',
-                appauth0clientid: this.props.appauth0clientid ? this.props.appauth0clientid : '',
-                appauth0clientsecret: this.props.appauth0clientsecret ? this.props.appauth0clientsecret : '',
-                appauth0domain: this.props.appauth0domain ? this.props.appauth0domain : '',
-                appauth0endpoint: this.props.appauth0endpoint ? this.props.appauth0endpoint : ''
+            this.composeWith(require.resolve('../app-auth'), {
+                appName: this.props.appName ? this.props.appName : '',
+                appAuthService: this.props.appAuthService ? this.props.appAuthService : '',
+                appAuth0ClientId: this.props.appAuth0ClientId ? this.props.appAuth0ClientId : '',
+                appAuth0ClientSecret: this.props.appAuth0ClientSecret ? this.props.appAuth0ClientSecret : '',
+                appAuth0Domain: this.props.appAuth0Domain ? this.props.appAuth0Domain : '',
+                appAuth0EndPoint: this.props.appAuth0EndPoint ? this.props.appAuth0EndPoint : ''
             });
 
         } else {
@@ -241,12 +243,12 @@ module.exports = class extends Generator {
         }
 
         // Run the Angular Responsive Schematic
-        if (this.props.appresponsive) {
+        if (this.props.appResponsive) {
 
-            this.composeWith(require.resolve('../appresponsive'), {
-                appname: this.props.appname ? this.props.appname : '', // project name (dasherized)
-                apptitle: this.props.apptitle ? this.props.apptitle : '', // Title for the app
-                appresponsivelogo: 'https://angular.io/assets/images/logos/angular/logo-nav@2x.png', // logo for header menu
+            this.composeWith(require.resolve('../app-responsive'), {
+                appName: this.props.appName ? this.props.appName : '', // project name (dasherized)
+                appTitle: this.props.appTitle ? this.props.appTitle : '', // Title for the app
+                appResponsivelogo: 'https://angular.io/assets/images/logos/angular/logo-nav@2x.png', // logo for header menu
                 removeAppComponentHtml: true, // Remove index content
                 auth: true, // Include Authentication options on menu
                 installAuth: false // Install cap-angular-schematic-auth-auth0
@@ -257,10 +259,10 @@ module.exports = class extends Generator {
         }
         
         // Run the Angular SSR Schematic
-        if (this.props.appssr) {
+        if (this.props.appSSR) {
             
-            this.composeWith(require.resolve('../appssr'), {
-                appname: this.props.appname ? this.props.appname : ''
+            this.composeWith(require.resolve('../app-ssr'), {
+                appName: this.props.appName ? this.props.appName : ''
             });
 
         } else {
@@ -268,12 +270,12 @@ module.exports = class extends Generator {
         }
         
         // Install the Angular PWA Schematic
-        if (this.props.apppwa) {
+        if (this.props.appPWA) {
 
-            this.composeWith(require.resolve('../apppwa'), {
-                appname: this.props.appname ? this.props.appname : '',
-                apppwashell: this.props.apppwashell ? this.props.apppwashell : '',
-                apppwawebpush: this.props.apppwawebpush ? this.props.apppwawebpush : ''
+            this.composeWith(require.resolve('../app-pwa'), {
+                appName: this.props.appName ? this.props.appName : '',
+                appPWAShell: this.props.appPWAShell ? this.props.appPWAShell : '',
+                appPWAWebPush: this.props.appPWAWebPush ? this.props.appPWAWebPush : ''
             });
 
         } else {
@@ -284,19 +286,39 @@ module.exports = class extends Generator {
     
     end() {
 
-        // Run the Angular SSR Schematic
-        if (this.props.appssr) {
+        // Run the Angular App server
+        if (this.props.appNew && !this.props.appSSR) {
 
+            // Run App in SSR
+            this.log(`\n=========================================\n
+            Now lets to run the Angular App
+            \n==========================================`);
+
+            this.spawnCommandSync('ng', ['serve', '-o'], { cwd:  this.destinationPath(this.props.appName) });
+
+        } else if (this.props.appPWAShell && !this.props.appSSR) {
+        // Run the Angular SSR Schematic
+
+            // Run App in SSR
+            this.log(`\n=========================================\n
+            Now lets to run the Angular PWA App
+            \n==========================================`);
+
+            this.spawnCommandSync('npm', ['run', 'app-shell'], { cwd:  this.destinationPath(this.props.appName) });
+
+        } else if (this.props.appSSR) {
+            // Run the Angular SSR Schematic
+    
             // Run App in SSR
             this.log(`\n=========================================\n
             Now lets to run the Angular Universal App
             \n==========================================`);
 
-            this.spawnCommandSync('npm', ['run', 'build:ssr'], {cwd:  this.destinationPath(this.props.appname)});
-            this.spawnCommandSync('npm', ['run', 'serve:ssr'], {cwd:  this.destinationPath(this.props.appname)});
-
+            this.spawnCommandSync('npm', ['run', 'build:ssr'], { cwd:  this.destinationPath(this.props.appName) });
+            this.spawnCommandSync('npm', ['run', 'serve:ssr'], { cwd:  this.destinationPath(this.props.appName) });
+    
         } else {
-            this.log('Do not continue with SSR App Run');
+            this.log('Do not continue with App Run');
         }
         
         this.log('Finish!');

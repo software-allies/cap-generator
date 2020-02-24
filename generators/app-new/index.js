@@ -10,7 +10,7 @@ module.exports = class extends Generator {
         \n==========================================`);
 
         // Create a new Angular App
-        this.spawnCommandSync('ng', ['new', this.options.appname, '--routing', '--style', 'scss']);
+        this.spawnCommandSync('ng', ['new', this.options.appName, '--routing', '--style', 'scss']);
     }
 
 };

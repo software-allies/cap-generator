@@ -10,23 +10,23 @@ module.exports = class extends Generator {
         Now lets add a PWA feature to you Angular App
         \n==========================================`);
 
-        this.spawnCommandSync('ng', ['add', '@angular/pwa', '--clientProject', this.options.appname], {cwd:  this.destinationPath(this.options.appname)});
+        this.spawnCommandSync('ng', ['add', '@angular/pwa', '--clientProject', this.options.appName], {cwd:  this.destinationPath(this.options.appName)});
 
         // Install the Angular PWA App-Shell Schematic
-        if (this.options.apppwashell) {
+        if (this.options.appPWAShell) {
 
             this.log(`\n=========================================\n
             Now lets add a PWA App-Shell feature to you Angular App
             \n==========================================`);
 
-            this.spawnCommandSync('ng', ['generate', '@schematics/angular:appShell', '--clientProject', this.options.appname, '--universalProject', this.options.appname + '-universal'], {cwd:  this.destinationPath(this.options.appname)});
+            this.spawnCommandSync('ng', ['generate', '@schematics/angular:appShell', '--clientProject', this.options.appName, '--universalProject', this.options.appName + '-universal'], {cwd:  this.destinationPath(this.options.appName)});
 
         } else {
             this.log('Do not continue with PWA App-Shell feature installation');
         }
 
         // Install the Angular PWA WebPush Schematic
-        if (this.options.apppwawebpush) {
+        if (this.options.appPWAWebPush) {
 
             this.log(`\n=========================================\n
             Now lets add a PWA WebPush feature to you Angular App
@@ -38,13 +38,13 @@ module.exports = class extends Generator {
             \n`);
 
             
-            // this.npmInstall(['web-push'], { g: true },  { cwd:  this.destinationPath(this.options.appname) });
+            // this.npmInstall(['web-push'], { g: true },  { cwd:  this.destinationPath(this.options.appName) });
 
             this.spawnCommandSync('npm', [
                 'install', 
                 'web-push',
                 '-g'
-            ], {cwd:  this.destinationPath(this.options.appname)});
+            ], {cwd:  this.destinationPath(this.options.appName)});
 
 
             // Get Vapid Keys Pair
@@ -52,7 +52,7 @@ module.exports = class extends Generator {
             ----------- Get Vapid Keys Pair -------------
             \n`);
 
-            exec('web-push generate-vapid-keys --json', { cwd:  this.destinationPath(this.options.appname) }, async (error, stdout) => {
+            exec('web-push generate-vapid-keys --json', { cwd:  this.destinationPath(this.options.appName) }, async (error, stdout) => {
     
                 if (error) {
                     console.log('error: you dont have web-push installed');
@@ -66,11 +66,11 @@ module.exports = class extends Generator {
                     this.spawnCommandSync('ng', [
                         'add', 
                         'cap-angular-schematic-webpush',
-                        this.options.appname,
+                        this.options.appName,
                         'http://localhost:4000',
                         vapidKeys.publicKey || 'xxxxxxxxxxxxxxxxxxxxxx',
                         vapidKeys.privateKey || 'xxxxxxxxxxxxxxxxxxxxxx'
-                    ], {cwd:  this.destinationPath(this.options.appname)});
+                    ], {cwd:  this.destinationPath(this.options.appName)});
                 
                 }
     
@@ -82,12 +82,11 @@ module.exports = class extends Generator {
             /* const vapidKeys = this.spawnCommand('web-push', [
                 'generate-vapid-keys', 
                 '--json'
-            ], { cwd:  this.destinationPath(this.options.appname), stdio: [process.stderr] }); */
+            ], { cwd:  this.destinationPath(this.options.appName), stdio: [process.stderr] }); */
 
         } else {
             this.log('Do not continue with PWA WebPush feature installation');
         }
-
 
     }
 

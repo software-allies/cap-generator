@@ -8,7 +8,7 @@ module.exports = class extends Generator {
         Now lets to add Angular Universal feature
         \n==========================================`);
 
-        this.spawnCommandSync('ng', ['add', '@nguniversal/express-engine',  '--clientProject', this.options.appname], {cwd:  this.destinationPath(this.options.appname)});
+        this.spawnCommandSync('ng', ['add', '@nguniversal/express-engine',  '--clientProject', this.options.appName], {cwd:  this.destinationPath(this.options.appName)});
     }
 
 };

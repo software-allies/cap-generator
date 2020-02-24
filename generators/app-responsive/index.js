@@ -12,12 +12,12 @@ module.exports = class extends Generator {
         this.spawnCommandSync('ng', [
             'add', 
             'cap-angular-schematic-responsive', 
-            this.options.apptitle, 
-            this.options.appresponsivelogo,
+            this.options.appTitle, 
+            this.options.appResponsiveLogo,
             this.options.removeAppComponentHtml,
             this.options.auth,
             this.options.installAuth
-        ], {cwd:  this.destinationPath(this.options.appname)});
+        ], {cwd:  this.destinationPath(this.options.appName)});
     }
 
 };
