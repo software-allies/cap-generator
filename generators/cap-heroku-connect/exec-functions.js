@@ -54,7 +54,7 @@ const authConnection = async name =>
 const tokenApplication = async () => exec(`heroku auth:token`);
 
 const curlPost = async data => {
-  var options = {
+  let options = {
     url: `https://hc-central.heroku.com/auth/${data.name}`,
     headers: {
       ContentType: 'application/json',
