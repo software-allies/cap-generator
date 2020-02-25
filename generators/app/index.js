@@ -298,7 +298,9 @@ module.exports = class extends Generator {
       this.props.modules.forEach(m => {
         this.composeWith(require.resolve(`../${m.name}`), {
           name: this.props.appName ? this.props.appName : '',
-          auth: this.props.authService === 'auth0' &&
+          auth:
+            (this.props.authService === 'auth0' ||
+              this.props.authService === 'firebase') &&
             this.props.modules.find(x => x.name === 'cap-heroku-connect') ? true : false,
           credentials: this.props,
           deployFrontEnd: yesNoValidation(this.props.deploy),

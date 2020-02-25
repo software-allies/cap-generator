@@ -5,7 +5,7 @@ var jwtCheck = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: '<%= domain %>/.well-known/jwks.json'
+    jwksUri: '<%= jwksUri %>'
   }),
   getToken: function fromHeaderOrQuerystring (req) {
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
@@ -15,8 +15,8 @@ var jwtCheck = jwt({
     }
     return null;
   },
-  audience: '<%= domain %>/api/v2/',
-  issuer: '<%= domain %>/',
+  audience: '<%= audience %>',
+  issuer: '<%= issuer %>/',
   algorithms: ['RS256']
 });
 module.exports = function() {
