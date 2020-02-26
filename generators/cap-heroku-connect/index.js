@@ -95,9 +95,11 @@ module.exports = class extends Generator {
             {}
           );
 
-          let jkws = await firebaseJwt.getGoogleCredentials(
-            this.options.credentials.projectId
-          );
+          let jkws = this.options.credentials.authService === 'firebase'
+            ? await firebaseJwt.getGoogleCredentials(
+                this.options.credentials.projectId
+              )
+            : null;
 
           this.fs.copyTpl(
             this.templatePath('cap-heroku-connect-api/auth/**'),
@@ -136,22 +138,43 @@ module.exports = class extends Generator {
           }
 
           if (this.options.auth) {
-            this.spawnCommandSync(
-              'ng',
-              [
-                'add',
-                'cap-angular-schematic-auth-auth0',
-                `--clientID=${this.options.credentials.AUTH0_CLIENT_ID}`,
-                `--clientSecret=${this.options.credentials.AUTH0_CLIENT_SECRET}`,
-                `--domain=${this.options.credentials.AUTH0_DOMAIN}`,
-                yesNoValidation(this.props.deploy)
-                  ? `--endPoint=${urlDataBase.herokuURL.trim()}api/CapUserCs`
-                  : '--endPoint='
-              ],
-              {
-                cwd: this.destinationPath(this.options.name)
-              }
-            );
+            if (this.options.credentials.authService === 'auth0') {
+              this.spawnCommandSync(
+                'ng',
+                [
+                  'add',
+                  'cap-angular-schematic-auth-auth0',
+                  `--clientID=${this.options.credentials.AUTH0_CLIENT_ID}`,
+                  `--clientSecret=${this.options.credentials.AUTH0_CLIENT_SECRET}`,
+                  `--domain=${this.options.credentials.AUTH0_DOMAIN}`,
+                  yesNoValidation(this.props.deploy)
+                    ? `--endPoint=${urlDataBase.herokuURL.trim()}api/CapUserCs`
+                    : '--endPoint='
+                ],
+                {
+                  cwd: this.destinationPath(this.options.name)
+                }
+              );
+            } else if (this.options.credentials.authService === 'firebase') {
+              this.spawnCommandSync(
+                'ng',
+                [
+                  'add',
+                  'cap-angular-schematic-auth-firebase',
+                  `--apiKey=${this.options.credentials.apiKey}`,
+                  `--authDomain=${this.options.credentials.authDomain}`,
+                  `--databaseURL=${this.options.credentials.databaseURL}`,
+                  `--projectId=${this.options.credentials.projectId}`,
+                  `--storageBucket=${this.options.credentials.storageBucket}`,
+                  `--senderId=${this.options.credentials.senderId}`,
+                  `--appId=${this.options.credentials.appId}`,
+                  `--measurementId=${this.options.credentials.measurementId}`
+                ],
+                {
+                  cwd: this.destinationPath(this.options.name)
+                }
+              );
+            }
           }
 
           this.spawnCommandSync(

@@ -223,43 +223,42 @@ module.exports = class extends Generator {
         'css'
       ]);
 
-      if (
-        this.props.authService === 'auth0' &&
-        !this.props.modules.find(x => x.name === 'cap-heroku-connect')
-      ) {
-        this.spawnCommandSync(
-          'ng',
-          [
-            'add',
-            'cap-angular-schematic-auth-auth0',
-            `--clientID=${this.props.AUTH0_CLIENT_ID}`,
-            `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
-            `--domain=${this.props.AUTH0_DOMAIN}`,
-            `--endPoint=`
-          ],
-          {
-            cwd: this.destinationPath(this.props.appName)
-          }
-        );
-      } else if (this.props.authService === 'firebase') {
-        this.spawnCommandSync(
-          'ng',
-          [
-            'add',
-            'cap-angular-schematic-auth-firebase',
-            `--apiKey=${this.props.apiKey}`,
-            `--authDomain=${this.props.authDomain}`,
-            `--databaseURL=${this.props.databaseURL}`,
-            `--projectId=${this.props.projectId}`,
-            `--storageBucket=${this.props.storageBucket}`,
-            `--senderId=${this.props.senderId}`,
-            `--appId=${this.props.appId}`,
-            `--measurementId=${this.props.measurementId}`
-          ],
-          {
-            cwd: this.destinationPath(this.props.appName)
-          }
-        );
+      if (!this.props.modules.find(x => x.name === 'cap-heroku-connect')) {
+        if (this.props.authService === 'auth0') {
+          this.spawnCommandSync(
+            'ng',
+            [
+              'add',
+              'cap-angular-schematic-auth-auth0',
+              `--clientID=${this.props.AUTH0_CLIENT_ID}`,
+              `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
+              `--domain=${this.props.AUTH0_DOMAIN}`,
+              `--endPoint=`
+            ],
+            {
+              cwd: this.destinationPath(this.props.appName)
+            }
+          );
+        } else if (this.props.authService === 'firebase') {
+          this.spawnCommandSync(
+            'ng',
+            [
+              'add',
+              'cap-angular-schematic-auth-firebase',
+              `--apiKey=${this.props.apiKey}`,
+              `--authDomain=${this.props.authDomain}`,
+              `--databaseURL=${this.props.databaseURL}`,
+              `--projectId=${this.props.projectId}`,
+              `--storageBucket=${this.props.storageBucket}`,
+              `--senderId=${this.props.senderId}`,
+              `--appId=${this.props.appId}`,
+              `--measurementId=${this.props.measurementId}`
+            ],
+            {
+              cwd: this.destinationPath(this.props.appName)
+            }
+          );
+        }
       }
 
       if (yesNoValidation(this.props.deploy)) {
@@ -298,10 +297,7 @@ module.exports = class extends Generator {
       this.props.modules.forEach(m => {
         this.composeWith(require.resolve(`../${m.name}`), {
           name: this.props.appName ? this.props.appName : '',
-          auth:
-            (this.props.authService === 'auth0' ||
-              this.props.authService === 'firebase') &&
-            this.props.modules.find(x => x.name === 'cap-heroku-connect') ? true : false,
+          auth: this.props.modules.find(x => x.name === 'cap-heroku-connect') ? true : false,
           credentials: this.props,
           deployFrontEnd: yesNoValidation(this.props.deploy),
           angularHerokuApp: this.props.appNameHeroku
