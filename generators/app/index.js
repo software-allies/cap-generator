@@ -1,5 +1,4 @@
 'use strict';
-
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
@@ -8,6 +7,12 @@ const existingApplication = require('../../utils/existing-application');
 const herokuConnectScript = require('../cap-heroku-connect/heroku-connect');
 
 module.exports = class extends Generator {
+
+  constructor(args, opts) {
+    super(args, opts);
+    this.argument("appName", { type: String, required: false });
+  }
+
   /**
    * @description Prompts all the question to the user so we can know what type of app the user wants to create
    * @author Christofer Flores <cristofer@sofwareallies.com>
@@ -43,7 +48,7 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'appName',
         message: "What's the name of your application?",
-        default: this.appname,
+        default: this.options.appName || this.appname,
         when: ctx => ctx.projecttype === 'create'
       },
       {
@@ -274,7 +279,11 @@ module.exports = class extends Generator {
           this.props.appName,
           'https://angular.io/assets/images/logos/angular/logo-nav@2x.png',
           true,
-          false
+          true,
+          false,
+          this.props.modules.find(x => x.name === 'cap-heroku-connect')
+            ? true
+            : false
         ],
         {
           cwd: this.destinationPath(this.props.appName)
