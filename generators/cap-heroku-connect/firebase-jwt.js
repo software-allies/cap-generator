@@ -4,7 +4,7 @@ const https = require('https');
 
 let versionCommand = `jq --version`;
 let installJQCommand = 'brew install jq';
-let jwtCommand = `curl -s 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com' | jq '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: (.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) } ] | {"keys": .}'`;
+let jwtCommand = `curl -s 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com' | jq '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: [(.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] | {"keys": .}'`;
 
 const createJWTFirebase = async () => {
   try {

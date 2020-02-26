@@ -111,7 +111,7 @@ module.exports = class extends Generator {
                   : this.options.credentials.projectId,
               issuer:
                 this.options.credentials.authService === 'auth0'
-                  ? this.options.credentials.AUTH0_DOMAIN
+                  ? `${this.options.credentials.AUTH0_DOMAIN}/`
                   : `https://securetoken.google.com/${
                       this.options.credentials.projectId
                     }`,

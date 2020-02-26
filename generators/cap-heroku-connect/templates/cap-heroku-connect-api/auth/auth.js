@@ -16,7 +16,7 @@ var jwtCheck = jwt({
     return null;
   },
   audience: '<%= audience %>',
-  issuer: '<%= issuer %>/',
+  issuer: '<%= issuer %>',
   algorithms: ['RS256']
 });
 module.exports = function() {
