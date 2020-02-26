@@ -13,7 +13,7 @@ module.exports = class extends Generator {
             // Add Cap Authentication Schematic
             this.spawnCommandSync('ng', [
                 'add', 
-                'cap-angular-schematic-auth-auth0@1.1.4', 
+                'cap-angular-schematic-auth-auth0', 
                 this.options.appAuth0ClientId,
                 this.options.appAuth0ClientSecret,
                 this.options.appAuth0Domain,

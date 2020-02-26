@@ -248,10 +248,11 @@ module.exports = class extends Generator {
             this.composeWith(require.resolve('../app-responsive'), {
                 appName: this.props.appName ? this.props.appName : '', // project name (dasherized)
                 appTitle: this.props.appTitle ? this.props.appTitle : '', // Title for the app
-                appResponsivelogo: 'https://angular.io/assets/images/logos/angular/logo-nav@2x.png', // logo for header menu
+                appResponsiveLogo: 'https://angular.io/assets/images/logos/angular/logo-nav@2x.png', // logo for header menu
                 removeAppComponentHtml: true, // Remove index content
                 auth: true, // Include Authentication options on menu
-                installAuth: false // Install cap-angular-schematic-auth-auth0
+                installAuth: false, // Install cap-angular-schematic-auth-auth0
+                sfcore: true
             });
 
         } else {
