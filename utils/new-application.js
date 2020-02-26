@@ -14,5 +14,21 @@ module.exports = [
       version: '0.0.1'
     },
     short: 'CAP LiveChat'
+  },
+  {
+    name: 'CAP-SSR',
+    value: {
+      name: 'cap-ssr',
+      version: '0.0.0'
+    },
+    short: 'CAP SSR'
+  },
+  {
+    name: 'CAP-PWA',
+    value: {
+      name: 'cap-pwa',
+      version: '0.0.0'
+    },
+    short: 'CAP PWA'
   }
 ];
