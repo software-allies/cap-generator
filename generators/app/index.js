@@ -280,6 +280,7 @@ module.exports = class extends Generator {
           'https://angular.io/assets/images/logos/angular/logo-nav@2x.png',
           true,
           true,
+          this.props.authService,
           false,
           this.props.modules.find(x => x.name === 'cap-heroku-connect')
             ? true
@@ -291,6 +292,7 @@ module.exports = class extends Generator {
       );
     }
   }
+
 
   /**
    * @description Install dependencies and show next steps
