@@ -79,6 +79,21 @@ module.exports = class extends Generator {
           cwd:  this.destinationPath(this.options.name)
         }
       );
+      // Add Schematics-Webpush
+      this.spawnCommandSync(
+        'ng',
+        [
+          'add',
+          'cap-angular-schematic-webpush'
+          ,this.options.appName,
+          'http://localhost:4000',
+          'xxxxxxxxxxxxxxxxxxxxxx',
+          'xxxxxxxxxxxxxxxxxxxxxx'
+        ],
+        {
+          cwd:  this.destinationPath(this.options.appName)
+        }
+      );
     }
   }
 }
