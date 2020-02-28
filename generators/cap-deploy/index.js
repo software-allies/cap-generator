@@ -50,5 +50,14 @@ module.exports = class extends Generator {
     this.spawnCommandSync('npm', ['install', '--save', 'express', 'path'], {
       cwd: this.destinationPath(this.options.name)
     });
+    if (this.options.deployFrontEnd && !(this.options.modules.find(x => x.name === 'cap-heroku-connect'))) {
+      this.spawnCommandSync('heroku', ['apps:create', this.options.angularHerokuApp]);
+      this.spawnCommandSync('git', ['init'], {cwd: this.destinationPath(this.options.name)});
+      this.spawnCommandSync('git', ['add', '.'], {cwd: this.destinationPath(this.options.name)});
+      this.spawnCommandSync('git', ['commit', '-m', `"First commit"`], {cwd:this.destinationPath(this.options.name)});
+      this.spawnCommandSync('git', ['remote', '-v'], {cwd:this.destinationPath(this.options.name)});
+      this.spawnCommandSync('heroku', ['git:remote', '-a', this.options.angularHerokuApp], {cwd:this.destinationPath(this.options.name)});
+      this.spawnCommandSync('git', ['push', 'heroku', 'master'], {cwd:this.destinationPath(this.options.name)});
+    }
   }
 };
