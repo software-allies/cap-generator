@@ -45,7 +45,7 @@ module.exports = class extends Generator {
         'add',
         '@angular/pwa',
         '--clientProject',
-        this.options.appName
+        this.options.name
       ],
       {
         cwd:  this.destinationPath(this.options.name)
@@ -85,13 +85,13 @@ module.exports = class extends Generator {
         [
           'add',
           'cap-angular-schematic-webpush'
-          ,this.options.appName,
+          ,this.options.name,
           'http://localhost:4000',
           'xxxxxxxxxxxxxxxxxxxxxx',
           'xxxxxxxxxxxxxxxxxxxxxx'
         ],
         {
-          cwd:  this.destinationPath(this.options.appName)
+          cwd:  this.destinationPath(this.options.name)
         }
       );
     }
