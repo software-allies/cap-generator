@@ -173,14 +173,14 @@ module.exports = class extends Generator {
       {
         type: 'input',
         name: 'email',
-        message: `Email`,
+        message: `Heroku email`,
         default: '',
         when: ctx => yesNoValidation(ctx.deploy) || yesNoValidation(ctx.sync)
       },
       {
         type: 'password',
         name: 'password',
-        message: `Password`,
+        message: `Heroku password`,
         default: '',
         when: ctx => yesNoValidation(ctx.deploy) || yesNoValidation(ctx.sync)
       }
@@ -225,7 +225,7 @@ module.exports = class extends Generator {
         this.props.appName,
         '--routing',
         '--style',
-        'css'
+        'scss'
       ]);
 
       if (!this.props.modules.find(x => x.name === 'cap-heroku-connect')) {
@@ -311,7 +311,8 @@ module.exports = class extends Generator {
           auth: this.props.modules.find(x => x.name === 'cap-heroku-connect') ? true : false,
           credentials: this.props,
           deployFrontEnd: yesNoValidation(this.props.deploy),
-          angularHerokuApp: this.props.appNameHeroku
+          angularHerokuApp: this.props.appNameHeroku,
+          modules: this.props.modules
         });
       });
     } else {
