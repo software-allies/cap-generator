@@ -1,6 +1,7 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
+const Parser = require('ts-simple-ast').default;
 
 module.exports = class extends Generator {
   /**
@@ -88,7 +89,31 @@ module.exports = class extends Generator {
    * @author Diego Moreno <diego@sofwareallies.com>
    * @returns
    */
+
   writing() {
+    const tsParser = new Parser();
+    tsParser.addExistingSourceFile(
+      this.destinationPath(
+        this.options.name ? `${this.options.name}/src/app/app.component.html` : 'src/app/app.component.html'
+      )
+    );
+    const file = tsParser.getSourceFile(
+      this.destinationPath(
+        this.options.name ? `${this.options.name}/src/app/app.component.html` : 'src/app/app.component.html'
+      )
+    );
+
+    const selector = /<div id="main">/g;
+    const newText = file.getText().replace(selector,
+      `<div id="main">
+  <cap-live-chat-sf></cap-live-chat-sf>`);
+
+    file.removeText(file.getPos(), file.getEnd());
+    file.insertText(0, newText);
+    file.saveSync();
+  }
+
+  install() {
     this.spawnCommandSync(
       'ng',
       [
