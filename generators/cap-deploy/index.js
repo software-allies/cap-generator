@@ -21,8 +21,8 @@ module.exports = class extends Generator {
       )
     );
     const devDependencies = /"devDependencies": {/g;
-    const e2e = /"e2e": "ng e2e"/g;
-    const scriptStart = /"start": "/g;
+    const e2e = /"build": "ng build",/g;
+    const scriptStart = /"start": "ng serve"/g;
 
     const newText = file
       .getText()
@@ -35,11 +35,12 @@ module.exports = class extends Generator {
   "devDependencies": {`
       )
       .replace(
-        e2e,
-        `"e2e": "ng e2e",
-    "postinstall": "ng build --aot --prod"`
+        e2e, this.options.modules.find(x => x.name === 'cap-ssr')
+        ? `"postinstall": "npm run build:ssr",`
+        : `"build": "ng build",
+    "postinstall": "ng build --aot --prod",`
       )
-      .replace(scriptStart, `"start": "node server.js && `);
+      .replace(scriptStart, this.options.modules.find(x => x.name === 'cap-ssr') ? `"start": "npm run serve:ssr"` : `"start": "node server.js"`);
 
     file.removeText(file.getPos(), file.getEnd()); // Remove all the text since we already have the text formed with the correct values
     file.insertText(0, newText); // Insert new text
@@ -51,7 +52,7 @@ module.exports = class extends Generator {
       cwd: this.destinationPath(this.options.name)
     });
     if (this.options.deployFrontEnd && !(this.options.modules.find(x => x.name === 'cap-heroku-connect'))) {
-      this.spawnCommandSync('heroku', ['apps:create', this.options.angularHerokuApp]);
+      // this.spawnCommandSync('heroku', ['apps:create', this.options.angularHerokuApp]);
       this.spawnCommandSync('git', ['init'], {cwd: this.destinationPath(this.options.name)});
       this.spawnCommandSync('git', ['add', '.'], {cwd: this.destinationPath(this.options.name)});
       this.spawnCommandSync('git', ['commit', '-m', `"First commit"`], {cwd:this.destinationPath(this.options.name)});
