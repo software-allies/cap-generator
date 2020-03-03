@@ -71,7 +71,7 @@ module.exports = class extends Generator {
                 Now lets to run the PWA App
                 \n==========================================`);
 
-                this.spawnCommandSync('npm', ['run', 'app-shell'], { cwd:  this.destinationPath(this.props.appName) });
+                this.spawnCommandSync('npm', ['run', 'app-shell'], { cwd:  this.destinationPath(this.options.appName) });
         
             
             }
