@@ -164,11 +164,12 @@ module.exports = class extends Generator {
             {
                 type: "confirm",
                 name: "appPWA",
-                message: "Would you like to add to your Angular App a PWA feature?",
+                message: "Would you like to add to your Angular App a PWA feature (included App-shell and WebPush features)?",
                 required: true,
                 default: this.config.get("appPWA") || false,
                 when: ctx => ctx.projectType === 'new'
-            },
+            }
+            /* ,
             {
                 type: "confirm",
                 name: "appPWAShell",
@@ -184,7 +185,7 @@ module.exports = class extends Generator {
                 required: true,
                 default: this.config.get("appPWAWebPush") || false,
                 when: ctx => ctx.projectType === 'new' && ctx.appPWA === true
-            }
+            } */
 
         ]);
 
@@ -275,9 +276,7 @@ module.exports = class extends Generator {
         if (this.props.appPWA) {
 
             this.composeWith(require.resolve('../app-pwa'), {
-                appName: this.props.appName ? this.props.appName : '',
-                appPWAShell: this.props.appPWAShell ? this.props.appPWAShell : '',
-                appPWAWebPush: this.props.appPWAWebPush ? this.props.appPWAWebPush : ''
+                appName: this.props.appName ? this.props.appName : ''
             });
 
         } else {
@@ -299,7 +298,7 @@ module.exports = class extends Generator {
             this.spawnCommandSync('ng', ['serve', '-o'], { cwd:  this.destinationPath(this.props.appName) });
 
         } else if (this.props.appSSR && !this.props.appPWA) {
-            
+
             // Run App in SSR
             this.log(`\n=========================================\n
             Now lets to run the Angular Universal App
