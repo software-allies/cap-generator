@@ -52,18 +52,17 @@ module.exports = class extends Generator {
             ----------- Get Vapid Keys Pair -------------
             \n`);
 
-            exec('web-push generate-vapid-keys --json', { cwd:  this.destinationPath(this.options.appName) }, async (error, stdout) => {
+            exec('web-push generate-vapid-keys --json', { cwd:  this.destinationPath(this.options.appName) }, (error, stdout) => {
     
                 if (error) {
                     console.log('error: you dont have web-push installed');
-                    await loopback.loopbackCLI(this.props.path, true);
                 } else {
 
                     const vapidKeys = JSON.parse(stdout);
                     console.log('vapidKeys', vapidKeys);
 
                     // Add Schematics-Webpush
-                    this.spawnCommandSync('ng', [
+                     this.spawnCommandSync('ng', [
                         'add', 
                         'cap-angular-schematic-webpush',
                         this.options.appName,
@@ -71,6 +70,15 @@ module.exports = class extends Generator {
                         vapidKeys.publicKey || 'xxxxxxxxxxxxxxxxxxxxxx',
                         vapidKeys.privateKey || 'xxxxxxxxxxxxxxxxxxxxxx'
                     ], {cwd:  this.destinationPath(this.options.appName)});
+
+
+                    // Run App in SSR
+                    this.log(`\n=========================================\n
+                    Now lets to run the PWA App
+                    \n==========================================`);
+
+                    this.spawnCommandSync('npm', ['run', 'app-shell'], { cwd:  this.destinationPath(this.props.appName) });
+            
                 
                 }
     
@@ -79,10 +87,6 @@ module.exports = class extends Generator {
                 console.error('ERROR: ', err);
             });
 
-            /* const vapidKeys = this.spawnCommand('web-push', [
-                'generate-vapid-keys', 
-                '--json'
-            ], { cwd:  this.destinationPath(this.options.appName), stdio: [process.stderr] }); */
 
         } else {
             this.log('Do not continue with PWA WebPush feature installation');

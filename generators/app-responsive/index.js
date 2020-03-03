@@ -16,6 +16,7 @@ module.exports = class extends Generator {
             this.options.appResponsiveLogo,
             this.options.removeAppComponentHtml,
             this.options.auth,
+            this.options.service,
             this.options.installAuth,
             this.options.sfcore
         ], {cwd:  this.destinationPath(this.options.appName)});

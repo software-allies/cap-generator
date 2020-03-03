@@ -251,6 +251,7 @@ module.exports = class extends Generator {
                 appResponsiveLogo: 'https://angular.io/assets/images/logos/angular/logo-nav@2x.png', // logo for header menu
                 removeAppComponentHtml: true, // Remove index content
                 auth: true, // Include Authentication options on menu
+                service: this.props.appAuthService, // auth0 or firebase
                 installAuth: false, // Install cap-angular-schematic-auth-auth0
                 sfcore: true
             });
@@ -288,7 +289,7 @@ module.exports = class extends Generator {
     end() {
 
         // Run the Angular App server
-        if (this.props.appNew && !this.props.appSSR) {
+        if (this.props.appNew && !this.props.appSSR && !this.props.appPWA) {
 
             // Run App in SSR
             this.log(`\n=========================================\n
@@ -297,19 +298,8 @@ module.exports = class extends Generator {
 
             this.spawnCommandSync('ng', ['serve', '-o'], { cwd:  this.destinationPath(this.props.appName) });
 
-        } else if (this.props.appPWAShell && !this.props.appSSR) {
-        // Run the Angular SSR Schematic
-
-            // Run App in SSR
-            this.log(`\n=========================================\n
-            Now lets to run the Angular PWA App
-            \n==========================================`);
-
-            this.spawnCommandSync('npm', ['run', 'app-shell'], { cwd:  this.destinationPath(this.props.appName) });
-
-        } else if (this.props.appSSR) {
-            // Run the Angular SSR Schematic
-    
+        } else if (this.props.appSSR && !this.props.appPWA) {
+            
             // Run App in SSR
             this.log(`\n=========================================\n
             Now lets to run the Angular Universal App
