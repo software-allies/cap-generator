@@ -72,6 +72,7 @@ module.exports = class extends Generator {
                 \n==========================================`);
 
                 this.spawnCommandSync('npm', ['run', 'app-shell'], { cwd:  this.destinationPath(this.options.appName) });
+                this.spawnCommandSync('npm', ['run', 'serve:ssr'], { cwd:  this.destinationPath(this.options.appName) });
         
             
             }
