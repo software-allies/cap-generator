@@ -277,7 +277,6 @@ module.exports = class extends Generator {
           'add',
           'cap-angular-schematic-responsive',
           this.props.appName,
-          'https://angular.io/assets/images/logos/angular/logo-nav@2x.png',
           true,
           true,
           this.props.authService,
@@ -292,7 +291,6 @@ module.exports = class extends Generator {
       );
     }
   }
-
 
   /**
    * @description Install dependencies and show next steps
