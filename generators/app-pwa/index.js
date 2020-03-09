@@ -56,10 +56,9 @@ module.exports = class extends Generator {
                 console.log('vapidKeys', vapidKeys);
 
                 // Add Schematics-Webpush
-                    this.spawnCommandSync('ng', [
+                this.spawnCommandSync('ng', [
                     'add', 
                     'cap-angular-schematic-webpush',
-                    this.options.appName,
                     'http://localhost:4000',
                     vapidKeys.publicKey || 'xxxxxxxxxxxxxxxxxxxxxx',
                     vapidKeys.privateKey || 'xxxxxxxxxxxxxxxxxxxxxx'
@@ -72,7 +71,7 @@ module.exports = class extends Generator {
                 \n==========================================`);
 
                 this.spawnCommandSync('npm', ['run', 'app-shell'], { cwd:  this.destinationPath(this.options.appName) });
-                this.spawnCommandSync('npm', ['run', 'serve:ssr'], { cwd:  this.destinationPath(this.options.appName) });
+                this.spawnCommandSync('node', ['serve.js'], { cwd:  this.destinationPath(this.options.appName) });
         
             
             }

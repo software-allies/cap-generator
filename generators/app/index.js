@@ -1,5 +1,5 @@
 var Generator = require('yeoman-generator');
-var dasherize = require('underscore.string/dasherize');
+var slugify = require('underscore.string/slugify');
 
 module.exports = class extends Generator {
     constructor(args, opts) {
@@ -56,7 +56,7 @@ module.exports = class extends Generator {
                 when: ctx => ctx.projectType === 'new'
             }, */
 
-            {
+            /* {
                 type: "confirm",
                 name: "appApi",
                 message: "Would you like to add to your Angular App a API Service?",
@@ -71,15 +71,15 @@ module.exports = class extends Generator {
                 required: true,
                 default: this.config.get("appApiServer") || 'http://localhost:8080/api/v1',
                 when: ctx => ctx.projectType === 'new' && ctx.appApi === true
-            },
-            {
+            }, */
+            /* {
                 type: "confirm",
                 name: "appCache",
                 message: "Would you like to add to your Angular App a Chache Http Interceptor?",
                 required: true,
                 default: this.config.get("appCache") || false,
                 when: ctx => ctx.projectType === 'new'
-            },
+            }, */
 
             {
                 type: "confirm",
@@ -144,14 +144,14 @@ module.exports = class extends Generator {
                 default: this.config.get("appSSR") || false,
                 when: ctx => ctx.projectType === 'new'
             },
-            {
+            /* {
                 type: "confirm",
                 name: "appSSRSeo",
                 message: "Would you like to add to your SSR Angular App a SEO service?",
                 required: true,
                 default: this.config.get("appSSRSeo") || false,
                 when: ctx => ctx.projectType === 'new' && ctx.appSSR === true
-            },
+            }, */
             {
                 type: "confirm",
                 name: "appSSRTransfer",
@@ -189,13 +189,17 @@ module.exports = class extends Generator {
 
         ]);
 
-        // Set default options
-        this.props.appName = dasherize(this.props.appName);
-        this.props.appTitle = this.props.appName;
-        this.props.appResponsive = true;
     }
     
     configuring() {
+        
+        // Set default options
+        this.props.appTitle = this.props.appName;
+        console.log('this.props.appName', this.props.appName);
+        console.log('this.props.appTitle', this.props.appTitle);
+        this.props.appName = slugify(this.props.appName);
+        console.log('this.props.appName slugify', this.props.appName);
+        this.props.appResponsive = true;
 
     }
     
@@ -247,9 +251,8 @@ module.exports = class extends Generator {
         if (this.props.appResponsive) {
 
             this.composeWith(require.resolve('../app-responsive'), {
-                appName: this.props.appName ? this.props.appName : '', // project name (dasherized)
+                appName: this.props.appName ? this.props.appName : '', // project name (slugifyd)
                 appTitle: this.props.appTitle ? this.props.appTitle : '', // Title for the app
-                appResponsiveLogo: 'https://angular.io/assets/images/logos/angular/logo-nav@2x.png', // logo for header menu
                 removeAppComponentHtml: true, // Remove index content
                 auth: true, // Include Authentication options on menu
                 service: this.props.appAuthService, // auth0 or firebase

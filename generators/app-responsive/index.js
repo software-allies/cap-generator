@@ -13,7 +13,6 @@ module.exports = class extends Generator {
             'add', 
             'cap-angular-schematic-responsive', 
             this.options.appTitle, 
-            this.options.appResponsiveLogo,
             this.options.removeAppComponentHtml,
             this.options.auth,
             this.options.service,

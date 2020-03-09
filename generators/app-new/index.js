@@ -9,6 +9,8 @@ module.exports = class extends Generator {
         Now lets to add a Angular App with Rounting and SCSS style
         \n==========================================`);
 
+        console.log('Generator new this.options.appName', this.options.appName);
+
         // Create a new Angular App
         this.spawnCommandSync('ng', ['new', this.options.appName, '--routing', '--style', 'scss']);
     }
