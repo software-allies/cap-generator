@@ -168,7 +168,10 @@ module.exports = class extends Generator {
                   `--storageBucket=${this.options.credentials.storageBucket}`,
                   `--senderId=${this.options.credentials.senderId}`,
                   `--appId=${this.options.credentials.appId}`,
-                  `--measurementId=${this.options.credentials.measurementId}`
+                  `--measurementId=${this.options.credentials.measurementId}`,
+                  yesNoValidation(this.props.deploy)
+                    ? `--endPoint=${urlDataBase.herokuURL.trim()}api/CapUserCs`
+                    : '--endPoint='
                 ],
                 {
                   cwd: this.destinationPath(this.options.name)

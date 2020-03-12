@@ -257,7 +257,8 @@ module.exports = class extends Generator {
               `--storageBucket=${this.props.storageBucket}`,
               `--senderId=${this.props.senderId}`,
               `--appId=${this.props.appId}`,
-              `--measurementId=${this.props.measurementId}`
+              `--measurementId=${this.props.measurementId}`,
+              `--endPoint=`
             ],
             {
               cwd: this.destinationPath(this.props.appName)
