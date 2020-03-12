@@ -11,7 +11,7 @@ const herokuConnectInstallation = async () =>
 const loginPop = async () => {
   const child = exec('heroku login');
   child.stdin.write(`\n`);
-  child.stderr.on('data', data => { });
+  child.stderr.on('data', () => {});
   child.stdin.end();
   return child;
 };
@@ -21,11 +21,11 @@ const checkUser = async () => exec('heroku whoami');
 const login = async credentials => {
   const child = exec('heroku login -i');
   child.stderr.on('data', async data => {
-    if (data == 'Email: ') {
+    if (data === 'Email: ') {
       child.stdin.write(`${credentials.email}`);
       child.stdin.write(`\n`);
     }
-    if (data == 'Password: ') {
+    if (data === 'Password: ') {
       child.stdin.write(`${credentials.password}`);
       child.stdin.write(`\n`);
       child.stdin.end();

@@ -23,21 +23,24 @@ exports.run = (promise, messages, appName) => {
         };
         resolve(response);
       }
-      if (commandResult.stdout === 'no plugins installed\n') {
-        load.stop();
-        load.fail(messages.error_message);
-        if (commandResult) {
-          errorAction = {
-            messages: commandResult.stdout,
-            code: 400,
-            description: 'Heroku Connect is not installed'
-          };
-          reject(errorAction);
+
+      if (commandResult.stdout) {
+        if (commandResult.stdout === 'no plugins installed\n') {
+          load.stop();
+          load.fail(messages.error_message);
+          if (commandResult) {
+            errorAction = {
+              messages: commandResult.stdout,
+              code: 400,
+              description: 'Heroku Connect is not installed'
+            };
+            reject(errorAction);
+          }
+        } else {
+          load.stop();
+          load.succeed(messages.responseMessage);
+          if (commandResult) resolve(commandResult);
         }
-      } else {
-        load.stop();
-        load.succeed(messages.responseMessage);
-        if (commandResult) resolve(commandResult);
       }
     } catch (error) {
       switch (error.code) {
