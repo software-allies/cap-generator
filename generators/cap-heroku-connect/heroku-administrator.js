@@ -52,17 +52,34 @@ exports.run = (promise, messages, appName) => {
     } catch (error) {
       switch (error.code) {
         case 1:
-          load.stop();
-          load.fail(
-            "You've reached the limit of 5 apps for unverified accounts. Delete some apps or add a credit card to verify your Heroku account."
-          );
-          errorAction = {
-            messages: `${error.stderr}`,
-            code: 1,
-            description:
-              "You've reached the limit of 5 apps for unverified accounts. Delete some apps or add a credit card to verify your Heroku account.."
-          };
-          reject(errorAction);
+          if (
+            error.stderr.includes(
+              `You've reached the limit of 5 apps for unverified accounts`
+            )
+          ) {
+            load.stop();
+            load.fail(
+              "You've reached the limit of 5 apps for unverified accounts. Delete some apps or add a credit card to verify your Heroku account."
+            );
+            errorAction = {
+              messages: `${error.stderr}`,
+              code: 1,
+              description:
+                "You've reached the limit of 5 apps for unverified accounts. Delete some apps or add a credit card to verify your Heroku account.."
+            };
+            reject(errorAction);
+          }
+
+          if (error.stderr.includes(`throw new Error('no input');`)) {
+            load.stop();
+            load.fail('Wrong heroku credentials');
+            errorAction = {
+              messages: `${error.stderr}`,
+              code: 1,
+              description: 'Wrong heroku credentials'
+            };
+            reject(errorAction);
+          }
           break;
         case 2:
           load.stop();
