@@ -24,6 +24,13 @@ exports.run = (promise, messages, appName) => {
         resolve(response);
       }
 
+      if (
+        commandResult.stderr.includes('Installing plugin heroku-connect-plugin... Done')
+      ) {
+        load.stop();
+        load.succeed(messages.responseMessage);
+        if (commandResult) resolve(messages.responseMessage);
+      }
       if (commandResult.stdout) {
         if (commandResult.stdout === 'no plugins installed\n') {
           load.stop();

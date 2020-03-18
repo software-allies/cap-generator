@@ -190,7 +190,6 @@ exports.herokuCLI = async (appName, path) => {
     }
     // }
   } catch (error) {
-    console.log('error: ', error);
     if (error.description === 'Heroku Connect is not installed') {
       await herokuService.run(
         command.herokuConnectInstallation,
