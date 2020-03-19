@@ -24,25 +24,24 @@ exports.run = (promise, messages, appName) => {
         resolve(response);
       }
 
-      if (
-        commandResult.stderr.includes('Installing plugin heroku-connect-plugin... Done')
-      ) {
-        load.stop();
-        load.succeed(messages.responseMessage);
-        if (commandResult) resolve(messages.responseMessage);
-      }
-      if (commandResult.stdout) {
+      if (commandResult) {
+        if (
+          commandResult.stderr.includes('Installing plugin heroku-connect-plugin... Done')
+        ) {
+          load.stop();
+          load.succeed(messages.responseMessage);
+          if (commandResult) resolve(messages.responseMessage);
+        }
+
         if (commandResult.stdout === 'no plugins installed\n') {
           load.stop();
           load.fail(messages.error_message);
-          if (commandResult) {
-            errorAction = {
-              messages: commandResult.stdout,
-              code: 400,
-              description: 'Heroku Connect is not installed'
-            };
-            reject(errorAction);
-          }
+          errorAction = {
+            messages: commandResult.stdout,
+            code: 400,
+            description: 'Heroku Connect is not installed'
+          };
+          reject(errorAction);
         } else {
           load.stop();
           load.succeed(messages.responseMessage);
