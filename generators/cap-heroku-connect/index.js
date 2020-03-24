@@ -137,7 +137,7 @@ module.exports = class extends Generator {
             );
           }
 
-          if (this.options.auth) {
+          /*if (this.options.auth) {
             if (this.options.credentials.authService === 'auth0') {
               this.spawnCommandSync(
                 'ng',
@@ -178,7 +178,7 @@ module.exports = class extends Generator {
                 }
               );
             }
-          }
+          }*/
 
           this.spawnCommandSync(
             'ng',

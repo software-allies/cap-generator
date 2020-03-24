@@ -49,6 +49,7 @@ exports.run = (promise, messages, appName) => {
         }
       }
     } catch (error) {
+      console.log('heroku-administrator', error);
       switch (error.code) {
         case 1:
           if (error.stderr.includes('No connection(s) found')) {

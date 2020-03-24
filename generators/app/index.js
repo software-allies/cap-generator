@@ -2,6 +2,7 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
+const Parser = require('ts-simple-ast').default;
 const newApplication = require('../../utils/new-application');
 const existingApplication = require('../../utils/existing-application');
 const herokuConnectScript = require('../cap-heroku-connect/heroku-connect');
@@ -228,50 +229,65 @@ module.exports = class extends Generator {
         'scss'
       ]);
 
-      if (!this.props.modules.find(x => x.name === 'cap-heroku-connect')) {
-        if (this.props.authService === 'auth0') {
-          this.spawnCommandSync(
-            'ng',
-            [
-              'add',
-              'cap-angular-schematic-auth-auth0',
-              `--clientID=${this.props.AUTH0_CLIENT_ID}`,
-              `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
-              `--domain=${this.props.AUTH0_DOMAIN}`,
-              `--endPoint=`
-            ],
-            {
-              cwd: this.destinationPath(this.props.appName)
-            }
-          );
-        } else if (this.props.authService === 'firebase') {
-          this.spawnCommandSync(
-            'ng',
-            [
-              'add',
-              'cap-angular-schematic-auth-firebase',
-              `--apiKey=${this.props.apiKey}`,
-              `--authDomain=${this.props.authDomain}`,
-              `--databaseURL=${this.props.databaseURL}`,
-              `--projectId=${this.props.projectId}`,
-              `--storageBucket=${this.props.storageBucket}`,
-              `--senderId=${this.props.senderId}`,
-              `--appId=${this.props.appId}`,
-              `--measurementId=${this.props.measurementId}`,
-              `--endPoint=`
-            ],
-            {
-              cwd: this.destinationPath(this.props.appName)
-            }
-          );
-        }
+      const tsParser = new Parser();
+      tsParser.addExistingSourceFile(
+        this.destinationPath(
+          `${this.props.appName}/tsconfig.json`
+        )
+      );
+      const file = tsParser.getSourceFile(
+        this.destinationPath(
+          `${this.props.appName}/tsconfig.json`
+        )
+      );
+      const target = /"target": "es2015"/g;
+
+      const newText = file.getText().replace(target, `"target": "es5"`);
+      file.removeText(file.getPos(), file.getEnd());
+      file.insertText(0, newText);
+      file.saveSync();
+
+      if (this.props.authService === 'auth0') {
+        this.spawnCommandSync(
+          'ng',
+          [
+            'add',
+            'cap-angular-schematic-auth-auth0',
+            `--clientID=${this.props.AUTH0_CLIENT_ID}`,
+            `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
+            `--domain=${this.props.AUTH0_DOMAIN}`,
+            `--endPoint=`
+          ],
+          {
+            cwd: this.destinationPath(this.props.appName)
+          }
+        );
+      } else if (this.props.authService === 'firebase') {
+        this.spawnCommandSync(
+          'ng',
+          [
+            'add',
+            'cap-angular-schematic-auth-firebase',
+            `--apiKey=${this.props.apiKey}`,
+            `--authDomain=${this.props.authDomain}`,
+            `--databaseURL=${this.props.databaseURL}`,
+            `--projectId=${this.props.projectId}`,
+            `--storageBucket=${this.props.storageBucket}`,
+            `--senderId=${this.props.senderId}`,
+            `--appId=${this.props.appId}`,
+            `--measurementId=${this.props.measurementId}`,
+            `--endPoint=`
+          ],
+          {
+            cwd: this.destinationPath(this.props.appName)
+          }
+        );
       }
 
       if (yesNoValidation(this.props.deploy)) {
         this.props.appNameHeroku = this.props.appName + '-' + Date.now();
         this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
       }
-
       this.spawnCommandSync(
         'ng',
         [
