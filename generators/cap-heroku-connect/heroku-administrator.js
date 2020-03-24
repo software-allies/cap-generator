@@ -51,6 +51,15 @@ exports.run = (promise, messages, appName) => {
     } catch (error) {
       switch (error.code) {
         case 1:
+          if (error.stderr.includes('No connection(s) found')) {
+            errorAction = {
+              messages: `${error.stderr}`,
+              code: 1,
+              description: `${error.stderr} on Heroku`
+            };
+            reject(errorAction);
+          }
+
           if (
             error.stderr.includes(
               `You've reached the limit of 5 apps for unverified accounts`
