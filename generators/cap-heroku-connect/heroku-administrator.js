@@ -52,6 +52,8 @@ exports.run = (promise, messages, appName) => {
       switch (error.code) {
         case 1:
           if (error.stderr.includes('No connection(s) found')) {
+            load.stop();
+            load.fail(`${error.stderr} on Heroku`);
             errorAction = {
               messages: `${error.stderr}`,
               code: 1,
