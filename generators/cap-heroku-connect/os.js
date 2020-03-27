@@ -98,7 +98,7 @@ if (opsys === 'darwin' || opsys === 'linux') {
   verifyJqVersion(versionCommand, installJQCommand);
 } else {
   console.log('Windows');
-  installJQCommand = 'npm install node-jq -g';
+  installJQCommand = 'npm install node-jq --save';
   versionCommand = '';
   verifyJqVersion(versionCommand, installJQCommand);
 }
