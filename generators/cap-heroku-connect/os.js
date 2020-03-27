@@ -7,21 +7,16 @@ let load = null;
 
 let versionCommand = '';
 let installJQCommand = '';
-let jwtCommandWindows = `curl -X POST -d "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"| jq '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: [(.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] | {"keys": .}'`;
+// let jwtCommandWindows = `curl -X POST -d "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"| jq '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: [(.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] | {"keys": .}'`;
 let jwtCommand = `curl -s 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com' | jq '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: [(.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] | {"keys": .}'`;
 
-const createJWTFirebase = async () => {
+const createJWTFirebase = async command => {
   try {
     load = loading('Creating a JSON to Firebase auth...'.blue).start();
     let jwt;
     let jsonJWT;
     if (opsys === 'darwin' || opsys === 'linux') {
-      jwt = await exec(jwtCommand);
-      jsonJWT = JSON.stringify(JSON.parse(jwt.stdout));
-      load.stop();
-      load.succeed('The JSON was successful generated.');
-    } else {
-      jwt = await exec(jwtCommandWindows);
+      jwt = await exec(command);
       jsonJWT = JSON.stringify(JSON.parse(jwt.stdout));
       load.stop();
       load.succeed('The JSON was successful generated.');
@@ -40,13 +35,32 @@ const installJq = async command => {
     load = loading('Installing jq...'.blue).start();
     let installationStatus = await exec(command);
     console.log(installationStatus);
-    if (
-      installationStatus.stdout.includes('Already downloaded') ||
-      installationStatus.stdout.includes('Downloaded')
-    ) {
+    if (installationStatus.stdout.includes('Already downloaded')) {
       load.stop();
       load.succeed('Installation finished');
-      createJWTFirebase();
+      createJWTFirebase(jwtCommand);
+    }
+  } catch (error) {
+    console.log(error);
+    load.stop();
+    load.fail('Error trying to install jq.');
+    console.log('error: ', error);
+  }
+};
+
+const installJqWindows = async command => {
+  try {
+    load = loading('Installing jq...'.blue).start();
+    let installationStatus = await exec(command);
+    console.log(installationStatus);
+    if (installationStatus.stdout.includes('Downloaded')) {
+      load.stop();
+      load.succeed('Installation finished');
+      const jq = require('node-jq');
+      console.log('jq: ', jq);
+      let jwtCommand = `curl -s 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com' | ${jq} '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: [(.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] | {"keys": .}'`;
+      console.log('jwtCommand: ', jwtCommand);
+      createJWTFirebase(jwtCommand);
     }
   } catch (error) {
     console.log(error);
@@ -60,8 +74,7 @@ const verifyJqVersion = async (versionCommand, installatioCommand) => {
   try {
     if (versionCommand === '') {
       console.log('its a windows machine');
-
-      installJq(installatioCommand);
+      installJqWindows(installatioCommand);
     } else {
       let version = await exec(versionCommand);
       if (version.stdout !== '') {
