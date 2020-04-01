@@ -19,19 +19,29 @@ const loginPop = async () => {
 const checkUser = async () => exec('heroku whoami');
 
 const login = async credentials => {
-  const child = exec('heroku login -i');
-  child.stderr.on('data', async data => {
-    if (data === 'Email: ') {
-      child.stdin.write(`${credentials.email}`);
-      child.stdin.write(`\n`);
-    }
-    if (data === 'Password: ') {
-      child.stdin.write(`${credentials.password}`);
-      child.stdin.write(`\n`);
-      child.stdin.end();
-    }
-  });
-  return child;
+  if (credentials.email !== '' || credentials.password !== '') {
+    const child = exec('heroku login -i');
+    child.stderr.on('data', async data => {
+      if (data === 'Email: ') {
+        child.stdin.write(`${credentials.email}`);
+        child.stdin.write(`\n`);
+      }
+      if (data === 'Password: ') {
+        child.stdin.write(`${credentials.password}`);
+        child.stdin.write(`\n`);
+        child.stdin.end();
+      }
+    });
+    return child;
+  }
+
+  let error = {
+    error: 'No credentials provider',
+    code: 101,
+    message: 'The credentials were not provider'
+  };
+
+  return error;
 };
 
 const herokuApps = async () => exec(`heroku apps`);

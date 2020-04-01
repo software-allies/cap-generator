@@ -8,7 +8,6 @@ exports.verifyInstallation = async (email, password) => {
     await herokuService.run(command.herokuVersion, loadMessages.herokuV);
     await herokuService.run(command.herokuConnectVerification, loadMessages.herokuC);
 
-    // eslint-disable-next-line no-unused-expressions
     await herokuService.run(command.checkUser, loadMessages.checkUser);
   } catch (error) {
     let credentials = { email: email, password: password };

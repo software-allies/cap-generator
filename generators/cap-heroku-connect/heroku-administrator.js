@@ -14,7 +14,52 @@ exports.run = (promise, messages, appName) => {
       } else {
         commandResult = await promise();
       }
-      if (messages.actionMessage === 'Importing a mapping configuration...') {
+
+      if (commandResult) {
+        if (commandResult.error) {
+          if (messages.actionMessage === 'Login...') {
+            load.stop();
+            load.fail(commandResult.error.messages);
+            reject(commandResult.error);
+          }
+        } else {
+          if (commandResult.stdout.includes('Logged in as ')) {
+            load.stop();
+            load.succeed(messages.responseMessage);
+            resolve(messages.responseMessage);
+          }
+
+          if (
+            commandResult.stderr.includes(
+              'Installing plugin heroku-connect-plugin... Done'
+            )
+          ) {
+            load.stop();
+            load.succeed(messages.responseMessage);
+            resolve(messages.responseMessage);
+          }
+
+          if (commandResult.stdout.includes('added')) {
+            load.stop();
+            load.succeed(messages.responseMessage);
+            resolve(messages.responseMessage);
+          }
+
+          if (commandResult.stdout.includes('no plugins installed\n')) {
+            load.stop();
+            load.fail(messages.error_message);
+            errorAction = {
+              messages: commandResult.stdout,
+              code: 400,
+              description: 'Heroku Connect is not installed'
+            };
+            reject(errorAction);
+          }
+          load.stop();
+          load.succeed(messages.responseMessage);
+          resolve(commandResult);
+        }
+      } else {
         load.stop();
         load.succeed(messages.responseMessage);
         let response = {
@@ -23,33 +68,7 @@ exports.run = (promise, messages, appName) => {
         };
         resolve(response);
       }
-
-      if (commandResult) {
-        if (
-          commandResult.stderr.includes('Installing plugin heroku-connect-plugin... Done')
-        ) {
-          load.stop();
-          load.succeed(messages.responseMessage);
-          if (commandResult) resolve(messages.responseMessage);
-        }
-
-        if (commandResult.stdout === 'no plugins installed\n') {
-          load.stop();
-          load.fail(messages.error_message);
-          errorAction = {
-            messages: commandResult.stdout,
-            code: 400,
-            description: 'Heroku Connect is not installed'
-          };
-          reject(errorAction);
-        } else {
-          load.stop();
-          load.succeed(messages.responseMessage);
-          if (commandResult) resolve(commandResult);
-        }
-      }
     } catch (error) {
-      console.log('heroku-administrator', error);
       switch (error.code) {
         case 1:
           if (error.stderr.includes('No connection(s) found')) {
@@ -112,6 +131,10 @@ exports.run = (promise, messages, appName) => {
             description: "You don't access"
           };
           reject(errorAction);
+          break;
+        case 101:
+          load.stop();
+          load.fail(messages);
           break;
         case 127:
           load.stop();
