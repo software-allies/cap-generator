@@ -216,10 +216,6 @@ module.exports = class extends Generator {
       return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
     }
 
-    if (yesNoValidation(this.props.deploy) || yesNoValidation(this.props.sync)) {
-      await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
-    }
-
     if (this.props.projecttype === 'create') {
       this.spawnCommandSync('ng', [
         'new',
@@ -248,6 +244,13 @@ module.exports = class extends Generator {
       file.saveSync();
 
       if (this.props.authService === 'auth0') {
+
+        this.env.arguments.push(
+          {key: 'ApiKey', value: this.props.AUTH0_CLIENT_ID},
+          {key: 'CLIENT_SECRET', value: this.props.AUTH0_CLIENT_SECRET},
+          {key: 'AUTH_DOMAIN', value: this.props.AUTH0_DOMAIN}
+        )
+
         this.spawnCommandSync(
           'ng',
           [
@@ -263,6 +266,18 @@ module.exports = class extends Generator {
           }
         );
       } else if (this.props.authService === 'firebase') {
+
+        this.env.arguments.push(
+          {key: 'API_KEY', value: this.props.apiKey},
+          {key: 'AUTH_DOMAIN', value: this.props.authDomain},
+          {key: 'DATA_BASE_URL', value: this.props.databaseURL},
+          {key: 'PROJECT_ID', value: this.props.projectId},
+          {key: 'STORAGE_BUCKET', value: this.props.storageBucket},
+          {key: 'SENDER_ID', value: this.props.senderId},
+          {key: 'APP_ID', value: this.props.appId},
+          {key: 'MEASUREMENT_ID', value: this.props.measurementId},
+        )
+
         this.spawnCommandSync(
           'ng',
           [
@@ -284,10 +299,15 @@ module.exports = class extends Generator {
         );
       }
 
+      if (yesNoValidation(this.props.deploy) || yesNoValidation(this.props.sync)) {
+        await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
+      }
+
       if (yesNoValidation(this.props.deploy)) {
         this.props.appNameHeroku = this.props.appName + '-' + Date.now();
         this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
       }
+
       this.spawnCommandSync(
         'ng',
         [
