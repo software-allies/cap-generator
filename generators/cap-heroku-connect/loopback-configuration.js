@@ -15,17 +15,17 @@ async function removeUnnecessaryCode (destinationPath) {
   fileDelete.saveSync();
 }
 
-async function datasourceConfig (destinationPath, datasource) {
+async function datasourceConfig (destinationPath, datasource, deploy) {
   const tsParseDB = new Parser();
   tsParseDB.addExistingSourceFile(`${destinationPath}/server/datasources.json`);
   const fileDB = tsParseDB.getSourceFile(`${destinationPath}/server/datasources.json`);
-  const dataSource = /"connector": "memory"/g;
-  const newTextDB = fileDB.getText().replace(dataSource,
-  `"url": "${datasource}?ssl=true",
-  "connector": "postgresql"`);
+  // const dataSource = /"connector": "memory"/g;
+  /*const newTextDB = fileDB.getText().replace(dataSource,
+  `"url": "${deploy ? '' : datasource}?ssl=true",
+  "connector": "postgresql"`);*/
   fileDB.removeText(fileDB.getPos(), fileDB.getEnd());
-  fileDB.insertText(0, newTextDB);
-  fileDB.saveSync();
+  fileDB.insertText(0, `{}`);
+  fileDB.save();
 }
 
 async function middlewareAuth (destinationPath) {
@@ -83,40 +83,40 @@ async function ModelConfig  (destinationPath) {
   ]
   },
   "Lead": {
-    "dataSource": "db",
+    "dataSource": "heroku",
     "public": true
   },
   "Account": {
-    "dataSource": "db",
+    "dataSource": "heroku",
     "public": true
   },
   "Contact": {
-    "dataSource": "db",
+    "dataSource": "heroku",
     "public": true
   },
   "Opportunity": {
-    "dataSource": "db",
+    "dataSource": "heroku",
     "public": true
   },
   "CapUserC": {
-    "dataSource": "db",
+    "dataSource": "heroku",
     "public": true
   },
   "CapFileC": {
-    "dataSource": "db",
+    "dataSource": "heroku",
     "public": true
   }
 }`);
   fileModelConfig.saveSync();
 }
 
-const loopbackConfiguration = async (appName, destinationPath, datasource) => {
+const loopbackConfiguration = async (appName, destinationPath, datasource, deploy) => {
   datasource = datasource;
   try {
 
     await removeUnnecessaryCode(destinationPath);
 
-    await datasourceConfig(destinationPath, datasource);
+    await datasourceConfig(destinationPath, datasource, deploy);
 
     await middlewareAuth(destinationPath);
 
