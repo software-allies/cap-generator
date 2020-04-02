@@ -63,7 +63,7 @@ module.exports = class extends Generator {
       'ng',
       [
         'add',
-        'cap-angular-schematic-storage-aws',
+        'cap-angular-schematic-storage-aws@latest',
         `--bucket=${this.props.awsBucket}`,
         `--accessKeyId=${this.props.awsAccessKeyId}`,
         `--secretAccessKey=${this.props.awsSecretAccessKey}`,

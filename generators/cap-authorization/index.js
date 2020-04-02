@@ -148,7 +148,7 @@ module.exports = class extends Generator {
         'ng',
         [
           'add',
-          'cap-angular-schematic-auth-firebase',
+          'cap-angular-schematic-auth-firebase@latest',
           `--apiKey=${this.props.apiKey}`,
           `--authDomain=${this.props.authDomain}`,
           `--databaseURL=${this.props.databaseURL}`,

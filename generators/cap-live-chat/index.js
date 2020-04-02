@@ -118,7 +118,7 @@ module.exports = class extends Generator {
       'ng',
       [
         'add',
-        'cap-angular-schematic-livechat',
+        'cap-angular-schematic-livechat@latest',
         `--embeddedServiceName=${this.props.embeddedServiceName}`,
         `--idServiceName=${this.props.idServiceName}`,
         `--urlSandbox=${this.props.urlSandbox}`,

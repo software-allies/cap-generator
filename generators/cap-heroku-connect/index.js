@@ -184,7 +184,7 @@ module.exports = class extends Generator {
             'ng',
             [
               'add',
-              'cap-angular-schematic-sfcore',
+              'cap-angular-schematic-sfcore@latest',
               yesNoValidation(this.props.deploy)
                 ? `--apiEndPoint=${urlDataBase.herokuURL.trim()}api`
                 : '--apiEndPoint=http://localhost:3000/api'

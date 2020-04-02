@@ -252,7 +252,7 @@ module.exports = class extends Generator {
           'ng',
           [
             'add',
-            'cap-angular-schematic-auth-auth0',
+            'cap-angular-schematic-auth-auth0@latest',
             `--clientID=${this.props.AUTH0_CLIENT_ID}`,
             `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
             `--domain=${this.props.AUTH0_DOMAIN}`,
@@ -267,7 +267,7 @@ module.exports = class extends Generator {
           'ng',
           [
             'add',
-            'cap-angular-schematic-auth-firebase',
+            'cap-angular-schematic-auth-firebase@latest',
             `--apiKey=${this.props.apiKey}`,
             `--authDomain=${this.props.authDomain}`,
             `--databaseURL=${this.props.databaseURL}`,
@@ -292,12 +292,11 @@ module.exports = class extends Generator {
         'ng',
         [
           'add',
-          'cap-angular-schematic-responsive',
+          'cap-angular-schematic-responsive@latest',
           this.props.appName,
           true,
           true,
           this.props.authService,
-          false,
           this.props.modules.find(x => x.name === 'cap-heroku-connect')
             ? true
             : false
