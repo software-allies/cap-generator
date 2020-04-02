@@ -1,13 +1,26 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const Parser = require('ts-simple-ast').default;
+const { exec, spawn } = require('promisify-child-process');
 
 module.exports = class extends Generator {
   writing() {
+
     const path = this.destinationPath(this.options.name).split('/')
-    this.fs.copyTpl(this.templatePath(), this.destinationPath(this.options.name), {
-      appName: this.options.name ? this.options.name : path[path.length - 1]
-    });
+
+    this.fs.copyTpl(
+      this.templatePath('server/**'),
+      this.destinationPath(this.options.name),
+      {
+        appName: this.options.name ? this.options.name : path[path.length - 1]
+      }
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('env/**'),
+      this.destinationPath(this.options.name),
+      {}
+    )
 
     const tsParser = new Parser();
     tsParser.addExistingSourceFile(
@@ -47,7 +60,12 @@ module.exports = class extends Generator {
     file.saveSync(); // Save all changes
   }
 
-  install() {
+  async install(){
+    const auth_env = this.options.env.arguments;
+    auth_env.map( async x => {
+       await exec(`heroku config:set ${x.variable}=${x.key} --app=${this.options.angularHerokuApp}`);
+    });
+
     this.spawnCommandSync('npm', ['install', '--save', 'express', 'path'], {
       cwd: this.destinationPath(this.options.name)
     });
