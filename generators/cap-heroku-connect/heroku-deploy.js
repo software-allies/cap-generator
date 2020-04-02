@@ -18,8 +18,16 @@ async function herokuPush(path) {
   const { stdout, stderr } = await child;
 }
 
-const herokuCLI = async (appName, appHeroku) => {
+const AuthCredential = async (path, HerokuApp, AUTH_URL) =>
+  exec(`heroku config:set AUTH_URL=${AUTH_URL} -a ${HerokuApp}`, { cwd: `./${path}` });
+
+const herokuCLI = async (appName, appHeroku, AUTH_URL, backOrFront) => {
   try {
+
+    if (backOrFront) {
+      await AuthCredential(appName, appHeroku, AUTH_URL)
+    }
+
     await herokuGitInit(appName);
 
     await herokuGitAdd(appName);
