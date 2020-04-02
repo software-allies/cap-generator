@@ -107,33 +107,50 @@ module.exports = class extends Generator {
             {
               audience:
                 this.options.credentials.authService === 'auth0'
-                  ? `${this.options.credentials.AUTH0_DOMAIN}/api/v2/`
-                  : this.options.credentials.projectId,
+                  ? '${process.env.AUTH_URL}/api/v2/'
+                  : `${this.options.credentials.projectId}`,
               issuer:
                 this.options.credentials.authService === 'auth0'
-                  ? `${this.options.credentials.AUTH0_DOMAIN}/`
+                  ? '${process.env.AUTH_URL}/'
                   : `https://securetoken.google.com/${
                       this.options.credentials.projectId
                     }`,
               jwksUri:
                 this.options.credentials.authService === 'auth0'
-                  ? `${this.options.credentials.AUTH0_DOMAIN}/.well-known/jwks.json`
+                  ? '${process.env.AUTH_URL}/.well-known/jwks.json'
                   : `https://${
                       this.options.credentials.projectId
                     }.firebaseio.com/jwks/${jkws}.json`
             }
           );
 
+          this.fs.write(
+            this.destinationPath(`${this.props.path}/server/datasources.local.js`),
+            `
+module.exports = {
+  "heroku": {
+    "url": process.env.DATABASE_URL+"?ssl=true",
+    "name": "heroku",
+    "connector": "postgresql"
+  }
+}
+          `);
+
           await loopbackConfig.loopbackConfiguration(
             this.props.path,
             this.destinationPath(`${this.props.path}`),
-            urlDataBase ? urlDataBase.postgresURL : ''
+            urlDataBase ? urlDataBase.postgresURL : '',
+            this.props.deploy
           );
 
           if (yesNoValidation(this.props.deploy)) {
             await herokuDeploy.herokuCLI(
               this.props.path,
-              urlDataBase ? urlDataBase.appName : ''
+              urlDataBase ? urlDataBase.appName : '',
+              this.options.credentials.authService === 'auth0'
+                ? this.options.credentials.AUTH0_DOMAIN
+                : `https://${this.options.credentials.projectId}.firebaseio.com/jwks/${jkws}.json`,
+                true
             );
           }
 
@@ -197,7 +214,9 @@ module.exports = class extends Generator {
           if (this.options.deployFrontEnd) {
             await herokuDeploy.herokuCLI(
               this.options.name,
-              this.options.angularHerokuApp
+              this.options.angularHerokuApp,
+              '',
+              false
             );
           }
         }).catch(function(err) {
