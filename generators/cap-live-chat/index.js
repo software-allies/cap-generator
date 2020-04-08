@@ -2,6 +2,7 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const Parser = require('ts-simple-ast').default;
+const { exec, spawn } = require('promisify-child-process');
 
 module.exports = class extends Generator {
   /**
@@ -91,6 +92,21 @@ module.exports = class extends Generator {
    */
 
   writing() {
+    if (this.options.deployFrontEnd) {
+      this.env.arguments.push(
+        {key: 'LIVECHAT_SERVICE_NAME', value: this.props.embeddedServiceName},
+        {key: 'LIVECHAT_SERVICE_NAME_ID', value: this.props.idServiceName},
+        {key: 'LIVECHAT_URL_SANDBOX', value: this.props.urlSandbox},
+        {key: 'LIVECHAT_URL_DOMAIN', value: this.props.urlDomain},
+        {key: 'LIVECHAT_BASE_LIVE_AGENT_CONTENT_URL', value: this.props.baseLiveAgentContentURL},
+        {key: 'LIVECHAT_DEPLOYMENT_ID', value: this.props.deploymentId},
+        {key: 'LIVECHAT_BUTTON_ID', value: this.props.buttonId},
+        {key: 'LIVECHAT_BASE_LIVE_AGENT_URL', value: this.props.baseLiveAgentURL},
+        {key: 'LIVECHAT_SCRIPT_URL', value: this.props.scriptUrl},
+        {key: 'LIVECHAT_LIVE_AGENT_DEV_NAME', value: this.props.eswLiveAgentDevName},
+      )
+    }
+
     const tsParser = new Parser();
     tsParser.addExistingSourceFile(
       this.destinationPath(
@@ -111,9 +127,46 @@ module.exports = class extends Generator {
     file.removeText(file.getPos(), file.getEnd());
     file.insertText(0, newText);
     file.saveSync();
+
+    const tsEnvironment = new Parser();
+    tsEnvironment.addExistingSourceFile(
+      this.destinationPath(
+        this.options.name ? `${this.options.name}/src/environments/environment.ts` : 'src/environments/environment.ts'
+      )
+    );
+
+    const fileEnvironment = tsEnvironment.getSourceFile(
+      this.destinationPath(
+        this.options.name ? `${this.options.name}/src/environments/environment.ts` : 'src/environments/environment.ts'
+      )
+    );
+
+    const environments = /export const environment = {/g;
+    const newEnvironments = fileEnvironment.getText().replace(environments,
+ `export const environment = {
+  embeddedServiceName: '',
+  idServiceName: '',
+  urlSandbox: '',
+  urlDomain: '',
+  baseLiveAgentContentURL: '',
+  deploymentId: '',
+  buttonId: '',
+  baseLiveAgentURL: '',
+  scriptUrl: '',
+  eswLiveAgentDevName: '',`);
+
+    fileEnvironment.removeText(fileEnvironment.getPos(), fileEnvironment.getEnd());
+    fileEnvironment.insertText(0, newEnvironments);
+    fileEnvironment.saveSync();
   }
 
   install() {
+    if (this.options.deployFrontEnd) {
+      this.env.arguments.map( async x => {
+        await exec(`heroku config:set ${x.key}=${x.value} --app=${this.options.angularHerokuApp}`);
+      });
+    }
+
     this.spawnCommandSync(
       'ng',
       [
