@@ -8,19 +8,24 @@ module.exports = class extends Generator {
 
     const path = this.destinationPath(this.options.name).split('/')
 
-    this.fs.copyTpl(
-      this.templatePath('server/**'),
-      this.destinationPath(this.options.name),
-      {
-        appName: this.options.name ? this.options.name : path[path.length - 1]
-      }
-    );
+    if (!(this.options.modules.find(x => x.name === 'cap-ssr'))) {
+      this.fs.copyTpl(
+        this.templatePath('server/**'),
+        this.destinationPath(this.options.name),
+        {
+          appName: this.options.name ? this.options.name : path[path.length - 1]
+        }
+      );
+    }
 
     this.fs.copyTpl(
       this.templatePath('env/**'),
       this.destinationPath(this.options.name),
-      {}
-    )
+      {
+        modules: this.options.modules,
+        auth: this.options.credentials.authService
+      }
+    );
 
     const tsParser = new Parser();
     tsParser.addExistingSourceFile(
@@ -33,9 +38,9 @@ module.exports = class extends Generator {
         this.options.name ? `${this.options.name}/package.json` : 'package.json'
       )
     );
-    const devDependencies = /"devDependencies": {/g;
+    const devDependencies = /"dependencies": {/g;
     const e2e = /"build": "ng build",/g;
-    const scriptStart = /"start": "ng serve"/g;
+    const scriptStart = /"start": "ng serve",/g;
 
     const newText = file
       .getText()
@@ -45,29 +50,70 @@ module.exports = class extends Generator {
     "node": "~12.14.1",
     "npm": "~6.13.6"
   },
-  "devDependencies": {`
+  "dependencies": {
+    "typescript": "~3.5.3",
+    `
       )
       .replace(
         e2e, this.options.modules.find(x => x.name === 'cap-ssr')
-        ? `"postinstall": "npm run build:ssr",`
+        ? `"postinstall": "npm run config && npm run build:ssr",`
         : `"build": "ng build",
-    "postinstall": "ng build --aot --prod",`
+    "postinstall": "npm run config && ng build --aot --prod",`
       )
-      .replace(scriptStart, this.options.modules.find(x => x.name === 'cap-ssr') ? `"start": "npm run serve:ssr"` : `"start": "node server.js"`);
+      .replace(scriptStart, this.options.modules.find(x => x.name === 'cap-ssr')
+        ? `"start": "npm run config && npm run serve:ssr",
+    "config": "node set-env.ts",`
+        : `"start": "npm run config && node server.js",
+    "config": "node set-env.ts",`);
 
-    file.removeText(file.getPos(), file.getEnd()); // Remove all the text since we already have the text formed with the correct values
-    file.insertText(0, newText); // Insert new text
-    file.saveSync(); // Save all changes
+    file.removeText(file.getPos(), file.getEnd());
+    file.insertText(0, newText);
+    file.saveSync();
+
+  /**
+   * Edit environment.ts
+   */
+    const tsEnvironment = new Parser();
+    tsEnvironment.addExistingSourceFile(
+      this.destinationPath(
+        this.options.name ? `${this.options.name}/src/environments/environment.ts` : 'src/environments/environment.ts'
+      )
+    );
+
+    const fileEnvironment = tsEnvironment.getSourceFile(
+      this.destinationPath(
+        this.options.name ? `${this.options.name}/src/environments/environment.ts` : 'src/environments/environment.ts'
+      )
+    );
+
+    const environments = /export const environment = {/g;
+    const newEnvironments = fileEnvironment.getText().replace(environments,
+      this.options.credentials.authService === 'auth0'
+      ? `export const environment = {
+  clientId: '',
+  clientSecret: '',
+  domain: '',`
+      : `export const environment = {
+  apiKey: '',
+  authDomain: '',
+  databaseURL: '',
+  projectId: '',
+  storageBucket: '',
+  messagingSenderId: '',
+  appId: '',
+  measurementId: ''`);
+
+    fileEnvironment.removeText(fileEnvironment.getPos(), fileEnvironment.getEnd());
+    fileEnvironment.insertText(0, newEnvironments);
+    fileEnvironment.saveSync();
+  /**
+   * Edit environment.ts
+   */
   }
 
-  async install(){
-    const auth_env = this.options.env.arguments;
-    auth_env.map( async x => {
-       await exec(`heroku config:set ${x.variable}=${x.key} --app=${this.options.angularHerokuApp}`);
-    });
-
-    this.spawnCommandSync('npm', ['install', '--save', 'express', 'path'], {
-      cwd: this.destinationPath(this.options.name)
+  install(){
+    this.options.env.arguments.map( async x => {
+      await exec(`heroku config:set ${x.key}=${x.value} --app=${this.options.angularHerokuApp}`);
     });
     if (this.options.deployFrontEnd && !(this.options.modules.find(x => x.name === 'cap-heroku-connect'))) {
       // this.spawnCommandSync('heroku', ['apps:create', this.options.angularHerokuApp]);
