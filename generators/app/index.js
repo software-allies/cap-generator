@@ -2,10 +2,11 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const Parser = require('ts-simple-ast').default;
+// const Parser = require('ts-simple-ast').default;
 const newApplication = require('../../utils/new-application');
 const existingApplication = require('../../utils/existing-application');
 const herokuConnectScript = require('../cap-heroku-connect/heroku-connect');
+const ts_ast = require('../../utils/AST-files');
 
 module.exports = class extends Generator {
 
@@ -227,23 +228,7 @@ module.exports = class extends Generator {
         cwd: this.destinationPath(this.props.appName)
       });
 
-      const tsParser = new Parser();
-      tsParser.addExistingSourceFile(
-        this.destinationPath(
-          `${this.props.appName}/tsconfig.json`
-        )
-      );
-      const file = tsParser.getSourceFile(
-        this.destinationPath(
-          `${this.props.appName}/tsconfig.json`
-        )
-      );
-      const target = /"target": "es2015"/g;
-
-      const newText = file.getText().replace(target, `"target": "es5"`);
-      file.removeText(file.getPos(), file.getEnd());
-      file.insertText(0, newText);
-      file.saveSync();
+      ts_ast.astFiles(this.destinationPath(`${this.props.appName}/tsconfig.json`), `"target": "es2015"`, `"target": "es5"`);
 
       // if (!this.props.modules.find(x => x.name === 'cap-heroku-connect')) {
         if (this.props.authService === 'auth0') {
