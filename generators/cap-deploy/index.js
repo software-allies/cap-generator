@@ -1,10 +1,11 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const Parser = require('ts-simple-ast').default;
+// const Parser = require('ts-simple-ast').default;
 const { exec, spawn } = require('promisify-child-process');
+const ts_ast = require('../../utils/AST-files');
 
 module.exports = class extends Generator {
-  writing() {
+  async writing() {
 
     const path = this.destinationPath(this.options.name).split('/')
 
@@ -27,7 +28,7 @@ module.exports = class extends Generator {
       }
     );
 
-    const tsParser = new Parser();
+    /*const tsParser = new Parser();
     tsParser.addExistingSourceFile(
       this.destinationPath(
         this.options.name ? `${this.options.name}/package.json` : 'package.json'
@@ -69,31 +70,57 @@ module.exports = class extends Generator {
     file.removeText(file.getPos(), file.getEnd());
     file.insertText(0, newText);
     file.saveSync();
+*/
 
-  /**
-   * Edit environment.ts
-   */
-    const tsEnvironment = new Parser();
-    tsEnvironment.addExistingSourceFile(
-      this.destinationPath(
-        this.options.name ? `${this.options.name}/src/environments/environment.ts` : 'src/environments/environment.ts'
-      )
+
+    await ts_ast.astFiles(
+      this.destinationPath(this.options.name
+        ? `${this.options.name}/package.json`
+        : 'package.json'),
+      `"dependencies": {`,
+      `"engines": {
+    "node": "~12.14.1",
+    "npm": "~6.13.6"
+  },
+  "dependencies": {
+    "typescript": "~3.5.3",`
     );
 
-    const fileEnvironment = tsEnvironment.getSourceFile(
-      this.destinationPath(
-        this.options.name ? `${this.options.name}/src/environments/environment.ts` : 'src/environments/environment.ts'
-      )
+    await ts_ast.astFiles(
+      this.destinationPath(this.options.name
+        ? `${this.options.name}/package.json`
+        : 'package.json'),
+      `"build": "ng build",`,
+      this.options.modules.find(x => x.name === 'cap-ssr')
+        ? `"postinstall": "npm run config && npm run build:ssr",`
+        :`"build": "ng build",
+    "postinstall": "npm run config && ng build --aot --prod",`
     );
 
-    const environments = /export const environment = {/g;
-    const newEnvironments = fileEnvironment.getText().replace(environments,
+    await ts_ast.astFiles(
+      this.destinationPath(this.options.name
+        ? `${this.options.name}/package.json`
+        : 'package.json'),
+      `"start": "ng serve",`,
+      this.options.modules.find(x => x.name === 'cap-ssr')
+        ?`"start": "npm run config && npm run serve:ssr",
+    "config": "node set-env.ts",`
+        : `"start": "npm run config && node server.js",
+    "config": "node set-env.ts",`
+    );
+
+
+    await ts_ast.astFiles(
+      this.destinationPath( this.options.name
+        ? `${this.options.name}/src/environments/environment.ts`
+        : 'src/environments/environment.ts'),
+      `export const environment = {`,
       this.options.credentials.authService === 'auth0'
-      ? `export const environment = {
+        ? `export const environment = {
   clientId: '',
   clientSecret: '',
   domain: '',`
-      : `export const environment = {
+        : `export const environment = {
   apiKey: '',
   authDomain: '',
   databaseURL: '',
@@ -102,13 +129,6 @@ module.exports = class extends Generator {
   messagingSenderId: '',
   appId: '',
   measurementId: ''`);
-
-    fileEnvironment.removeText(fileEnvironment.getPos(), fileEnvironment.getEnd());
-    fileEnvironment.insertText(0, newEnvironments);
-    fileEnvironment.saveSync();
-  /**
-   * Edit environment.ts
-   */
   }
 
   install(){
