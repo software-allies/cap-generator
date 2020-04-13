@@ -1,8 +1,9 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
-const Parser = require('ts-simple-ast').default;
+// const Parser = require('ts-simple-ast').default;
 const { exec, spawn } = require('promisify-child-process');
+const ts_ast = require ('../../utils/AST-files');
 
 module.exports = class extends Generator {
   /**
@@ -60,7 +61,7 @@ module.exports = class extends Generator {
    * @author Diego Moreno <diego@sofwareallies.com>
    * @returns
    */
-  writing() {
+  async writing() {
     if (this.options.deployFrontEnd) {
       this.env.arguments.push(
         {key: 'AWS_BUCKET', value: this.props.awsBucket},
@@ -71,7 +72,19 @@ module.exports = class extends Generator {
       )
     }
 
-    const tsEnvironment = new Parser();
+    await ts_ast.astFiles(
+      this.destinationPath(this.options.name
+        ? `${this.options.name}/src/environments/environment.ts`
+        : 'src/environments/environment.ts'),
+        `export const environment = {`,
+        `export const environment = {
+  bucket: '',
+  accessKeyId: '',
+  secretAccessKey: '',
+  region: '',
+  folder: '',`);
+
+    /*const tsEnvironment = new Parser();
     tsEnvironment.addExistingSourceFile(
       this.destinationPath(
         this.options.name ? `${this.options.name}/src/environments/environment.ts` : 'src/environments/environment.ts'
@@ -95,7 +108,7 @@ module.exports = class extends Generator {
 
     fileEnvironment.removeText(fileEnvironment.getPos(), fileEnvironment.getEnd());
     fileEnvironment.insertText(0, newEnvironments);
-    fileEnvironment.saveSync();
+    fileEnvironment.saveSync();*/
 
     if (this.options.deployFrontEnd) {
       this.env.arguments.map( async x => {
