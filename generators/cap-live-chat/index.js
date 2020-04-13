@@ -1,8 +1,9 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
-const Parser = require('ts-simple-ast').default;
+// const Parser = require('ts-simple-ast').default;
 const { exec, spawn } = require('promisify-child-process');
+const ts_ast =  require('../../utils/AST-files');
 
 module.exports = class extends Generator {
   /**
@@ -91,7 +92,7 @@ module.exports = class extends Generator {
    * @returns
    */
 
-  writing() {
+  async writing() {
     if (this.options.deployFrontEnd) {
       this.env.arguments.push(
         {key: 'LIVECHAT_SERVICE_NAME', value: this.props.embeddedServiceName},
@@ -107,7 +108,7 @@ module.exports = class extends Generator {
       )
     }
 
-    const tsParser = new Parser();
+    /*const tsParser = new Parser();
     tsParser.addExistingSourceFile(
       this.destinationPath(
         this.options.name ? `${this.options.name}/src/app/app.component.html` : 'src/app/app.component.html'
@@ -126,9 +127,37 @@ module.exports = class extends Generator {
 
     file.removeText(file.getPos(), file.getEnd());
     file.insertText(0, newText);
-    file.saveSync();
+    file.saveSync();*/
 
-    const tsEnvironment = new Parser();
+
+    await ts_ast.astFiles(
+      this.destinationPath(this.options.name
+        ? `${this.options.name}/src/app/app.component.html`
+        : 'src/app/app.component.html'),
+        `<div id="main">`,
+        `<div id="main">
+  <cap-live-chat-sf></cap-live-chat-sf>`
+    );
+
+    await ts_ast.astFiles(
+      this.destinationPath(this.options.name
+        ? `${this.options.name}/src/app/app.component.html`
+        : 'src/app/app.component.html'),
+        `export const environment = {`,
+        `export const environment = {
+    embeddedServiceName: '',
+    idServiceName: '',
+    urlSandbox: '',
+    urlDomain: '',
+    baseLiveAgentContentURL: '',
+    deploymentId: '',
+    buttonId: '',
+    baseLiveAgentURL: '',
+    scriptUrl: '',
+    eswLiveAgentDevName: '',`
+    )
+
+    /*const tsEnvironment = new Parser();
     tsEnvironment.addExistingSourceFile(
       this.destinationPath(
         this.options.name ? `${this.options.name}/src/environments/environment.ts` : 'src/environments/environment.ts'
@@ -157,7 +186,7 @@ module.exports = class extends Generator {
 
     fileEnvironment.removeText(fileEnvironment.getPos(), fileEnvironment.getEnd());
     fileEnvironment.insertText(0, newEnvironments);
-    fileEnvironment.saveSync();
+    fileEnvironment.saveSync();*/
   }
 
   install() {
