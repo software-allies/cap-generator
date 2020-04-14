@@ -2,10 +2,11 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const Parser = require('ts-simple-ast').default;
+// const Parser = require('ts-simple-ast').default;
 const newApplication = require('../../utils/new-application');
 const existingApplication = require('../../utils/existing-application');
 const herokuConnectScript = require('../cap-heroku-connect/heroku-connect');
+const ts_ast = require('../../utils/AST-files');
 
 module.exports = class extends Generator {
 
@@ -14,17 +15,12 @@ module.exports = class extends Generator {
     this.argument("appName", { type: String, required: false });
   }
 
-  /**
-   * @description Prompts all the question to the user so we can know what type of app the user wants to create
-   * @author Christofer Flores <cristofer@sofwareallies.com>
-   * @returns
-   */
   prompting() {
 
     function yesNoValidation(value) {
       return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
     }
-    // Have Yeoman greet the user.
+
     this.log(
       yosay(`${chalk.red('CAP Generator\n Build amazing apps faster and better')}`)
     );
@@ -192,11 +188,6 @@ module.exports = class extends Generator {
     });
   }
 
-  /**
-   * @description Create the app based on the user answer, and update the template to include the values from the user inputs
-   * @author Lenin Emmanuel Espinoza <lenin_emmanuel@sofwareallies.com>
-   * @returns
-   */
   writing() {
     function yesNoValidation(value) {
       return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
@@ -216,10 +207,6 @@ module.exports = class extends Generator {
       return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
     }
 
-    if (yesNoValidation(this.props.deploy) || yesNoValidation(this.props.sync)) {
-      await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
-    }
-
     if (this.props.projecttype === 'create') {
       this.spawnCommandSync('ng', [
         'new',
@@ -229,65 +216,87 @@ module.exports = class extends Generator {
         'scss'
       ]);
 
-      const tsParser = new Parser();
-      tsParser.addExistingSourceFile(
-        this.destinationPath(
-          `${this.props.appName}/tsconfig.json`
-        )
-      );
-      const file = tsParser.getSourceFile(
-        this.destinationPath(
-          `${this.props.appName}/tsconfig.json`
-        )
-      );
-      const target = /"target": "es2015"/g;
+      this.spawnCommandSync(
+        'npm',
+        [
+          'install',
+          '--save',
+          'express',
+          'path',
+          'dotenv'
+        ], {
+        cwd: this.destinationPath(this.props.appName)
+      });
 
-      const newText = file.getText().replace(target, `"target": "es5"`);
-      file.removeText(file.getPos(), file.getEnd());
-      file.insertText(0, newText);
-      file.saveSync();
+      ts_ast.astFiles(this.destinationPath(`${this.props.appName}/tsconfig.json`), `"target": "es2015"`, `"target": "es5"`);
 
-      if (this.props.authService === 'auth0') {
-        this.spawnCommandSync(
-          'ng',
-          [
-            'add',
-            'cap-angular-schematic-auth-auth0@latest',
-            `--clientID=${this.props.AUTH0_CLIENT_ID}`,
-            `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
-            `--domain=${this.props.AUTH0_DOMAIN}`,
-            `--endPoint=`
-          ],
-          {
-            cwd: this.destinationPath(this.props.appName)
-          }
-        );
-      } else if (this.props.authService === 'firebase') {
-        this.spawnCommandSync(
-          'ng',
-          [
-            'add',
-            'cap-angular-schematic-auth-firebase@latest',
-            `--apiKey=${this.props.apiKey}`,
-            `--authDomain=${this.props.authDomain}`,
-            `--databaseURL=${this.props.databaseURL}`,
-            `--projectId=${this.props.projectId}`,
-            `--storageBucket=${this.props.storageBucket}`,
-            `--senderId=${this.props.senderId}`,
-            `--appId=${this.props.appId}`,
-            `--measurementId=${this.props.measurementId}`,
-            `--endPoint=`
-          ],
-          {
-            cwd: this.destinationPath(this.props.appName)
-          }
-        );
+      // if (!this.props.modules.find(x => x.name === 'cap-heroku-connect')) {
+        if (this.props.authService === 'auth0') {
+
+          this.env.arguments.push(
+            {key: 'AUTH0_CLIENT_ID', value: this.props.AUTH0_CLIENT_ID},
+            {key: 'AUTH0_CLIENT_SECRET', value: this.props.AUTH0_CLIENT_SECRET},
+            {key: 'AUTH0_DOMAIN', value: this.props.AUTH0_DOMAIN}
+          )
+
+          this.spawnCommandSync(
+            'ng',
+            [
+              'add',
+              'cap-angular-schematic-auth-auth0',
+              `--clientID=${this.props.AUTH0_CLIENT_ID}`,
+              `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
+              `--domain=${this.props.AUTH0_DOMAIN}`,
+              `--endPoint=`
+            ],
+            {
+              cwd: this.destinationPath(this.props.appName)
+            }
+          );
+        } else if (this.props.authService === 'firebase') {
+
+          this.env.arguments.push(
+            {key: 'API_KEY', value: this.props.apiKey},
+            {key: 'AUTH_DOMAIN', value: this.props.authDomain},
+            {key: 'DATA_BASE_URL', value: this.props.databaseURL},
+            {key: 'PROJECT_ID', value: this.props.projectId},
+            {key: 'STORAGE_BUCKET', value: this.props.storageBucket},
+            {key: 'SENDER_ID', value: this.props.senderId},
+            {key: 'APP_ID', value: this.props.appId},
+            {key: 'MEASUREMENT_ID', value: this.props.measurementId},
+          );
+
+          this.spawnCommandSync(
+            'ng',
+            [
+              'add',
+              'cap-angular-schematic-auth-firebase',
+              `--apiKey=${this.props.apiKey}`,
+              `--authDomain=${this.props.authDomain}`,
+              `--databaseURL=${this.props.databaseURL}`,
+              `--projectId=${this.props.projectId}`,
+              `--storageBucket=${this.props.storageBucket}`,
+              `--senderId=${this.props.senderId}`,
+              `--appId=${this.props.appId}`,
+              `--measurementId=${this.props.measurementId}`,
+              `--endPoint=`
+            ],
+            {
+              cwd: this.destinationPath(this.props.appName)
+            }
+          );
+        }
+      // }
+
+      if (yesNoValidation(this.props.deploy) || yesNoValidation(this.props.sync)) {
+        await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
       }
 
       if (yesNoValidation(this.props.deploy)) {
         this.props.appNameHeroku = this.props.appName + '-' + Date.now();
         this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
       }
+
       this.spawnCommandSync(
         'ng',
         [
@@ -308,11 +317,6 @@ module.exports = class extends Generator {
     }
   }
 
-  /**
-   * @description Install dependencies and show next steps
-   * @author Christofer Flores <cristofer@sofwareallies.com>
-   * @returns
-   */
   end() {
     function yesNoValidation(value) {
       return value.toLowerCase() === 'yes' || value.toLowerCase() === 'y' ? true : false;
