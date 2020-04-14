@@ -244,7 +244,10 @@ module.exports = class extends Generator {
             [
               'add',
               'cap-angular-schematic-auth-auth0',
-              `--clientID=${this.props.AUTH0_CLIENT_ID}`,
+              yesNoValidation(this.props.deploy)
+                ? `--credentials=${true}`
+                : `--credentials=${false}`
+              ,`--clientID=${this.props.AUTH0_CLIENT_ID}`,
               `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
               `--domain=${this.props.AUTH0_DOMAIN}`,
               `--endPoint=`
