@@ -228,68 +228,89 @@ module.exports = class extends Generator {
         cwd: this.destinationPath(this.props.appName)
       });
 
-      ts_ast.astFiles(this.destinationPath(`${this.props.appName}/tsconfig.json`), `"target": "es2015"`, `"target": "es5"`);
+      await ts_ast.astFiles(this.destinationPath(`${this.props.appName}/tsconfig.json`), `"target": "es2015"`, `"target": "es5"`);
+      await ts_ast.astFiles(
+        this.destinationPath( this.props.appName
+          ? `${this.props.appName}/src/environments/environment.ts`
+          : 'src/environments/environment.ts'),
+        `export const environment = {`,
+        this.props.authService === 'auth0'
+          ? `export const environment = {
+  clientId: '',
+  clientSecret: '',
+  domain: '',`
+          : `export const environment = {
+  apiKey: '',
+  authDomain: '',
+  databaseURL: '',
+  projectId: '',
+  storageBucket: '',
+  messagingSenderId: '',
+  appId: '',
+  measurementId: '',`);
 
-      // if (!this.props.modules.find(x => x.name === 'cap-heroku-connect')) {
-        if (this.props.authService === 'auth0') {
+      if (this.props.authService === 'auth0') {
 
-          this.env.arguments.push(
-            {key: 'AUTH0_CLIENT_ID', value: this.props.AUTH0_CLIENT_ID},
-            {key: 'AUTH0_CLIENT_SECRET', value: this.props.AUTH0_CLIENT_SECRET},
-            {key: 'AUTH0_DOMAIN', value: this.props.AUTH0_DOMAIN}
-          )
+        this.env.arguments.push(
+          {key: 'AUTH0_CLIENT_ID', value: this.props.AUTH0_CLIENT_ID},
+          {key: 'AUTH0_CLIENT_SECRET', value: this.props.AUTH0_CLIENT_SECRET},
+          {key: 'AUTH0_DOMAIN', value: this.props.AUTH0_DOMAIN}
+        );
 
-          this.spawnCommandSync(
-            'ng',
-            [
-              'add',
-              'cap-angular-schematic-auth-auth0',
-              yesNoValidation(this.props.deploy)
-                ? `--credentials=${true}`
-                : `--credentials=${false}`
-              ,`--clientID=${this.props.AUTH0_CLIENT_ID}`,
-              `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
-              `--domain=${this.props.AUTH0_DOMAIN}`,
-              `--endPoint=`
-            ],
-            {
-              cwd: this.destinationPath(this.props.appName)
-            }
-          );
-        } else if (this.props.authService === 'firebase') {
+        this.spawnCommandSync(
+          'ng',
+          [
+            'add',
+            'cap-angular-schematic-auth-auth0@latest',
+            yesNoValidation(this.props.deploy)
+              ? `--credentials=${true}`
+              : `--credentials=${false}`
+            ,`--clientID=${this.props.AUTH0_CLIENT_ID}`,
+            `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
+            `--domain=${this.props.AUTH0_DOMAIN}`,
+            `--endPoint=`
+          ],
+          {
+            cwd: this.destinationPath(this.props.appName)
+          }
+        );
 
-          this.env.arguments.push(
-            {key: 'API_KEY', value: this.props.apiKey},
-            {key: 'AUTH_DOMAIN', value: this.props.authDomain},
-            {key: 'DATA_BASE_URL', value: this.props.databaseURL},
-            {key: 'PROJECT_ID', value: this.props.projectId},
-            {key: 'STORAGE_BUCKET', value: this.props.storageBucket},
-            {key: 'SENDER_ID', value: this.props.senderId},
-            {key: 'APP_ID', value: this.props.appId},
-            {key: 'MEASUREMENT_ID', value: this.props.measurementId},
-          );
+      } else if (this.props.authService === 'firebase') {
 
-          this.spawnCommandSync(
-            'ng',
-            [
-              'add',
-              'cap-angular-schematic-auth-firebase',
-              `--apiKey=${this.props.apiKey}`,
-              `--authDomain=${this.props.authDomain}`,
-              `--databaseURL=${this.props.databaseURL}`,
-              `--projectId=${this.props.projectId}`,
-              `--storageBucket=${this.props.storageBucket}`,
-              `--senderId=${this.props.senderId}`,
-              `--appId=${this.props.appId}`,
-              `--measurementId=${this.props.measurementId}`,
-              `--endPoint=`
-            ],
-            {
-              cwd: this.destinationPath(this.props.appName)
-            }
-          );
-        }
-      // }
+        this.env.arguments.push(
+          {key: 'API_KEY', value: this.props.apiKey},
+          {key: 'AUTH_DOMAIN', value: this.props.authDomain},
+          {key: 'DATA_BASE_URL', value: this.props.databaseURL},
+          {key: 'PROJECT_ID', value: this.props.projectId},
+          {key: 'STORAGE_BUCKET', value: this.props.storageBucket},
+          {key: 'SENDER_ID', value: this.props.senderId},
+          {key: 'APP_ID', value: this.props.appId},
+          {key: 'MEASUREMENT_ID', value: this.props.measurementId},
+        );
+
+        this.spawnCommandSync(
+          'ng',
+          [
+            'add',
+            'cap-angular-schematic-auth-firebase@latest',
+            yesNoValidation(this.props.deploy)
+              ? `--credentials=${true}`
+              : `--credentials=${false}`
+            ,`--apiKey=${this.props.apiKey}`,
+            `--authDomain=${this.props.authDomain}`,
+            `--databaseURL=${this.props.databaseURL}`,
+            `--projectId=${this.props.projectId}`,
+            `--storageBucket=${this.props.storageBucket}`,
+            `--senderId=${this.props.senderId}`,
+            `--appId=${this.props.appId}`,
+            `--measurementId=${this.props.measurementId}`,
+            `--endPoint=`
+          ],
+          {
+            cwd: this.destinationPath(this.props.appName)
+          }
+        );
+      }
 
       if (yesNoValidation(this.props.deploy) || yesNoValidation(this.props.sync)) {
         await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);

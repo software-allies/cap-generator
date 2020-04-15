@@ -70,28 +70,7 @@ module.exports = class extends Generator {
     file.removeText(file.getPos(), file.getEnd());
     file.insertText(0, newText);
     file.saveSync();
-*/
-
-  await ts_ast.astFiles(
-    this.destinationPath( this.options.name
-      ? `${this.options.name}/src/environments/environment.ts`
-      : 'src/environments/environment.ts'),
-    `export const environment = {`,
-    this.options.credentials.authService === 'auth0'
-      ? `export const environment = {
-  clientId: '',
-  clientSecret: '',
-  domain: '',`
-      : `export const environment = {
-  apiKey: '',
-  authDomain: '',
-  databaseURL: '',
-  projectId: '',
-  storageBucket: '',
-  messagingSenderId: '',
-  appId: '',
-  measurementId: ''`);
-
+    */
 
     await ts_ast.astFiles(
       this.destinationPath(this.options.name

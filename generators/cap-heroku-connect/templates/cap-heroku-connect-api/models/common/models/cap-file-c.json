@@ -47,7 +47,7 @@
       "precision": null,
       "scale": null,
       "postgresql": {
-        "columnName": "sacap__uuid__c",
+        "columnName": "sacap__cap_user__c",
         "dataType": "character varying",
         "dataLength": 255,
         "dataPrecision": null,
