@@ -108,28 +108,6 @@ module.exports = class extends Generator {
       )
     }
 
-    /*const tsParser = new Parser();
-    tsParser.addExistingSourceFile(
-      this.destinationPath(
-        this.options.name ? `${this.options.name}/src/app/app.component.html` : 'src/app/app.component.html'
-      )
-    );
-    const file = tsParser.getSourceFile(
-      this.destinationPath(
-        this.options.name ? `${this.options.name}/src/app/app.component.html` : 'src/app/app.component.html'
-      )
-    );
-
-    const selector = /<div id="main">/g;
-    const newText = file.getText().replace(selector,
-      `<div id="main">
-  <cap-live-chat-sf></cap-live-chat-sf>`);
-
-    file.removeText(file.getPos(), file.getEnd());
-    file.insertText(0, newText);
-    file.saveSync();*/
-
-
     await ts_ast.astFiles(
       this.destinationPath(this.options.name
         ? `${this.options.name}/src/app/app.component.html`
@@ -157,37 +135,6 @@ module.exports = class extends Generator {
     scriptUrl: '',
     eswLiveAgentDevName: '',`
     )
-
-    /*const tsEnvironment = new Parser();
-    tsEnvironment.addExistingSourceFile(
-      this.destinationPath(
-        this.options.name ? `${this.options.name}/src/environments/environment.ts` : 'src/environments/environment.ts'
-      )
-    );
-
-    const fileEnvironment = tsEnvironment.getSourceFile(
-      this.destinationPath(
-        this.options.name ? `${this.options.name}/src/environments/environment.ts` : 'src/environments/environment.ts'
-      )
-    );
-
-    const environments = /export const environment = {/g;
-    const newEnvironments = fileEnvironment.getText().replace(environments,
- `export const environment = {
-  embeddedServiceName: '',
-  idServiceName: '',
-  urlSandbox: '',
-  urlDomain: '',
-  baseLiveAgentContentURL: '',
-  deploymentId: '',
-  buttonId: '',
-  baseLiveAgentURL: '',
-  scriptUrl: '',
-  eswLiveAgentDevName: '',`);
-
-    fileEnvironment.removeText(fileEnvironment.getPos(), fileEnvironment.getEnd());
-    fileEnvironment.insertText(0, newEnvironments);
-    fileEnvironment.saveSync();*/
   }
 
   install() {

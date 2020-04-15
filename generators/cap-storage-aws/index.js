@@ -84,32 +84,6 @@ module.exports = class extends Generator {
   region: '',
   folder: '',`);
 
-    /*const tsEnvironment = new Parser();
-    tsEnvironment.addExistingSourceFile(
-      this.destinationPath(
-        this.options.name ? `${this.options.name}/src/environments/environment.ts` : 'src/environments/environment.ts'
-      )
-    );
-
-    const fileEnvironment = tsEnvironment.getSourceFile(
-      this.destinationPath(
-        this.options.name ? `${this.options.name}/src/environments/environment.ts` : 'src/environments/environment.ts'
-      )
-    );
-
-    const environments = /export const environment = {/g;
-    const newEnvironments = fileEnvironment.getText().replace(environments,
- `export const environment = {
-  bucket: '',
-  accessKeyId: '',
-  secretAccessKey: '',
-  region: '',
-  folder: '',`);
-
-    fileEnvironment.removeText(fileEnvironment.getPos(), fileEnvironment.getEnd());
-    fileEnvironment.insertText(0, newEnvironments);
-    fileEnvironment.saveSync();*/
-
     if (this.options.deployFrontEnd) {
       this.env.arguments.map( async x => {
         await exec(`heroku config:set ${x.key}=${x.value} --app=${this.options.angularHerokuApp}`);

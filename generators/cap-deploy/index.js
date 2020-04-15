@@ -28,50 +28,6 @@ module.exports = class extends Generator {
       }
     );
 
-    /*const tsParser = new Parser();
-    tsParser.addExistingSourceFile(
-      this.destinationPath(
-        this.options.name ? `${this.options.name}/package.json` : 'package.json'
-      )
-    );
-    const file = tsParser.getSourceFile(
-      this.destinationPath(
-        this.options.name ? `${this.options.name}/package.json` : 'package.json'
-      )
-    );
-    const devDependencies = /"dependencies": {/g;
-    const e2e = /"build": "ng build",/g;
-    const scriptStart = /"start": "ng serve",/g;
-
-    const newText = file
-      .getText()
-      .replace(
-        devDependencies,
-        `  "engines": {
-    "node": "~12.14.1",
-    "npm": "~6.13.6"
-  },
-  "dependencies": {
-    "typescript": "~3.5.3",
-    `
-      )
-      .replace(
-        e2e, this.options.modules.find(x => x.name === 'cap-ssr')
-        ? `"postinstall": "npm run config && npm run build:ssr",`
-        : `"build": "ng build",
-    "postinstall": "npm run config && ng build --aot --prod",`
-      )
-      .replace(scriptStart, this.options.modules.find(x => x.name === 'cap-ssr')
-        ? `"start": "npm run config && npm run serve:ssr",
-    "config": "node set-env.ts",`
-        : `"start": "npm run config && node server.js",
-    "config": "node set-env.ts",`);
-
-    file.removeText(file.getPos(), file.getEnd());
-    file.insertText(0, newText);
-    file.saveSync();
-    */
-
     await ts_ast.astFiles(
       this.destinationPath(this.options.name
         ? `${this.options.name}/package.json`

@@ -163,49 +163,6 @@ module.exports = {
               : `endPoint: 'http://localhost:3000/api/CapUserCs'`
           );
 
-          /*if (this.options.auth) {
-            if (this.options.credentials.authService === 'auth0') {
-              this.spawnCommandSync(
-                'ng',
-                [
-                  'add',
-                  'cap-angular-schematic-auth-auth0',
-                  `--clientID=${this.options.credentials.AUTH0_CLIENT_ID}`,
-                  `--clientSecret=${this.options.credentials.AUTH0_CLIENT_SECRET}`,
-                  `--domain=${this.options.credentials.AUTH0_DOMAIN}`,
-                  yesNoValidation(this.props.deploy)
-                    ? `--endPoint=${urlDataBase.herokuURL.trim()}api/CapUserCs`
-                    : '--endPoint='
-                ],
-                {
-                  cwd: this.destinationPath(this.options.name)
-                }
-              );
-            } else if (this.options.credentials.authService === 'firebase') {
-              this.spawnCommandSync(
-                'ng',
-                [
-                  'add',
-                  'cap-angular-schematic-auth-firebase',
-                  `--apiKey=${this.options.credentials.apiKey}`,
-                  `--authDomain=${this.options.credentials.authDomain}`,
-                  `--databaseURL=${this.options.credentials.databaseURL}`,
-                  `--projectId=${this.options.credentials.projectId}`,
-                  `--storageBucket=${this.options.credentials.storageBucket}`,
-                  `--senderId=${this.options.credentials.senderId}`,
-                  `--appId=${this.options.credentials.appId}`,
-                  `--measurementId=${this.options.credentials.measurementId}`,
-                  yesNoValidation(this.props.deploy)
-                    ? `--endPoint=${urlDataBase.herokuURL.trim()}api/CapUserCs`
-                    : '--endPoint='
-                ],
-                {
-                  cwd: this.destinationPath(this.options.name)
-                }
-              );
-            }
-          }*/
-
           this.spawnCommandSync(
             'ng',
             [
