@@ -1,7 +1,8 @@
 const fs = require('fs');
 const targetPath = './src/environments/environment.prod.ts';
 require('dotenv').config();
-const envConfigFileProd = `export const environment = {<% if (auth === 'auth0') { %>
+const envConfigFileProd = `export const environment = {
+  <% if (auth === 'auth0') { %>
   clientId: '${process.env.AUTH0_CLIENT_ID}',
   clientSecret: '${process.env.AUTH0_CLIENT_SECRET}',
   domain: '${process.env.AUTH0_DOMAIN}',
@@ -29,9 +30,11 @@ const envConfigFileProd = `export const environment = {<% if (auth === 'auth0') 
   accessKeyId: '${process.env.AWS_ACCESS_KEY_ID}',
   secretAccessKey: '${process.env.AWS_SECRET_ACCESS_KEY}',
   region: '${process.env.AWS_REGION}',
-  folder: '${process.env.AWS_FOLDER}',<% } %>
+  folder: '${process.env.AWS_FOLDER}',
+  <% } %><% if (modules.find(x => x.name === 'cap-heroku-connect')) { -%>
+  sfApiUrl: '${process.env.API_URL}',<% } %>
   production: true,
-  apiUrl: 'http://mydomain.com/api/'
+  apiUrl: ''
 };
 `;
 fs.writeFile(targetPath, envConfigFileProd,

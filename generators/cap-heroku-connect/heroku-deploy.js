@@ -18,14 +18,14 @@ async function herokuPush(path) {
   const { stdout, stderr } = await child;
 }
 
-const AuthCredential = async (path, HerokuApp, AUTH_URL) =>
-  exec(`heroku config:set AUTH_URL=${AUTH_URL} -a ${HerokuApp}`, { cwd: `./${path}` });
+const confgVarsHeroku = async (path, herokuApp, key ,value) =>
+  exec(`heroku config:set ${key}=${value} -a ${herokuApp}`, { cwd: `./${path}` });
 
-const herokuCLI = async (appName, appHeroku, AUTH_URL, backOrFront) => {
+const herokuCLI = async (appName, appHeroku, variableKey ,variableValue, publishHerokuVar) => {
   try {
 
-    if (backOrFront) {
-      await AuthCredential(appName, appHeroku, AUTH_URL)
+    if (publishHerokuVar) {
+      await confgVarsHeroku(appName, appHeroku, variableKey, variableValue);
     }
 
     await herokuGitInit(appName);
