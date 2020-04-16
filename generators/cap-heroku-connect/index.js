@@ -148,26 +148,36 @@ module.exports = {
             await herokuDeploy.herokuCLI(
               this.props.path,
               urlDataBase ? urlDataBase.appName : '',
+              'AUTH_URL',
               this.options.credentials.authService === 'auth0'
                 ? this.options.credentials.AUTH0_DOMAIN
-                : `https://${this.options.credentials.projectId}.firebaseio.com/jwks/${jkws}.json`,
-                true
+                : `https://${this.options.credentials.projectId}.firebaseio.com/jwks/${jkws}.json`
+              ,true
             );
           }
 
           await ts_ast.astFiles(
-            this.destinationPath(`${this.options.name}/src/app/modules/cap-authentication/cap-authentication.module.ts`),
-            `endPoint: ''`,
+            this.options.credentials.authService === 'auth0'
+              ? this.destinationPath(`${this.options.name}/src/app/modules/cap-authentication/cap-authentication.module.ts`)
+              : this.destinationPath(`${this.options.name}/src/app/modules/cap-authentication-firebase/cap-authentication.module.ts`)
+            ,`endPoint: ''`,
             yesNoValidation(this.props.deploy)
               ? `endPoint: '${urlDataBase.herokuURL.trim()}api/CapUserCs'`
               : `endPoint: 'http://localhost:3000/api/CapUserCs'`
           );
+
+          await ts_ast.astFiles(
+            this.destinationPath(`${this.options.name}/src/environments/environment.ts`),
+            `export const environment = {`,
+            `export const environment = {
+  sfApiUrl: '',`);
 
           this.spawnCommandSync(
             'ng',
             [
               'add',
               'cap-angular-schematic-sfcore@latest',
+              yesNoValidation(this.props.deploy),
               yesNoValidation(this.props.deploy)
                 ? `--apiEndPoint=${urlDataBase.herokuURL.trim()}api`
                 : '--apiEndPoint=http://localhost:3000/api'
@@ -181,10 +191,12 @@ module.exports = {
             await herokuDeploy.herokuCLI(
               this.options.name,
               this.options.angularHerokuApp,
-              '',
-              false
+              'API_URL',
+              `${urlDataBase.herokuURL.trim()}api`,
+              true
             );
           }
+
         }).catch(function(err) {
           console.error('ERROR: ', err);
         });
