@@ -278,14 +278,14 @@ module.exports = class extends Generator {
       } else if (this.props.authService === 'firebase') {
 
         this.env.arguments.push(
-          {key: 'API_KEY', value: this.props.apiKey},
-          {key: 'AUTH_DOMAIN', value: this.props.authDomain},
-          {key: 'DATA_BASE_URL', value: this.props.databaseURL},
-          {key: 'PROJECT_ID', value: this.props.projectId},
-          {key: 'STORAGE_BUCKET', value: this.props.storageBucket},
-          {key: 'SENDER_ID', value: this.props.senderId},
-          {key: 'APP_ID', value: this.props.appId},
-          {key: 'MEASUREMENT_ID', value: this.props.measurementId},
+          {key: 'FIREBASE_API_KEY', value: this.props.apiKey},
+          {key: 'FIREBASE_DOMAIN', value: this.props.authDomain},
+          {key: 'FIREBASE_DATABASE', value: this.props.databaseURL},
+          {key: 'FIREBASE_PROJECT_ID', value: this.props.projectId},
+          {key: 'FIREBASE_BUCKET', value: this.props.storageBucket},
+          {key: 'FIREBASE_SENDER_ID', value: this.props.senderId},
+          {key: 'FIREBASE_APP_ID', value: this.props.appId},
+          {key: 'FIREBASE_MEASUREMENT', value: this.props.measurementId},
         );
 
         this.spawnCommandSync(
