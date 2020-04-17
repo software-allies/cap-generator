@@ -166,11 +166,11 @@ module.exports = {
               : `endPoint: 'http://localhost:3000/api/CapUserCs'`
           );
 
-          await ts_ast.astFiles(
+          /*await ts_ast.astFiles(
             this.destinationPath(`${this.options.name}/src/environments/environment.ts`),
             `export const environment = {`,
             `export const environment = {
-  sfApiUrl: '',`);
+  sfApiUrl: '',`);*/
 
           this.spawnCommandSync(
             'ng',

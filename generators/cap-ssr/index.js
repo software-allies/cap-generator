@@ -21,5 +21,15 @@ module.exports = class extends Generator {
         cwd:  this.destinationPath(this.options.name)
       }
     );
+    /*this.spawnCommandSync(
+      'ng',
+      [
+        'add',
+        'cap-angular-schematic-ssr@latest'
+      ],
+      {
+        cwd:  this.destinationPath(this.options.name)
+      }
+    );*/
   }
 }
