@@ -157,10 +157,8 @@ module.exports = {
           }
 
           await ts_ast.astFiles(
-            this.options.credentials.authService === 'auth0'
-              ? this.destinationPath(`${this.options.name}/src/app/modules/cap-authentication/cap-authentication.module.ts`)
-              : this.destinationPath(`${this.options.name}/src/app/modules/cap-authentication-firebase/cap-authentication.module.ts`)
-            ,`endPoint: ''`,
+            this.destinationPath(`${this.options.name}/src/app/modules/cap-authentication/cap-authentication.module.ts`),
+            `endPoint: ''`,
             yesNoValidation(this.props.deploy)
               ? `endPoint: '${urlDataBase.herokuURL.trim()}api/CapUserCs'`
               : `endPoint: 'http://localhost:3000/api/CapUserCs'`

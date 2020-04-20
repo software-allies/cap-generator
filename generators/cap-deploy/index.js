@@ -41,7 +41,7 @@ module.exports = class extends Generator {
     "typescript": "~3.5.3",`
     );
 
-    await ts_ast.astFiles(
+    /*await ts_ast.astFiles(
       this.destinationPath(this.options.name
         ? `${this.options.name}/package.json`
         : 'package.json'),
@@ -49,7 +49,29 @@ module.exports = class extends Generator {
       this.options.modules.find(x => x.name === 'cap-ssr')
         ? `"postinstall": "npm run config && npm run build:ssr",`
         : `"postinstall": "npm run config && ng build --aot --prod",`
+    );*/
+
+    await ts_ast.astFiles(
+      this.destinationPath(this.options.name
+        ? `${this.options.name}/package.json`
+        : 'package.json'),
+      `"build": "ng build",`,
+      this.options.modules.find(x => x.name === 'cap-ssr')
+        ? `"postinstall": "npm run config",`
+        : `"postinstall": "npm run config && ng build --aot --prod",`
     );
+
+    /*await ts_ast.astFiles(
+      this.destinationPath(this.options.name
+        ? `${this.options.name}/package.json`
+        : 'package.json'),
+      `"start": "ng serve",`,
+      this.options.modules.find(x => x.name === 'cap-ssr')
+        ?`"start": "npm run config && npm run serve:ssr",
+    "config": "node set-env.ts",`
+        : `"start": "npm run config && node server.js",
+    "config": "node set-env.ts",`
+    );*/
 
     await ts_ast.astFiles(
       this.destinationPath(this.options.name
@@ -57,7 +79,7 @@ module.exports = class extends Generator {
         : 'package.json'),
       `"start": "ng serve",`,
       this.options.modules.find(x => x.name === 'cap-ssr')
-        ?`"start": "npm run config && npm run serve:ssr",
+        ?`"start": "npm run config",
     "config": "node set-env.ts",`
         : `"start": "npm run config && node server.js",
     "config": "node set-env.ts",`
