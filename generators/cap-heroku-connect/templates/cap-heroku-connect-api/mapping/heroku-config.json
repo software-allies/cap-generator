@@ -228,37 +228,38 @@
     {
       "object_name": "SACAP__CAP_File__c",
       "config": {
-        "access": "read_write",
-        "sf_notify_enabled": true,
-        "sf_polling_seconds": 600,
-        "sf_max_daily_api_calls": 30000,
-        "fields": {
-          "SACAP__UUID__c": {},
-          "SACAP__CAP_User__c": {},
-          "Name": {},
-          "IsDeleted": {},
-          "SystemModstamp": {},
-          "SACAP__Name__c": {},
-          "CreatedDate": {},
-          "SACAP__URL__c": {},
-          "SACAP__CAP_User__r__SACAP__UUID__c": {},
-          "Id": {}
-        },
         "indexes": {
           "SACAP__UUID__c": {
             "unique": true
           },
-          "SystemModstamp": {
+          "SACAP__CAP_User__c": {
             "unique": false
           },
-          "SACAP__CAP_User__c": {
+          "SystemModstamp": {
             "unique": false
           },
           "Id": {
             "unique": true
           }
         },
-        "upsert_field": "SACAP__UUID__c"
+        "sf_max_daily_api_calls": 30000,
+        "access": "read_write",
+        "upsert_field": "SACAP__UUID__c",
+        "applied_at": "2020-04-16T20:26:01.732994Z",
+        "sf_polling_seconds": 600,
+        "sf_notify_enabled": true,
+        "fields": {
+          "SACAP__UUID__c": {},
+          "SACAP__CAP_User__c": {},
+          "Name": {},
+          "SACAP__CAP_User__c__SACAP__UUID__c": {},
+          "IsDeleted": {},
+          "SystemModstamp": {},
+          "SACAP__Name__c": {},
+          "CreatedDate": {},
+          "SACAP__URL__c": {},
+          "Id": {}
+        }
       }
     },
     {
@@ -297,5 +298,17 @@
       }
     }
   ],
+  "connection": {
+    "exported_at": "2020-04-21T14:08:26.587494+00:00",
+    "features": {
+      "disable_bulk_writes": false,
+      "poll_db_no_merge": true,
+      "poll_external_ids": false,
+      "rest_count_only": false
+    },
+    "api_version": "48.0",
+    "name": "",
+    "logplex_log_enabled": false
+  },
   "version": 1
 }
