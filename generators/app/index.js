@@ -232,7 +232,7 @@ module.exports = class extends Generator {
         'ng',
         [
           'add',
-          'cap-angular-schematic-boostrap@latest',
+          'cap-angular-schematic-bootstrap@latest',
           '4.0.0',
           true
         ],
