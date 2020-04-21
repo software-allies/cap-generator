@@ -228,26 +228,21 @@ module.exports = class extends Generator {
         cwd: this.destinationPath(this.props.appName)
       });
 
+      this.spawnCommandSync(
+        'ng',
+        [
+          'add',
+          'cap-angular-schematic-bootstrap@latest',
+          '4.0.0',
+          true
+        ],
+        {
+          cwd: this.destinationPath(this.props.appName)
+        }
+      );
+
       await ts_ast.astFiles(this.destinationPath(`${this.props.appName}/tsconfig.json`), `"target": "es2015"`, `"target": "es5"`);
-      /*await ts_ast.astFiles(
-        this.destinationPath( this.props.appName
-          ? `${this.props.appName}/src/environments/environment.ts`
-          : 'src/environments/environment.ts'),
-        `export const environment = {`,
-        this.props.authService === 'auth0'
-          ? `export const environment = {
-  clientId: '',
-  clientSecret: '',
-  domain: '',`
-          : `export const environment = {
-  apiKey: '',
-  authDomain: '',
-  databaseURL: '',
-  projectId: '',
-  storageBucket: '',
-  messagingSenderId: '',
-  appId: '',
-  measurementId: '',`);*/
+
 
       if (this.props.authService === 'auth0') {
 
