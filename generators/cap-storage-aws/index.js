@@ -1,9 +1,8 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
-// const Parser = require('ts-simple-ast').default;
-const { exec, spawn } = require('promisify-child-process');
-const ts_ast = require ('../../utils/AST-files');
+const { exec } = require('promisify-child-process');
+const tsAst = require('../../utils/AST-files');
 
 module.exports = class extends Generator {
   /**
@@ -23,31 +22,37 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'awsBucket',
         message: "What's the name of the bucket?",
-        default: '<aws-bucket>'
+        default: ''
       },
       {
         type: 'input',
         name: 'awsAccessKeyId',
         message: 'AWS Access Key?',
-        default: '<aws-access-key>'
+        default: ''
       },
       {
         type: 'input',
         name: 'awsSecretAccessKey',
         message: 'AWS Secret Access Key?',
-        default: '<aws-secret-key>'
+        default: ''
       },
       {
         type: 'input',
         name: 'awsRegion',
         message: "What's the region?",
-        default: '<aws-region>'
+        default: ''
       },
       {
         type: 'input',
         name: 'awsFolder',
         message: 'S3 Folder name?',
-        default: '<aws-folder>'
+        default: ''
+      },
+      {
+        type: 'input',
+        name: 'awsEndpoint',
+        message: 'Endpoint?',
+        default: ''
       }
     ];
     return this.prompt(prompts).then(props => {
@@ -64,29 +69,36 @@ module.exports = class extends Generator {
   async writing() {
     if (this.options.deployFrontEnd) {
       this.env.arguments.push(
-        {key: 'AWS_BUCKET', value: this.props.awsBucket},
-        {key: 'AWS_ACCESS_KEY_ID', value: this.props.awsAccessKeyId},
-        {key: 'AWS_SECRET_ACCESS_KEY', value: this.props.awsSecretAccessKey},
-        {key: 'AWS_REGION', value: this.props.awsRegion},
-        {key: 'AWS_FOLDER', value: this.props.awsFolder},
-      )
+        { key: 'AWS_BUCKET', value: this.props.awsBucket },
+        { key: 'AWS_ACCESS_KEY_ID', value: this.props.awsAccessKeyId },
+        { key: 'AWS_SECRET_ACCESS_KEY', value: this.props.awsSecretAccessKey },
+        { key: 'AWS_REGION', value: this.props.awsRegion },
+        { key: 'AWS_FOLDER', value: this.props.awsFolder },
+        { key: 'AWS_ENDPOINT', value: this.props.awsEndpoint }
+      );
     }
 
-    await ts_ast.astFiles(
-      this.destinationPath(this.options.name
-        ? `${this.options.name}/src/environments/environment.ts`
-        : 'src/environments/environment.ts'),
-        `export const environment = {`,
-        `export const environment = {
-  bucket: '',
-  accessKeyId: '',
-  secretAccessKey: '',
-  region: '',
-  folder: '',`);
+    await tsAst.astFiles(
+      this.destinationPath(
+        this.options.name
+          ? `${this.options.name}/src/environments/environment.ts`
+          : 'src/environments/environment.ts'
+      ),
+      `export const environment = {`,
+      `export const environment = {
+bucket: '',
+accessKeyId: '',
+secretAccessKey: '',
+region: '',
+folder: '',
+endpoint: '',`
+    );
 
     if (this.options.deployFrontEnd) {
-      this.env.arguments.map( async x => {
-        await exec(`heroku config:set ${x.key}=${x.value} --app=${this.options.angularHerokuApp}`);
+      this.env.arguments.map(async x => {
+        await exec(
+          `heroku config:set ${x.key}=${x.value} --app=${this.options.angularHerokuApp}`
+        );
       });
     }
 
@@ -99,7 +111,8 @@ module.exports = class extends Generator {
         `--accessKeyId=${this.props.awsAccessKeyId}`,
         `--secretAccessKey=${this.props.awsSecretAccessKey}`,
         `--region=${this.props.awsRegion}`,
-        `--folder=${this.props.awsFolder}`
+        `--folder=${this.props.awsFolder}`,
+        `--endpoint=${this.props.endpoint}`
       ],
       {
         cwd: this.destinationPath(this.options.name)
