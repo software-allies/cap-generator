@@ -2,7 +2,6 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-// const Parser = require('ts-simple-ast').default;
 const newApplication = require('../../utils/new-application');
 const existingApplication = require('../../utils/existing-application');
 const herokuConnectScript = require('../cap-heroku-connect/heroku-connect');
@@ -243,7 +242,6 @@ module.exports = class extends Generator {
 
       await ts_ast.astFiles(this.destinationPath(`${this.props.appName}/tsconfig.json`), `"target": "es2015"`, `"target": "es5"`);
 
-
       if (this.props.authService === 'auth0') {
 
         this.env.arguments.push(
@@ -307,11 +305,8 @@ module.exports = class extends Generator {
         );
       }
 
-      if (yesNoValidation(this.props.deploy) || yesNoValidation(this.props.sync)) {
-        await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
-      }
-
       if (yesNoValidation(this.props.deploy)) {
+        await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
         this.props.appNameHeroku = this.props.appName + '-' + Date.now();
         this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
       }

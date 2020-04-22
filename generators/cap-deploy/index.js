@@ -1,6 +1,5 @@
 'use strict';
 const Generator = require('yeoman-generator');
-// const Parser = require('ts-simple-ast').default;
 const { exec, spawn } = require('promisify-child-process');
 const ts_ast = require('../../utils/AST-files');
 
