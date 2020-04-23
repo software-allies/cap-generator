@@ -5,6 +5,7 @@ let load = null;
 exports.run = (promise, messages, appName) => {
   let commandResult;
   let errorAction;
+
   return new Promise(async (resolve, reject) => {
     try {
       load = loading(messages.actionMessage.blue).start();
@@ -80,9 +81,7 @@ exports.run = (promise, messages, appName) => {
               description: `${error.stderr} on Heroku`
             };
             reject(errorAction);
-          }
-
-          if (
+          } else if (
             error.stderr.includes(
               `You've reached the limit of 5 apps for unverified accounts`
             )
@@ -98,15 +97,31 @@ exports.run = (promise, messages, appName) => {
                 "You've reached the limit of 5 apps for unverified accounts. Delete some apps or add a credit card to verify your Heroku account.."
             };
             reject(errorAction);
-          }
-
-          if (error.stderr.includes(`throw new Error('no input');`)) {
+          } else if (error.stderr.includes(`throw new Error('no input');`)) {
             load.stop();
             load.fail('Wrong heroku credentials');
             errorAction = {
               messages: `${error.stderr}`,
               code: 1,
               description: 'Wrong heroku credentials'
+            };
+            reject(errorAction);
+          } else if (error.stderr.includes('heroku: Enter your login credentials')) {
+            load.stop();
+            load.fail(messages.errorMessage);
+            errorAction = {
+              messages: 'User not found',
+              code: 2,
+              description: "You don't a user register jet"
+            };
+            reject(errorAction);
+          } else {
+            load.stop();
+            load.fail(messages.errorMessage);
+            errorAction = {
+              description: "Heroku's CLI is not installed.",
+              messages: "Heroku's CLI is not installed.",
+              code: 127
             };
             reject(errorAction);
           }
