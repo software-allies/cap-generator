@@ -16,7 +16,11 @@ exports.verifyInstallation = async (email, password) => {
         try {
           await herokuService.run(command.login, loadMessages.login, credentials);
         } catch (error) {
-          await herokuService.run(command.loginPop, loadMessages.loginPop);
+          if (error.code === 2) {
+            await herokuService.run(command.loginPop, loadMessages.loginPop);
+          } else {
+            await herokuService.run(command.loginPop, loadMessages.loginPop);
+          }
         }
         break;
       case 100:
