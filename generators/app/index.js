@@ -307,7 +307,7 @@ module.exports = class extends Generator {
 
       if (yesNoValidation(this.props.deploy)) {
         await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
-        this.props.appNameHeroku = this.props.appName + '-' + Date.now();
+        this.props.appNameHeroku = this.props.appName.toLowerCase() + '-' + Date.now();
         this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
       }
 
