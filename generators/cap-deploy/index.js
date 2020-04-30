@@ -37,7 +37,7 @@ module.exports = class extends Generator {
     "npm": "~6.13.6"
   },
   "dependencies": {
-    "typescript": "^3.6.4",`
+    "typescript": "~3.5.3",`
     );
 
     /*await ts_ast.astFiles(
