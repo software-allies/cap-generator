@@ -8,7 +8,15 @@ let load = null;
 let versionCommand = '';
 let installJQCommand = '';
 // let jwtCommandWindows = `curl -X POST -d "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"| jq '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: [(.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] | {"keys": .}'`;
-let jwtCommand = `curl -s 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com' | jq '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: [(.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] | {"keys": .}'`;
+
+
+
+let jwtCommand = `
+                    curl -s 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com' 
+                    | jq '[ to_entries 
+                    | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: ."KEY", x5c: [(.value 
+                    | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] 
+                    | {"keys": .}'`;
 
 const createJWTFirebase = async command => {
   try {
@@ -73,7 +81,6 @@ const installJqWindows = async command => {
 const verifyJqVersion = async (versionCommand, installatioCommand) => {
   try {
     if (versionCommand === '') {
-      console.log('its a windows machine');
       installJqWindows(installatioCommand);
     } else {
       let version = await exec(versionCommand);
