@@ -52,7 +52,6 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    console.log(this.props);
     /*switch (this.props.sync) {
       case 'CustomSync':
         console.log('We are working on it');
