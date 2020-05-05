@@ -24,13 +24,12 @@ exports.run = (promise, messages, appName) => {
             reject(commandResult.error);
           }
         } else {
+          // eslint-disable-next-line no-lonely-if
           if (commandResult.stdout.includes('Logged in as ')) {
             load.stop();
             load.succeed(messages.responseMessage);
             resolve(messages.responseMessage);
-          }
-
-          if (
+          } else if (
             commandResult.stderr.includes(
               'Installing plugin heroku-connect-plugin... Done'
             )
@@ -38,15 +37,11 @@ exports.run = (promise, messages, appName) => {
             load.stop();
             load.succeed(messages.responseMessage);
             resolve(messages.responseMessage);
-          }
-
-          if (commandResult.stdout.includes('added')) {
+          } else if (commandResult.stdout.includes('added')) {
             load.stop();
             load.succeed(messages.responseMessage);
             resolve(messages.responseMessage);
-          }
-
-          if (commandResult.stdout.includes('no plugins installed\n')) {
+          } else if (commandResult.stdout.includes('no plugins installed\n')) {
             load.stop();
             load.fail(messages.error_message);
             errorAction = {
@@ -55,10 +50,12 @@ exports.run = (promise, messages, appName) => {
               description: 'Heroku Connect is not installed'
             };
             reject(errorAction);
+          } else {
+            load.stop();
+            load.succeed(messages.responseMessage);
+            resolve(commandResult);
           }
-          load.stop();
-          load.succeed(messages.responseMessage);
-          resolve(commandResult);
+
         }
       } else {
         load.stop();
