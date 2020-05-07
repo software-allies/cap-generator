@@ -6,6 +6,7 @@ const newApplication = require('../../utils/new-application');
 const existingApplication = require('../../utils/existing-application');
 const herokuConnectScript = require('../cap-heroku-connect/heroku-connect');
 const ts_ast = require('../../utils/AST-files');
+const slugify = require('underscore.string/slugify');
 
 module.exports = class extends Generator {
 
@@ -198,6 +199,7 @@ module.exports = class extends Generator {
   }
 
   writing() {
+    this.props.appName = slugify(this.props.appName);
 
     if (this.props.deploy) {
       this.props.modules.push({ name: 'cap-deploy' });
@@ -310,7 +312,7 @@ module.exports = class extends Generator {
 
     if (this.props.deploy) {
       await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
-      this.props.appNameHeroku = this.props.appName.toLowerCase() + '-' + Date.now();
+      this.props.appNameHeroku = this.props.appName+ '-' +Date.now();
       this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
     }
 

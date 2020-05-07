@@ -8,6 +8,7 @@ const loopback = require('./loopback-build');
 const loopbackConfig = require('./loopback-configuration');
 const firebaseJwt = require('./firebase-jwt');
 const ts_ast =  require('../../utils/AST-files');
+const slugify = require('underscore.string/slugify');
 
 module.exports = class extends Generator {
 
@@ -52,6 +53,9 @@ module.exports = class extends Generator {
   }
 
   writing() {
+
+    this.props.path = slugify(this.props.path);
+
     /*switch (this.props.sync) {
       case 'CustomSync':
         console.log('We are working on it');
