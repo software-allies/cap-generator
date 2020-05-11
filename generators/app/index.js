@@ -156,7 +156,14 @@ module.exports = class extends Generator {
         type: 'checkbox',
         name: 'modules',
         message: 'Select the modules you want to include:',
-        choices: newApplication,
+        choices: newApplication
+      },
+      {
+        type: 'confirm',
+        name: 'pwa',
+        message: `Do you want your app to work like PWA (Progressive Web Application)?`,
+        default: false,
+        when: ctx => !ctx.modules.find(x => x.name === 'cap-ssr')
       },
       /*{
         type: 'checkbox',
@@ -200,6 +207,10 @@ module.exports = class extends Generator {
 
   writing() {
     this.props.appName = slugify(this.props.appName);
+
+    if (this.props.pwa) {
+      this.props.modules.push({ name: 'cap-pwa' });
+    }
 
     if (this.props.deploy) {
       this.props.modules.push({ name: 'cap-deploy' });

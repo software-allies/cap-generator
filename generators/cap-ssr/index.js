@@ -16,13 +16,15 @@ module.exports = class extends Generator {
       [
         'add',
         '@nguniversal/express-engine',
-        '--clientProject', this.options.name
+        '--clientProject',
+        this.options.name
       ],
       {
         cwd:  this.destinationPath(this.options.name)
       }
     );
-    this.spawnCommandSync(
+
+    /*this.spawnCommandSync(
       'ng',
       [
         'add',
@@ -31,7 +33,7 @@ module.exports = class extends Generator {
       {
         cwd:  this.destinationPath(this.options.name)
       }
-    );
+    );*/
 
     await ts_ast.astFiles(
       this.destinationPath(this.options.name
