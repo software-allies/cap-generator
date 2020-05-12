@@ -3,12 +3,32 @@
 
 > Connected App Platorm Generator (CAP Generator)
 
-## Installation
+CAP generator creates and deploys web applications, just like creating backend applications from scratch linked with a heroku synchronizer to SalesForce platform easy and fast.
 
-First, install [Yeoman](http://yeoman.io) and generator-cap using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
+
+## **Previous requirements**
+
+First, install [Yeoman](http://yeoman.io) (we assume you have pre-installed [node.js](https://nodejs.org/)).
 
 ```bash
 npm install -g yo
+```
+
+You must also have Angular/CLI to build web applications (We recommend having version ^8 for greater compatibility and stability).
+
+```bash
+npm i -g @angular/cli@8.3.8
+```
+
+Depending on Operating system you must have installed a package manager.
+* MacOS or Linux install [Brew](https://brew.sh/)
+* Windows install [Chocolatey](https://chocolatey.org/install)
+
+## Installation
+
+Install generator-cap
+
+```bash
 npm install -g generator-cap
 ```
 
@@ -31,9 +51,12 @@ For more detail about how to use each module we recommend go through their docum
 
 | Module | Subgenerator |
 | ------ | ------------ |
-| [CAP STORAGE AWS](https://www.npmjs.com/package/cap-storage-aws) | `cap:cap-storage-aws` |
-| [CAP AUTHORIZATION](https://www.npmjs.com/package/cap-authorization) | `cap:cap-authorization` |
-
+| [CAP STORAGE AWS](https://www.npmjs.com/package/cap-angular-schematic-storage-aws) | `cap:cap-storage-aws` |
+| [CAP AUTHENTICATION](https://www.npmjs.com/package/cap-angular-schematic-auth-auth0) | `cap:cap-authorization` |
+| [CAP LIVE CHAT](https://www.npmjs.com/package/cap-angular-schematic-livechat) | `cap:cap-live-char`|
+| [CAP SF CORE](https://www.npmjs.com/package/cap-angular-schematic-sfcore) | `cap:cap-heroku-connect` |
+| [CAP SSR]() | `cap:cap-ssr` |
+| [CAP PWA]() | `cap:cap-pwa` |
 ## Development
 
 First, clone the project:
