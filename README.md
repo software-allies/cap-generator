@@ -46,15 +46,13 @@ It will prompt you a series of question regarding to your project
 This generator automatically includes the sub generators based on the user answers. 
 For more detail about how to use each module we recommend go through their documentation
 
-> For now all subgenerators works only with the main generator, not alone.
-> Future release will have working this as completly standalone subgenerator
 
-| Module | Subgenerator |
+| Module | Description |
 | ------ | ------------ |
-| [CAP STORAGE AWS](https://www.npmjs.com/package/cap-angular-schematic-storage-aws) | `cap:cap-storage-aws` |
-| [CAP AUTHENTICATION](https://www.npmjs.com/package/cap-angular-schematic-auth-auth0) | `cap:cap-authorization` |
-| [CAP LIVE CHAT](https://www.npmjs.com/package/cap-angular-schematic-livechat) | `cap:cap-live-char`|
-| [CAP SF CORE](https://www.npmjs.com/package/cap-angular-schematic-sfcore) | `cap:cap-heroku-connect` |
+| [CAP STORAGE AWS](https://www.npmjs.com/package/cap-angular-schematic-storage-aws) | This module implements a connection with the Amazon Web Service server to upload files, images and videos to the provided account. |
+| [CAP AUTHENTICATION](https://www.npmjs.com/package/cap-angular-schematic-auth-auth0) | This module implements a complete user authentication section for web application security (available for [Auth0](https://auth0.com/) and [Firebase](https://console.firebase.google.com/u/0/) services) |
+| [CAP LIVE CHAT](https://www.npmjs.com/package/cap-angular-schematic-livechat) | This module implements a live chat service from the SalesForce service platform |
+| [CAP SF CORE](https://www.npmjs.com/package/cap-angular-schematic-sfcore) | This module creates together with [Heroku Cloud](www.heroku.com) a back-end application with database and synchronization to a SalesForce company for data management. and also creates a CRUD to manipulate the data from the web application |
 | [CAP SSR]() | `cap:cap-ssr` |
 | [CAP PWA]() | `cap:cap-pwa` |
 ## Development
