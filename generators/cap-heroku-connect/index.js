@@ -7,7 +7,7 @@ const herokuDeploy = require('./heroku-deploy');
 const loopback = require('./loopback-build');
 const loopbackConfig = require('./loopback-configuration');
 const firebaseJwt = require('./firebase-jwt');
-const ts_ast =  require('../../utils/AST-files');
+const ts_ast =  require('../app/utils/AST-files');
 const slugify = require('underscore.string/slugify');
 
 module.exports = class extends Generator {

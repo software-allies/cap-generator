@@ -2,10 +2,10 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const newApplication = require('../../utils/new-application');
-const existingApplication = require('../../utils/existing-application');
+const newApplication = require('./utils/new-application');
+const existingApplication = require('./utils/existing-application');
+const ts_ast = require('./utils/AST-files');
 const herokuConnectScript = require('../cap-heroku-connect/heroku-connect');
-const ts_ast = require('../../utils/AST-files');
 const slugify = require('underscore.string/slugify');
 
 module.exports = class extends Generator {
