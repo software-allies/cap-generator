@@ -9,11 +9,11 @@ async function testingC(){
 
 testingC().then( async res=> {
     let response = await JSON.parse(res.stdout)
-    console.log('BEfore', response.keys )
-    response.keys[0].alg = 'RS256';
-    response.keys[0].kty = 'RSA';
-    response.keys[0].use = 'sig';
-    console.log('After' ,response.keys)   
+    response.keys.forEach(element => {
+        element.alg = 'RS256';
+        element.kty = 'RSA';
+        element.use = 'sig';
+    });
 
 }).catch( err => {
     console.log(err)
