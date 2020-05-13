@@ -1,0 +1,97 @@
+{
+  "name": "generator-cap",
+  "version": "1.0.0",
+  "description": "Cap app generator to build amazing apps",
+  "homepage": "",
+  "author": {
+    "name": "Lenin Emmanuel Espinoza",
+    "email": "lenin_emmanuelt@softwareallies.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/software-allies/cap-generator/"
+  },
+  "files": [
+    "generators"
+  ],
+  "main": "generators/index.js",
+  "keywords": [
+    "yeoman-generator",
+    "cap",
+    "ionic",
+    "looback",
+    "angular"
+  ],
+  "devDependencies": {
+    "yeoman-test": "^1.7.0",
+    "yeoman-assert": "^3.1.1",
+    "nsp": "^2.8.0",
+    "eslint": "^4.19.1",
+    "prettier": "^1.11.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.1.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-config-xo": "^0.20.1",
+    "jest": "^22.0.6"
+  },
+  "engines": {
+    "npm": ">= 4.0.0"
+  },
+  "dependencies": {
+    "chalk": "^2.1.0",
+    "child-process-promise": "^2.2.1",
+    "child_process": "^1.0.2",
+    "loading-cli": "^1.1.0",
+    "promisify-child-process": "^3.1.3",
+    "request": "^2.88.0",
+    "ts-simple-ast": "^13.0.0",
+    "underscore.string": "^3.3.5",
+    "yeoman-generator": "^4.0.0",
+    "yosay": "^2.0.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/generators/app/templates/client/package.json"
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint.fix": "eslint . --fix",
+    "test": "jest"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "xo",
+      "prettier"
+    ],
+    "env": {
+      "jest": true,
+      "node": true
+    },
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "singleQuote": true,
+          "printWidth": 90
+        }
+      ]
+    },
+    "plugins": [
+      "prettier"
+    ]
+  },
+  "license": "MIT"
+}
