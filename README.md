@@ -53,8 +53,8 @@ For more detail about how to use each module we recommend go through their docum
 | [CAP AUTHENTICATION](https://www.npmjs.com/package/cap-angular-schematic-auth-auth0) | This module implements a complete user authentication section for web application security (available for [Auth0](https://auth0.com/) and [Firebase](https://console.firebase.google.com/u/0/) services) |
 | [CAP LIVE CHAT](https://www.npmjs.com/package/cap-angular-schematic-livechat) | This module implements a live chat service from the SalesForce service platform |
 | [CAP SF CORE](https://www.npmjs.com/package/cap-angular-schematic-sfcore) | This module creates together with [Heroku Cloud](www.heroku.com) a back-end application with database and synchronization to a SalesForce company for data management. and also creates a CRUD to manipulate the data from the web application |
-| [CAP SSR]() | `cap:cap-ssr` |
-| [CAP PWA]() | `cap:cap-pwa` |
+| [CAP SSR]() | This module adds a functionality to your SPA application so that it shows the source code to the google crawlers for a better search of your app within the google servers |
+| [CAP PWA]() | This module implements a modality of your SPA application so that in some browsers you get direct access so that I take it as a native application of your computer or cell phone |
 ## Development
 
 First, clone the project:
