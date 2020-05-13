@@ -55,40 +55,8 @@ For more detail about how to use each module we recommend go through their docum
 | [CAP SF CORE](https://www.npmjs.com/package/cap-angular-schematic-sfcore) | This module creates together with [Heroku Cloud](www.heroku.com) a back-end application with database and synchronization to a SalesForce company for data management. and also creates a CRUD to manipulate the data from the web application |
 | [CAP SSR]() | This module adds a functionality to your SPA application so that it shows the source code to the google crawlers for a better search of your app within the google servers |
 | [CAP PWA]() | This module implements a modality of your SPA application so that in some browsers you get direct access so that I take it as a native application of your computer or cell phone |
-## Development
-
-First, clone the project:
-
-```bash
-git clone https://github.com/software-allies/generator-cap
-
-cd generator-cap
-```
-
-then install the dependencies and link the generator to use it globally in your system:
-
-```bash
-npm i && npm link
-```
-
-After that you should be able to run:
-
-```bash
-yo cap
-```
-> You need to have Yeoman installed globlaly in your computer
-
-
-## Test
-
-To run the test just run
-
-```
-npm test
-```
 
 ## License
-
 Apache-2.0  © [Software Allies](https://www.softwareallies.com/)
 
 <!-- 
