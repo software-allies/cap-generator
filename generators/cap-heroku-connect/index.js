@@ -98,23 +98,17 @@ module.exports = class extends Generator {
         {
           audience:
             this.options.credentials.authService === 'auth0'
-              ? yesNoValidation(this.props.deploy)
-                ? '${process.env.AUTH_URL}/api/v2/'
-                : `${this.options.credentials.AUTH0_DOMAIN}/api/v2/`
+              ? yesNoValidation(this.props.deploy) ? '${process.env.AUTH_URL}/api/v2/' : `${this.options.credentials.AUTH0_DOMAIN}/api/v2/`
               : `${this.options.credentials.projectId}`,
           issuer:
             this.options.credentials.authService === 'auth0'
-              ? yesNoValidation(this.props.deploy)
-                ? '${process.env.AUTH_URL}/'
-                : `${this.options.credentials.AUTH0_DOMAIN}/`
+              ? yesNoValidation(this.props.deploy) ? '${process.env.AUTH_URL}/' : `${this.options.credentials.AUTH0_DOMAIN}/`
               : `https://securetoken.google.com/${
               this.options.credentials.projectId
               }`,
           jwksUri:
             this.options.credentials.authService === 'auth0'
-              ? yesNoValidation(this.props.deploy)
-                ? '${process.env.AUTH_URL}/.well-known/jwks.json'
-                : `${this.options.credentials.AUTH0_DOMAIN}/.well-known/jwks.json`
+              ? yesNoValidation(this.props.deploy) ? '${process.env.AUTH_URL}/.well-known/jwks.json' : `${this.options.credentials.AUTH0_DOMAIN}/.well-known/jwks.json`
               : `https://${
               this.options.credentials.projectId
               }.firebaseio.com/jwks/${jkws}.json`
@@ -126,14 +120,11 @@ module.exports = class extends Generator {
         `
 module.exports = {
   "heroku": {
-    "url": ${
-      this.props.deploy ? 'process.env.DATABASE_URL' : `"${urlDataBase.postgresURL}"`
-    }+"?ssl=true",
+    "url": ${this.props.deploy ? 'process.env.DATABASE_URL' : `"${urlDataBase.postgresURL}"`}+"?ssl=true",
     "name": "heroku",
     "connector": "postgresql"
   }
-}`
-      );
+}`);
 
       await loopbackConfig.loopbackConfiguration(
         this.props.path,
@@ -149,9 +140,7 @@ module.exports = {
           'AUTH_URL',
           this.options.credentials.authService === 'auth0'
             ? this.options.credentials.AUTH0_DOMAIN
-            : `https://${
-                this.options.credentials.projectId
-              }.firebaseio.com/jwks/${jkws}.json`,
+            : `https://${this.options.credentials.projectId}.firebaseio.com/jwks/${jkws}.json`
           , true
         );
       }
