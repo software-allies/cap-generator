@@ -3,8 +3,8 @@ const https = require('https');
 const opsys = process.platform;
 let versionCommand = `jq --version`;
 let installJQCommand = 'brew install jq';
-let jwtCommand = `curl -s 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com' | jq '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: [(.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] | {"keys": .}'`;
-
+const jwtCommand = `curl -s 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com' | jq '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: [(.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] | {"keys": .}'`;
+const windowsCommand = `curl -s "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com" | jq "[ to_entries | .[] | {alg: ."RS256", kty: ."RSA", use: ."sig", kid: ."key", x5c: [(.value | @base64) ] } ] | {"keys": "."}"`
 const createJWTFirebase = async () => {
   try {
     let jwt = await exec(jwtCommand);
@@ -12,6 +12,22 @@ const createJWTFirebase = async () => {
     return jsonJWT;
   } catch (error) {
     console.log('error: ', error);
+  }
+};
+
+const createJwtWindows = async command => {
+  try {
+    let cmdWindows = await exec(command);
+    let jsonT = JSON.parse(cmdWindows.stdout);
+    jsonT.keys.forEach(element => {
+      element.alg = 'RS256';
+      element.kty = 'RSA';
+      element.use = 'sig';
+    });
+    console.log('jsonT: ', JSON.stringify(jsonT));
+    return JSON.stringify(jsonT);
+  } catch (error) {
+    console.log('error trying to generate the jwt on windows: ', error);
   }
 };
 
@@ -74,15 +90,8 @@ const firebasePost = projectID => {
       req.end();
     } else {
       console.log('windows');
-      let cmdWindows = await exec(`curl -s "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com" | jq "[ to_entries | .[] | {alg: ."RS256", kty: ."RSA", use: ."sig", kid: ."key", x5c: [(.value | @base64) ] } ] | {"keys": "."}"`);
-      let jsonT = JSON.parse(cmdWindows.stdout);
-      jsonT.keys.forEach(element => {
-        element.alg = 'RS256';
-        element.kty = 'RSA';
-        element.use = 'sig';
-      });
-      // let data = await verifyJqVersion(versionCommand);
-      req.write(jsonT);
+      let data = await createJwtWindows(windowsCommand);
+      req.write(data);
       req.end();
     }
   });
