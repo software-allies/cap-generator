@@ -7,7 +7,7 @@ const herokuDeploy = require('./heroku-deploy');
 const loopback = require('./loopback-build');
 const loopbackConfig = require('./loopback-configuration');
 const firebaseJwt = require('./firebase-jwt');
-const ts_ast =  require('../app/utils/AST-files');
+const ts_ast = require('../app/utils/AST-files');
 const slugify = require('underscore.string/slugify');
 
 module.exports = class extends Generator {
@@ -74,7 +74,9 @@ module.exports = class extends Generator {
 
       let urlDataBase = await HerokuConnect.herokuCLI(
         this.props.path,
-        this.templatePath('cap-heroku-connect-api/mapping')
+        this.templatePath('cap-heroku-connect-api/mapping'),
+        this.options.credentials.email,
+        this.options.credentials.password
       );
       // Console.log('urlDataBase: ', urlDataBase);
 
@@ -86,8 +88,8 @@ module.exports = class extends Generator {
 
       let jkws = this.options.credentials.authService === 'firebase'
         ? await firebaseJwt.getGoogleCredentials(
-            this.options.credentials.projectId
-          )
+          this.options.credentials.projectId
+        )
         : null;
 
       this.fs.copyTpl(
@@ -96,33 +98,42 @@ module.exports = class extends Generator {
         {
           audience:
             this.options.credentials.authService === 'auth0'
-              ? this.props.deploy ? '${process.env.AUTH_URL}/api/v2/' : `${this.options.credentials.AUTH0_DOMAIN}/api/v2/`
+              ? yesNoValidation(this.props.deploy)
+                ? '${process.env.AUTH_URL}/api/v2/'
+                : `${this.options.credentials.AUTH0_DOMAIN}/api/v2/`
               : `${this.options.credentials.projectId}`,
           issuer:
             this.options.credentials.authService === 'auth0'
-              ? this.props.deploy ? '${process.env.AUTH_URL}/' : `${this.options.credentials.AUTH0_DOMAIN}/`
+              ? yesNoValidation(this.props.deploy)
+                ? '${process.env.AUTH_URL}/'
+                : `${this.options.credentials.AUTH0_DOMAIN}/`
               : `https://securetoken.google.com/${
-                  this.options.credentials.projectId
-                }`,
+              this.options.credentials.projectId
+              }`,
           jwksUri:
             this.options.credentials.authService === 'auth0'
-              ? this.props.deploy ? '${process.env.AUTH_URL}/.well-known/jwks.json': `${this.options.credentials.AUTH0_DOMAIN}/.well-known/jwks.json`
+              ? yesNoValidation(this.props.deploy)
+                ? '${process.env.AUTH_URL}/.well-known/jwks.json'
+                : `${this.options.credentials.AUTH0_DOMAIN}/.well-known/jwks.json`
               : `https://${
-                  this.options.credentials.projectId
-                }.firebaseio.com/jwks/${jkws}.json`
+              this.options.credentials.projectId
+              }.firebaseio.com/jwks/${jkws}.json`
         }
       );
 
       this.fs.write(
         this.destinationPath(`${this.props.path}/server/datasources.local.js`),
-            `
+        `
 module.exports = {
   "heroku": {
-    "url": ${this.props.deploy ? 'process.env.DATABASE_URL' : `"${urlDataBase.postgresURL}"`}+"?ssl=true",
+    "url": ${
+      this.props.deploy ? 'process.env.DATABASE_URL' : `"${urlDataBase.postgresURL}"`
+    }+"?ssl=true",
     "name": "heroku",
     "connector": "postgresql"
   }
-}`);
+}`
+      );
 
       await loopbackConfig.loopbackConfiguration(
         this.props.path,
@@ -138,8 +149,10 @@ module.exports = {
           'AUTH_URL',
           this.options.credentials.authService === 'auth0'
             ? this.options.credentials.AUTH0_DOMAIN
-            : `https://${this.options.credentials.projectId}.firebaseio.com/jwks/${jkws}.json`
-          ,true
+            : `https://${
+                this.options.credentials.projectId
+              }.firebaseio.com/jwks/${jkws}.json`,
+          , true
         );
       }
 
@@ -176,10 +189,10 @@ module.exports = {
         );
       }
 
-    }).catch(function(err) {
+    }).catch(function (err) {
       console.error('ERROR: ', err);
     });
-        /*break;
-    }*/
+    /*break;
+}*/
   }
 };

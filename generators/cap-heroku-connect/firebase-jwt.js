@@ -1,7 +1,6 @@
 const { exec } = require('promisify-child-process');
-// const request = require('request');
 const https = require('https');
-
+const opsys = process.platform;
 let versionCommand = `jq --version`;
 let installJQCommand = 'brew install jq';
 let jwtCommand = `curl -s 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com' | jq '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: [(.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] | {"keys": .}'`;
@@ -68,9 +67,24 @@ const firebasePost = projectID => {
       reject(error);
     });
 
-    let data = await verifyJqVersion(versionCommand);
-    req.write(data);
-    req.end();
+    if (opsys === 'darwin' || opsys === 'linux') {
+      console.log('linux or mac');
+      let data = await verifyJqVersion(versionCommand);
+      req.write(data);
+      req.end();
+    } else {
+      console.log('windows');
+      let cmdWindows = await exec(`curl -s "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com" | jq "[ to_entries | .[] | {alg: ."RS256", kty: ."RSA", use: ."sig", kid: ."key", x5c: [(.value | @base64) ] } ] | {"keys": "."}"`);
+      let jsonT = JSON.parse(cmdWindows.stdout);
+      jsonT.keys.forEach(element => {
+        element.alg = 'RS256';
+        element.kty = 'RSA';
+        element.use = 'sig';
+      });
+      // let data = await verifyJqVersion(versionCommand);
+      req.write(jsonT);
+      req.end();
+    }
   });
 };
 
