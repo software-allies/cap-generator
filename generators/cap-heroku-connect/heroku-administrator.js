@@ -10,11 +10,10 @@ exports.run = (promise, messages, appName) => {
     try {
       load = loading(messages.actionMessage.blue).start();
 
-      if (appName) {
-        commandResult = await promise(appName);
-      } else {
-        commandResult = await promise();
-      }
+      // eslint-disable-next-line no-unused-expressions
+      appName
+        ? (commandResult = await promise(appName))
+        : (commandResult = await promise());
 
       if (commandResult) {
         if (commandResult.error) {
@@ -24,41 +23,69 @@ exports.run = (promise, messages, appName) => {
             reject(commandResult.error);
           }
         } else {
-          if (commandResult.stdout.includes('Logged in as ')) {
-            load.stop();
-            load.succeed(messages.responseMessage);
-            resolve(messages.responseMessage);
+          let data = commandResult.stdout;
+          switch (data) {
+            case data.includes('Logged in as '):
+              load.stop();
+              load.succeed(messages.responseMessage);
+              resolve(messages.responseMessage);
+              break;
+            case data.includes('Installing plugin heroku-connect-plugin... Done'):
+              load.stop();
+              load.succeed(messages.responseMessage);
+              resolve(messages.responseMessage);
+              break;
+            case data.includes('added'):
+              load.stop();
+              load.succeed(messages.responseMessage);
+              resolve(messages.responseMessage);
+              break;
+            case data.includes('no plugins installed'):
+              load.stop();
+              load.succeed(messages.responseMessage);
+              resolve(messages.responseMessage);
+              break;
+            default:
+              load.stop();
+              load.succeed(messages.responseMessage);
+              resolve(commandResult);
+              break;
           }
+          // if (commandResult.stdout.includes('Logged in as ')) {
+          //   load.stop();
+          //   load.succeed(messages.responseMessage);
+          //   resolve(messages.responseMessage);
+          // }
 
-          if (
-            commandResult.stderr.includes(
-              'Installing plugin heroku-connect-plugin... Done'
-            )
-          ) {
-            load.stop();
-            load.succeed(messages.responseMessage);
-            resolve(messages.responseMessage);
-          }
+          // if (
+          //   commandResult.stderr.includes(
+          //     'Installing plugin heroku-connect-plugin... Done'
+          //   )
+          // ) {
+          //   load.stop();
+          //   load.succeed(messages.responseMessage);
+          //   resolve(messages.responseMessage);
+          // }
 
-          if (commandResult.stdout.includes('added')) {
-            load.stop();
-            load.succeed(messages.responseMessage);
-            resolve(messages.responseMessage);
-          }
+          // if (commandResult.stdout.includes('added')) {
+          //   load.stop();
+          //   load.succeed(messages.responseMessage);
+          //   resolve(messages.responseMessage);
+          // }
 
-          if (commandResult.stdout.includes('no plugins installed\n')) {
-            load.stop();
-            load.fail(messages.error_message);
-            errorAction = {
-              messages: commandResult.stdout,
-              code: 400,
-              description: 'Heroku Connect is not installed'
-            };
-            reject(errorAction);
-          }
-          load.stop();
-          load.succeed(messages.responseMessage);
-          resolve(commandResult);
+          // if (commandResult.stdout.includes('no plugins installed\n')) {
+          //   load.stop();
+          //   load.fail(messages.error_message);
+          //   errorAction = {
+          //     messages: commandResult.stdout,
+          //     code: 400,
+          //     description: 'Heroku Connect is not installed'
+          //   };
+          //   reject(errorAction);
+          // }
+          // load.stop();
+          // load.succeed(messages.responseMessage);
+          // resolve(commandResult);
         }
       } else {
         load.stop();
