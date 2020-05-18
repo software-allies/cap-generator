@@ -10,22 +10,25 @@ exports.verifyInstallation = async (email, password) => {
 
     await herokuService.run(command.checkUser, loadMessages.checkUser);
   } catch (error) {
-    let credentials = { email: email, password: password };
+    // let credentials = { email: email, password: password };
     switch (error.code) {
       case 2:
         try {
-          await herokuService.run(command.login, loadMessages.login, credentials);
+          // await herokuService.run(command.login, loadMessages.login, credentials);
+          await herokuService.run(command.loginPop, loadMessages.loginPop);
         } catch (error) {
-          if (error.code === 2) {
-            await herokuService.run(command.loginPop, loadMessages.loginPop);
-          } else {
-            await herokuService.run(command.loginPop, loadMessages.loginPop);
-          }
+          await herokuService.run(command.loginPop, loadMessages.loginPop);
+          // if (error.code === 2) {
+          //   await herokuService.run(command.loginPop, loadMessages.loginPop);
+          // } else {
+          //   await herokuService.run(command.loginPop, loadMessages.loginPop);
+          // }
         }
         break;
       case 100:
         try {
-          await herokuService.run(command.login, loadMessages.login, credentials);
+          // await herokuService.run(command.login, loadMessages.login, credentials);
+          await herokuService.run(command.loginPop, loadMessages.loginPop);
         } catch (error) {
           await herokuService.run(command.loginPop, loadMessages.loginPop);
         }
@@ -40,7 +43,8 @@ exports.verifyInstallation = async (email, password) => {
             command.herokuConnectInstallation,
             loadMessages.herokuConnectIns
           );
-          await herokuService.run(command.login, loadMessages.login, credentials);
+          await herokuService.run(command.loginPop, loadMessages.loginPop);
+          // await herokuService.run(command.login, loadMessages.login, credentials);
         } catch (error) {
           await herokuService.run(command.loginPop, loadMessages.loginPop);
         }
@@ -53,7 +57,8 @@ exports.verifyInstallation = async (email, password) => {
             command.herokuConnectInstallation,
             loadMessages.herokuConnectIns
           );
-          await herokuService.run(command.login, loadMessages.login, credentials);
+          await herokuService.run(command.loginPop, loadMessages.loginPop);
+          // await herokuService.run(command.login, loadMessages.login, credentials);
         } catch (error) {
           await herokuService.run(command.loginPop, loadMessages.loginPop);
         }
@@ -69,7 +74,8 @@ exports.verifyInstallation = async (email, password) => {
             command.herokuConnectInstallation,
             loadMessages.herokuConnectIns
           );
-          await herokuService.run(command.login, loadMessages.login, credentials);
+          await herokuService.run(command.loginPop, loadMessages.loginPop);
+          // await herokuService.run(command.login, loadMessages.login, credentials);
         } catch (error) {
           await herokuService.run(command.loginPop, loadMessages.loginPop);
         }
@@ -177,9 +183,9 @@ const startConfigurationApp = async (name, path) => {
   }
 };
 
-exports.herokuCLI = async (appName, path) => {
+exports.herokuCLI = async (appName, path, email, password) => {
   try {
-    await this.verifyInstallation();
+    await this.verifyInstallation(email, password);
     let newName = await appsCreation(appName);
     herokuConfiguration.appName = newName;
     if (newName.code === 1) {
