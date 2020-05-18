@@ -86,7 +86,9 @@ module.exports = class extends Generator {
 
           let urlDataBase = await HerokuConnect.herokuCLI(
             this.props.path,
-            this.templatePath('cap-heroku-connect-api/mapping')
+            this.templatePath('cap-heroku-connect-api/mapping'),
+            this.options.credentials.email,
+            this.options.credentials.password
           );
           // Console.log('urlDataBase: ', urlDataBase);
 
