@@ -1,6 +1,6 @@
 {
   "name": "generator-cap",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cap app generator to build amazing apps",
   "homepage": "",
   "author": {
@@ -18,9 +18,12 @@
   "keywords": [
     "yeoman-generator",
     "cap",
-    "ionic",
+    "angular",
     "looback",
-    "angular"
+    "Salesforce",
+    "SFDC",
+    "External App",
+    "Integration"
   ],
   "devDependencies": {
     "eslint": "^4.19.1",
