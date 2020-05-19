@@ -24,7 +24,6 @@ const createJwtWindows = async command => {
       element.kty = 'RSA';
       element.use = 'sig';
     });
-    console.log('jsonT: ', JSON.stringify(jsonT));
     return JSON.stringify(jsonT);
   } catch (error) {
     console.log('error trying to generate the jwt on windows: ', error);
