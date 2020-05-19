@@ -98,17 +98,17 @@ module.exports = class extends Generator {
         {
           audience:
             this.options.credentials.authService === 'auth0'
-              ? yesNoValidation(this.props.deploy) ? '${process.env.AUTH_URL}/api/v2/' : `${this.options.credentials.AUTH0_DOMAIN}/api/v2/`
+              ? this.props.deploy ? '${process.env.AUTH_URL}/api/v2/' : `${this.options.credentials.AUTH0_DOMAIN}/api/v2/`
               : `${this.options.credentials.projectId}`,
           issuer:
             this.options.credentials.authService === 'auth0'
-              ? yesNoValidation(this.props.deploy) ? '${process.env.AUTH_URL}/' : `${this.options.credentials.AUTH0_DOMAIN}/`
+              ? this.props.deploy ? '${process.env.AUTH_URL}/' : `${this.options.credentials.AUTH0_DOMAIN}/`
               : `https://securetoken.google.com/${
               this.options.credentials.projectId
               }`,
           jwksUri:
             this.options.credentials.authService === 'auth0'
-              ? yesNoValidation(this.props.deploy) ? '${process.env.AUTH_URL}/.well-known/jwks.json' : `${this.options.credentials.AUTH0_DOMAIN}/.well-known/jwks.json`
+              ? this.props.deploy ? '${process.env.AUTH_URL}/.well-known/jwks.json' : `${this.options.credentials.AUTH0_DOMAIN}/.well-known/jwks.json`
               : `https://${
               this.options.credentials.projectId
               }.firebaseio.com/jwks/${jkws}.json`
