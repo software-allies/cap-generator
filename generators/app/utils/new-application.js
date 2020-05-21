@@ -23,12 +23,4 @@ module.exports = [
     },
     short: 'CAP SSR'
   },
-  {
-    name: 'CAP-PWA',
-    value: {
-      name: 'cap-pwa',
-      version: '0.0.0'
-    },
-    short: 'CAP PWA'
-  }
 ];

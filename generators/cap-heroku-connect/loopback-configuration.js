@@ -52,11 +52,13 @@ async function packageDependencies (destinationPath) {
   tsParseDependencies.addExistingSourceFile(`${destinationPath}/package.json`);
   const fileDependencies = tsParseDependencies.getSourceFile(`${destinationPath}/package.json`);
   const dependencies = /"dependencies": {/g;
+  const nodeVersion = /"node": ">=6"/g
   const newTextDependencies = fileDependencies.getText().replace(dependencies,
   `"dependencies": {
     "express-jwt": "^5.3.1",
     "jwks-rsa": "^1.6.0",
-    "loopback-connector-postgresql": "^3.8.1",`);
+    "loopback-connector-postgresql": "^3.9.1",`)
+    .replace(nodeVersion, `"node": "^12.0.0"`);
   fileDependencies.removeText(fileDependencies.getPos(), fileDependencies.getEnd());
   fileDependencies.insertText(0, newTextDependencies);
   fileDependencies.saveSync();

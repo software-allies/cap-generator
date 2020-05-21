@@ -1,7 +1,7 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const { exec, spawn } = require('promisify-child-process');
-const ts_ast = require('../../utils/AST-files');
+const ts_ast = require('../app/utils/AST-files');
 
 module.exports = class extends Generator {
   async writing() {

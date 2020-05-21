@@ -1,7 +1,7 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
-const ts_ast = require('../../utils/AST-files');
+const ts_ast = require('../app/utils/AST-files');
 
 module.exports = class extends Generator {
     /**
@@ -16,13 +16,15 @@ module.exports = class extends Generator {
       [
         'add',
         '@nguniversal/express-engine',
-        '--clientProject', this.options.name
+        '--clientProject',
+        this.options.name
       ],
       {
         cwd:  this.destinationPath(this.options.name)
       }
     );
-    this.spawnCommandSync(
+
+    /*this.spawnCommandSync(
       'ng',
       [
         'add',
@@ -31,7 +33,7 @@ module.exports = class extends Generator {
       {
         cwd:  this.destinationPath(this.options.name)
       }
-    );
+    );*/
 
     await ts_ast.astFiles(
       this.destinationPath(this.options.name
