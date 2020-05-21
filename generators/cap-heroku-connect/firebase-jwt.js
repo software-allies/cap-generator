@@ -4,7 +4,8 @@ const opsys = process.platform;
 let versionCommand = `jq --version`;
 let installJQCommand = 'brew install jq';
 const jwtCommand = `curl -s 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com' | jq '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: [(.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] | {"keys": .}'`;
-const windowsCommand = `curl -s "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com" | jq "[ to_entries | .[] | {alg: ."RS256", kty: ."RSA", use: ."sig", kid: ."key", x5c: [(.value | @base64) ] } ] | {"keys": "."}"`
+const windowsCommand = `curl -s "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com" | jq "[ to_entries | .[] | {alg: ."RS256", kty: ."RSA", use: ."sig", kid: ."key", x5c: [(.value ) ] } ] | {"keys": "."}"`;
+
 const createJWTFirebase = async () => {
   try {
     let jwt = await exec(jwtCommand);
@@ -23,6 +24,10 @@ const createJwtWindows = async command => {
       element.alg = 'RS256';
       element.kty = 'RSA';
       element.use = 'sig';
+      element.x5c = element.x5c[0]
+        .split('\n')
+        .slice(1, 18)
+        .join('');
     });
     return JSON.stringify(jsonT);
   } catch (error) {
@@ -83,12 +88,10 @@ const firebasePost = projectID => {
     });
 
     if (opsys === 'darwin' || opsys === 'linux') {
-      console.log('linux or mac');
       let data = await verifyJqVersion(versionCommand);
       req.write(data);
       req.end();
     } else {
-      console.log('windows');
       let data = await createJwtWindows(windowsCommand);
       req.write(data);
       req.end();
