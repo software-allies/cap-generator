@@ -24,10 +24,14 @@ const createJwtWindows = async command => {
       element.alg = 'RS256';
       element.kty = 'RSA';
       element.use = 'sig';
-      element.x5c = element.x5c[0]
-        .split('\n')
-        .slice(1, 18)
-        .join('');
+
+      let aux = [
+        element.x5c[0]
+          .split('\n')
+          .slice(1, 18)
+          .join('')
+      ];
+      element.x5c = aux;
     });
     return JSON.stringify(jsonT);
   } catch (error) {
