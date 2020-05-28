@@ -24,7 +24,7 @@ Depending on Operating system you must have installed a package manager.
 * MacOS or Linux install [Brew](https://brew.sh/)
 * Windows install [Chocolatey](https://chocolatey.org/install)
 
-Note: To be able to use jq on Windows we recommend you check it the Unix tool on the [Adjusting your path environment]() section. 
+Note: To be able to use jq on Windows we recommend you check it the Unix tool on the [Adjusting your path environment](https://github.com/software-allies/cap-generator/blob/development/assets/git/git.png?raw=true) section. 
 
 ## Installation
 
