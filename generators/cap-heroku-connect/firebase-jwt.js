@@ -1,8 +1,14 @@
 const { exec } = require('promisify-child-process');
+
+const color = require('colors-cli/toxic');
+const loading = require('loading-cli');
+
 const https = require('https');
 const opsys = process.platform;
+
 let versionCommand = `jq --version`;
 let installJQCommand = 'brew install jq';
+
 const jwtCommand = `curl -s 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com' | jq '[ to_entries | .[] | {alg: "RS256", kty: "RSA", use: "sig", kid: .key, x5c: [(.value | sub(".*"; "") | sub("\n"; ""; "g") | sub("-.*"; "")) ] } ] | {"keys": .}'`;
 const windowsCommand = `curl -s "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com" | jq "[ to_entries | .[] | {alg: ."RS256", kty: ."RSA", use: ."sig", kid: ."key", x5c: [(.value ) ] } ] | {"keys": "."}"`;
 
@@ -66,9 +72,9 @@ const verifyJqVersion = async command => {
   }
 };
 
-// verifyJqVersion(versionCommand);
 const firebasePost = projectID => {
   return new Promise(async (resolve, reject) => {
+    let load = loading('The application is generating the token'.blue).start();
     const options = {
       hostname: `${projectID}.firebaseio.com`,
       path: '/jwks.json',
@@ -79,7 +85,7 @@ const firebasePost = projectID => {
     };
 
     const req = https.request(options, res => {
-      console.log(`+statusCode: ${res.statusCode}+`);
+      load.succeed('The token was successfully generated.');
       res.on('data', d => {
         let credentialId = JSON.parse(JSON.stringify(JSON.parse(d)));
         resolve(credentialId.name);
@@ -88,6 +94,8 @@ const firebasePost = projectID => {
 
     req.on('error', error => {
       console.error(error);
+      load.stop();
+      load.fail(`${error} `);
       reject(error);
     });
 
