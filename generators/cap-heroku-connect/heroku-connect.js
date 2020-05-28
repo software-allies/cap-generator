@@ -183,17 +183,10 @@ const startConfigurationApp = async (name, path) => {
     try {
 
       if (error.code === 1) {
-        await herokuService.run(
-          command.salesforceAuth,
-          loadMessages.salesforceAuth,
-          name
-        );
-
         let map = {
           path: path,
           name: name
         };
-
         await herokuService.run(
           command.schemaConnection,
           loadMessages.schemaConnection,
