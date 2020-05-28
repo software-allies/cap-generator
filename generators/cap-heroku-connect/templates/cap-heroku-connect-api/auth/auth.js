@@ -4,7 +4,7 @@ var jwtCheck = jwt({
   secret: jwts.expressJwtSecret({
     cache: true,
     rateLimit: true,
-    jwksRequestsPerMinute: 5,
+    jwksRequestsPerMinute: 100,
     jwksUri: `<%= jwksUri %>`
   }),
   getToken: function fromHeaderOrQuerystring (req) {
