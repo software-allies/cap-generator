@@ -172,16 +172,15 @@ const startConfigurationApp = async (name, path) => {
       name: name
     };
 
-    await herokuService.run(
-      command.schemaConnection,
-      loadMessages.schemaConnection,
-      name
-    );
+    // await herokuService.run(
+    //   command.schemaConnection,
+    //   loadMessages.schemaConnection,
+    //   name
+    // );
     await herokuService.run(command.mapping, loadMessages.mapping, map);
   } catch (error) {
     console.log('error: ', error);
     try {
-
       if (error.code === 1) {
         let map = {
           path: path,
