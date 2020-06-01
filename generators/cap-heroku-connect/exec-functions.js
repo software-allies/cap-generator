@@ -18,30 +18,38 @@ const loginPop = async () => {
 
 const checkUser = async () => exec('heroku whoami');
 
-const login = async credentials => {
-  if (credentials.email !== '' || credentials.password !== '') {
-    const child = exec('heroku login -i');
-    child.stderr.on('data', async data => {
-      if (data === 'Email: ') {
-        child.stdin.write(`${credentials.email}`);
-        child.stdin.write(`\n`);
-      }
-      if (data === 'Password: ') {
-        child.stdin.write(`${credentials.password}`);
-        child.stdin.write(`\n`);
-        child.stdin.end();
-      }
-    });
-    return child;
-  }
-
+const errorLogin = typeData => {
   let error = {
-    error: 'No credentials provider',
+    error: `No ${typeData} provider`,
     code: 101,
     message: 'The credentials were not provider'
   };
-
   return error;
+};
+
+const login = async credentials => {
+  if (credentials.email) {
+    if (credentials.password) {
+      if (credentials.email !== '' || credentials.password !== '') {
+        const child = exec('heroku login -i');
+        child.stderr.on('data', data => {
+          if (data === 'Email: ') {
+            child.stdin.write(`${credentials.email}`);
+            child.stdin.write(`\n`);
+          }
+          if (data === 'Password: ') {
+            child.stdin.write(`${credentials.password}`);
+            child.stdin.write(`\n`);
+            child.stdin.end();
+          }
+        });
+        return child;
+      }
+      return errorLogin('credentials');
+    }
+    return errorLogin('password');
+  }
+  return errorLogin('email');
 };
 
 const herokuApps = async () => exec(`heroku apps`);

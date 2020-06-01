@@ -3,7 +3,9 @@
 
 > Connected App Platorm Generator (CAP Generator)
 
-CAP generator creates and deploys web applications, just like creating backend applications from scratch linked with a heroku synchronizer to SalesForce platform easy and fast.
+CAP is an open-source suite of technologies for rapidly creating web and mobile applications that synchronize data with Salesforce and other systems. The CAP SDK (Software Development Kit) gives users the tools needed to quickly generate applications that can be fully customized. 
+
+**Why CAP?** Creating external connected applications to CRMs, ERPs and other external systems is involved and time consuming to build. CAP quickly generates the initial setup and creation of complex components like authorization, files and synchronization through an easy  to use CAP CLI (Command Line Interface).
 
 
 ## **Previous requirements**
@@ -17,12 +19,14 @@ npm install -g yo
 You must also have Angular/CLI to build web applications (We recommend having version ^8 for greater compatibility and stability).
 
 ```bash
-npm i -g @angular/cli@8.3.8
+npm i -g @angular/cli
 ```
 
 Depending on Operating system you must have installed a package manager.
 * MacOS or Linux install [Brew](https://brew.sh/)
 * Windows install [Chocolatey](https://chocolatey.org/install)
+
+Note: To be able to use jq on Windows we recommend you check it the Unix tool on the [Adjusting your path environment](https://github.com/software-allies/cap-generator/blob/development/assets/git/git.png?raw=true) section. 
 
 ## Installation
 
@@ -41,6 +45,44 @@ yo cap
 ```
 
 It will prompt you a series of question regarding to your project
+
+```
+     _-----_     ╭──────────────────────────╮
+    |       |    │       CAP Generator      │
+    |--(o)--|    │    Build amazing apps    │
+   `---------´   │     faster and better    │
+    ( _´U`_ )    ╰──────────────────────────╯
+    /___A___\   /
+     |  ~  |     
+   __'.___.'__   
+ ´   `  |° ´ Y ` 
+
+? What's the name of your application? front-end
+? Choose an authentication service: Firebase
+  Auth0 
+❯ Firebase
+
+? Set your ApiKey:  
+? Set your Auth Domain:  
+? Set your data base URL:  
+? Set your Project ID:  
+? Set your storage bucket:  
+? Set your message sender ID:  
+? Set your app ID:  
+? Set your measurement ID: 
+
+? Select the modules you want to include:
+❯◯ CAP-Storage-AWS-Module
+ ◯ CAP-Live-Chat
+ ◯ CAP-SSR
+ 
+? Do you want your app to work like PWA (Progressive Web Application)? Yes
+? Do you want to deploy your application in Heroku? Yes
+? Do you want to use a synchronization/API service? Yes
+```
+**Note** In the question `Do you want to deploy your application in Heroku?` you must have a heroku account created and if it is possible to install [Heroku/CLI](https://devcenter.heroku.com/articles/heroku-cli).  Contact us at sales@softwareallies.com for more information or auxiliary for better performance.
+
+**Note**: in the last question `? Do you want to use a synchronization/API service?` you must have a partnership in SalesForce so that you can synchronize your data to a database in conjunction with HerokuConnect. Contact us at sales@softwareallies.com for more information or auxiliary for better performance.
 
 ## Subgenerators
 This generator automatically includes the sub generators based on the user answers. 
