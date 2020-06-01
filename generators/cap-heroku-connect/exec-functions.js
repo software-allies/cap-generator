@@ -11,7 +11,7 @@ const herokuConnectInstallation = async () =>
 const loginPop = async () => {
   const child = exec('heroku login');
   child.stdin.write(`\n`);
-  child.stderr.on('data', () => {});
+  child.stderr.on('data', () => { });
   child.stdin.end();
   return child;
 };
@@ -103,6 +103,8 @@ const salesforceAuth = async name => exec(`heroku connect:sf:auth -a ${name}`);
 const mapping = async data =>
   exec(`heroku connect:import ${data.path}/heroku-config.json -a ${data.name}`);
 
+const openApp = async appName => exec(`heroku open -a ${appName}`);
+
 module.exports = {
   herokuVersionSpawn,
   herokuVersion,
@@ -123,5 +125,6 @@ module.exports = {
   curlPost,
   schemaConnection,
   salesforceAuth,
-  mapping
+  mapping,
+  openApp
 };
