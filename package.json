@@ -1,8 +1,8 @@
 {
   "name": "generator-cap",
-  "version": "1.0.3",
-  "description": "Cap app generator to build amazing apps",
-  "homepage": "",
+  "version": "1.0.4",
+  "description": "CAP (Connected Apps Platform) is an open-source suite of technologies for rapidly creating web and mobile applications that synchronize data with Salesforce and other systems.",
+  "homepage": "https://www.npmjs.com/package/generator-cap",
   "author": {
     "name": "Lenin Emmanuel Espinoza",
     "email": "lenin_emmanuelt@softwareallies.com"
