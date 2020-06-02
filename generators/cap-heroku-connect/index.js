@@ -158,7 +158,9 @@ module.exports = {
         [
           'add',
           'cap-angular-schematic-sfcore@latest',
-          this.props.deploy,
+          this.props.deploy
+          ? `--credentials=${false}`
+          : `--credentials=${true}`,
           this.props.deploy
             ? `--apiEndPoint=${urlDataBase.herokuURL.trim()}api`
             : '--apiEndPoint=http://localhost:3000/api'

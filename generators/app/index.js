@@ -272,8 +272,8 @@ module.exports = class extends Generator {
           'add',
           'cap-angular-schematic-auth-auth0@latest',
          this.props.deploy
-            ? `--credentials=${true}`
-            : `--credentials=${false}`
+            ? `--credentials=${false}`
+            : `--credentials=${true}`
           ,`--clientID=${this.props.AUTH0_CLIENT_ID}`,
           `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
           `--domain=${this.props.AUTH0_DOMAIN}`,
@@ -303,8 +303,8 @@ module.exports = class extends Generator {
           'add',
           'cap-angular-schematic-auth-firebase@~1.0.0',
           this.props.deploy
-            ? `--credentials=${true}`
-            : `--credentials=${false}`
+            ? `--credentials=${false}`
+            : `--credentials=${true}`
           ,`--apiKey=${this.props.apiKey}`,
           `--authDomain=${this.props.authDomain}`,
           `--databaseURL=${this.props.databaseURL}`,
