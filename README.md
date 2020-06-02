@@ -79,6 +79,9 @@ It will prompt you a series of question regarding to your project
 ? Do you want your app to work like PWA (Progressive Web Application)? Yes
 ? Do you want to deploy your application in Heroku? Yes
 ? Do you want to use a synchronization/API service? Yes
+
+? Heroku email 
+? Heroku password [hidden]
 ```
 **Note** In the question `Do you want to deploy your application in Heroku?` you must have a heroku account created and if it is possible to install [Heroku/CLI](https://devcenter.heroku.com/articles/heroku-cli).  Contact us at sales@softwareallies.com for more information or auxiliary for better performance.
 
@@ -87,7 +90,6 @@ It will prompt you a series of question regarding to your project
 ## Subgenerators
 This generator automatically includes the sub generators based on the user answers. 
 For more detail about how to use each module we recommend go through their documentation
-
 
 | Module | Description |
 | ------ | ------------ |
