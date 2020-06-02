@@ -36,6 +36,12 @@ Install generator-cap
 npm install -g generator-cap
 ```
 
+Update generator-cap:
+
+```bash
+npm update -g generator-cap
+```
+
 ## Usage 
 
 To generate a new project using CAP just run:
