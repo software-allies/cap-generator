@@ -1,12 +1,19 @@
 'use strict';
 const Generator = require('yeoman-generator');
+const ts_ast = require('./utils/AST-files');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const newApplication = require('./utils/new-application');
-const existingApplication = require('./utils/existing-application');
-const ts_ast = require('./utils/AST-files');
+
 const herokuConnectScript = require('../cap-heroku-connect/heroku-connect');
 const slugify = require('underscore.string/slugify');
+
+const Angular9 = require('./utils/packages-versions').Angular9;
+const Angular8 = require('./utils/packages-versions').Angular8;
+
+const HerokuConnect = require('./utils/packages-versions').sync;
+
+const Firebase = require('./utils/packages-versions').auth_firebase;
+const Auth0 = require('./utils/packages-versions').auth_auth0;
 
 module.exports = class extends Generator {
 
@@ -22,21 +29,6 @@ module.exports = class extends Generator {
     );
 
     const prompts = [
-      /*{
-        type: 'list',
-        name: 'projecttype',
-        message: 'Do you want to create a new application or modify an existing one?',
-        choices: [
-          {
-            name: `Create a new Angular application.`,
-            value: 'create'
-          },
-          {
-            name: `Modify an angular application.`,
-            value: 'modify'
-          }
-        ]
-      },*/
       {
         type: 'input',
         name: 'appName',
@@ -45,21 +37,21 @@ module.exports = class extends Generator {
         require: true,
         required: true
       },
-      /*{
+      {
         type: 'list',
         name: 'version',
         message: 'Select the Angular version you have installed',
         choices: [
           {
             name: `Angular 8`,
-            value: '~1.0.0'
+            value: 'angular8'
           },
           {
             name: `Angular 9`,
-            value: '~1.1.0'
+            value: 'angular9'
           }
         ]
-      },*/
+      },
       {
         type: 'list',
         name: 'authService',
@@ -155,8 +147,16 @@ module.exports = class extends Generator {
       {
         type: 'checkbox',
         name: 'modules',
-        message: 'Select the modules you want to include:',
-        choices: newApplication
+        message: 'Select the modules you want to include: (Angular 8)',
+        choices: Angular8,
+        when: ctx => ctx.version === 'angular8'
+      },
+      {
+        type: 'checkbox',
+        name: 'modules',
+        message: 'Select the modules you want to include: (Angular 9)',
+        choices: Angular9,
+        when: ctx => ctx.version === 'angular9'
       },
       {
         type: 'confirm',
@@ -165,13 +165,7 @@ module.exports = class extends Generator {
         default: false,
         when: ctx => !ctx.modules.find(x => x.name === 'cap-ssr')
       },
-      /*{
-        type: 'checkbox',
-        name: 'modules',
-        message: 'Select the modules you want to include:',
-        choices: existingApplication,
-        when: ctx => ctx.projecttype === 'modify'
-      },*/
+
       {
         type: 'confirm',
         name: 'deploy',
@@ -205,19 +199,59 @@ module.exports = class extends Generator {
     });
   }
 
+  configuring() {
+
+    if (this.props.authService === 'auth0') {
+      let auth0 = this.props.version === 'angular8'
+        ? Auth0.Angular8
+        : Auth0.Angular9;
+      this.env.options = { ... this.env.options, auth0};
+
+      this.env.arguments.push(
+        {key: 'AUTH0_CLIENT_ID', value: this.props.AUTH0_CLIENT_ID},
+        {key: 'AUTH0_CLIENT_SECRET', value: this.props.AUTH0_CLIENT_SECRET},
+        {key: 'AUTH0_DOMAIN', value: this.props.AUTH0_DOMAIN}
+      );
+    } else if (this.props.authService === 'firebase'){
+      let firebase = this.props.version === 'angular8'
+      ? Firebase.Angular8
+      : Firebase.Angular9;
+      this.env.options = { ... this.env.options, firebase };
+
+      this.env.arguments.push(
+        {key: 'FIREBASE_API_KEY', value: this.props.apiKey},
+        {key: 'FIREBASE_DOMAIN', value: this.props.authDomain},
+        {key: 'FIREBASE_DATABASE', value: this.props.databaseURL},
+        {key: 'FIREBASE_PROJECT_ID', value: this.props.projectId},
+        {key: 'FIREBASE_BUCKET', value: this.props.storageBucket},
+        {key: 'FIREBASE_SENDER_ID', value: this.props.senderId},
+        {key: 'FIREBASE_APP_ID', value: this.props.appId},
+        {key: 'FIREBASE_MEASUREMENT', value: this.props.measurementId},
+      );
+    }
+
+    if (this.props.sync) {
+      let sfCore = this.props.version === 'angular8'
+        ? HerokuConnect.Angular8
+        : HerokuConnect.Angular9;
+      this.env.options = { ... this.env.options, sfCore };
+      this.props.modules.push({ name: 'cap-heroku-connect' });
+    }
+
+    if (this.props.deploy) {
+      let deploy = this.props.version === 'angular8'
+        ? { typescript: '~3.5.3', node: 'none' }
+        : { typescript: '~3.8.3', node: 'none' };
+      this.env.options = { ... this.env.options, deploy };
+      this.props.modules.push({ name: 'cap-deploy' });
+    }
+  }
+
   writing() {
     this.props.appName = slugify(this.props.appName);
 
     if (this.props.pwa) {
       this.props.modules.push({ name: 'cap-pwa' });
-    }
-
-    if (this.props.deploy) {
-      this.props.modules.push({ name: 'cap-deploy' });
-    }
-
-    if (this.props.sync) {
-      this.props.modules.push({ name: 'cap-heroku-connect' });
     }
   }
 
@@ -260,17 +294,11 @@ module.exports = class extends Generator {
 
     if (this.props.authService === 'auth0') {
 
-      this.env.arguments.push(
-        {key: 'AUTH0_CLIENT_ID', value: this.props.AUTH0_CLIENT_ID},
-        {key: 'AUTH0_CLIENT_SECRET', value: this.props.AUTH0_CLIENT_SECRET},
-        {key: 'AUTH0_DOMAIN', value: this.props.AUTH0_DOMAIN}
-      );
-
       this.spawnCommandSync(
         'ng',
         [
           'add',
-          'cap-angular-schematic-auth-auth0@latest',
+          `cap-angular-schematic-auth-auth0@${this.env.options.auth0.version}`,
          this.props.deploy
             ? `--credentials=${false}`
             : `--credentials=${true}`
@@ -286,22 +314,11 @@ module.exports = class extends Generator {
 
     } else if (this.props.authService === 'firebase') {
 
-      this.env.arguments.push(
-        {key: 'FIREBASE_API_KEY', value: this.props.apiKey},
-        {key: 'FIREBASE_DOMAIN', value: this.props.authDomain},
-        {key: 'FIREBASE_DATABASE', value: this.props.databaseURL},
-        {key: 'FIREBASE_PROJECT_ID', value: this.props.projectId},
-        {key: 'FIREBASE_BUCKET', value: this.props.storageBucket},
-        {key: 'FIREBASE_SENDER_ID', value: this.props.senderId},
-        {key: 'FIREBASE_APP_ID', value: this.props.appId},
-        {key: 'FIREBASE_MEASUREMENT', value: this.props.measurementId},
-      );
-
       this.spawnCommandSync(
         'ng',
         [
           'add',
-          'cap-angular-schematic-auth-firebase@~1.0.0',
+          `cap-angular-schematic-auth-firebase@${this.env.options.firebase.version}`,
           this.props.deploy
             ? `--credentials=${false}`
             : `--credentials=${true}`
@@ -321,12 +338,6 @@ module.exports = class extends Generator {
       );
     }
 
-    if (this.props.deploy) {
-      await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
-      this.props.appNameHeroku = this.props.appName+ '-' +Date.now();
-      this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
-    }
-
     this.spawnCommandSync(
       'ng',
       [
@@ -344,6 +355,13 @@ module.exports = class extends Generator {
         cwd: this.destinationPath(this.props.appName)
       }
     );
+
+    if (this.props.deploy) {
+      await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
+      this.props.appNameHeroku = this.props.appName+ '-' +Date.now();
+      this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
+    }
+
   }
 
   end() {
@@ -359,8 +377,8 @@ module.exports = class extends Generator {
           modules: this.props.modules
         });
       });
-    } else {
-      // this.log(yosay(chalk.bgGreen('Happy coding')));
-    }
+    } /*else {
+      this.log(yosay(chalk.bgGreen('Happy coding')));
+    }*/
   }
 };

@@ -6,6 +6,7 @@ const ts_ast = require('../app/utils/AST-files');
 module.exports = class extends Generator {
   async writing() {
 
+    console.log(this.options.env.options.deploy.typescript)
     const path = this.destinationPath(this.options.name).split('/')
 
     if (!(this.options.modules.find(x => x.name === 'cap-ssr'))) {
@@ -37,7 +38,7 @@ module.exports = class extends Generator {
     "npm": "~6.13.6"
   },
   "dependencies": {
-    "typescript": "~3.5.3",`
+    "typescript": "${this.options.env.options.deploy.typescript}",`
     );
 
     await ts_ast.astFiles(
@@ -64,7 +65,7 @@ module.exports = class extends Generator {
 
   }
 
-  install(){
+  install() {
     this.options.env.arguments.map( async x => {
       await exec(`heroku config:set ${x.key}=${x.value} --app=${this.options.angularHerokuApp}`);
     });
