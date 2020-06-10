@@ -100,6 +100,11 @@ let loadMessages = {
     actionMessage: 'Importing a mapping configuration...',
     responseMessage: 'Successful mapping.',
     errorMessage: 'Error trying to mapping.'
+  },
+  reopenApplication: {
+    actionMessage: 'Reopening the connection',
+    responseMessage: 'Successful connection.',
+    errorMessage: 'Error trying to open the app.'
   }
 };
 
