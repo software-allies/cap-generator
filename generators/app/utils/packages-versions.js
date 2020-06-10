@@ -8,31 +8,32 @@
 exports.Angular9 = [
   {
     name: 'CAP-Storage-Amazon-Web-Services',
-    short: 'CAP AWS',
+    short: 'AWS',
     value: {
+      schameticName:'cap-angular-schematic-storage-aws',
+      moduleName: 'cap-storage-aws',
+      version: 'latest',
       name: 'cap-storage-aws',
-      packageName:'cap-angular-schematic-storage-aws',
-      version: 'latest'
-      // version: '~1.0.0'
     }
   },
   {
     name: 'CAP-Server-Side-Rendering',
-    short: 'CAP SSR',
+    short: 'SSR',
     value: {
-      name: 'cap-ssr',
-      packageName:'noen',
-      version: 'none'
+      schameticName:'noen',
+      moduleName: '',
+      version: 'none',
+      name: 'cap-ssr'
     }
   },
   {
     name: 'CAP-SalesForce-Live-Chat',
-    short: 'CAP LiveChat',
+    short: 'LiveChat',
     value: {
+      schameticName:'cap-angular-schematic-livechat',
+      moduleName: 'cap-livechat-sf',
+      version: 'latest',
       name: 'cap-live-chat',
-      packageName:'cap-angular-schematic-livechat',
-      version: 'latest'
-      // version: '~0.0.0'
     }
   }
 ];
@@ -40,31 +41,32 @@ exports.Angular9 = [
 exports.Angular8 = [
   {
     name: 'CAP-Storage-Amazon-Web-Services',
-    short: 'CAP AWS',
+    short: 'AWS',
     value: {
-      name: 'cap-storage-aws',
-      packageName:'cap-angular-schematic-storage-aws',
-      version: 'latest'
-      // version: '~1.0.0'
+      schameticName:'cap-angular-schematic-storage-aws',
+      moduleName: 'cap-storage-aws',
+      version: 'latest',
+      name: 'cap-storage-aws'
     }
   },
   {
     name: 'CAP-Server-Side-Rendering',
-    short: 'CAP SSR',
+    short: 'SSR',
     value: {
-      name: 'cap-ssr',
-      packageName:'noen',
-      version: 'none'
+      schameticName:'noen',
+      moduleName: '',
+      version: 'none',
+      name: 'cap-ssr'
     }
   },
   {
     name: 'CAP-SalesForce-Live-Chat',
-    short: 'CAP LiveChat',
+    short: 'LiveChat',
     value: {
-      name: 'cap-live-chat',
-      packageName:'cap-angular-schematic-livechat',
-      version: 'latest'
-      // version: '~0.0.0'
+      schameticName:'cap-angular-schematic-livechat',
+      moduleName: 'cap-livechat-sf',
+      version: 'latest',
+      name: 'cap-live-chat'
     }
   }
 ];

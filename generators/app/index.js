@@ -1,16 +1,15 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const ts_ast = require('./utils/AST-files');
+const slugify = require('underscore.string/slugify');
 const chalk = require('chalk');
 const yosay = require('yosay');
 
 const herokuConnectScript = require('../cap-heroku-connect/heroku-connect');
-const slugify = require('underscore.string/slugify');
+const HerokuConnect = require('./utils/packages-versions').sync;
 
 const Angular9 = require('./utils/packages-versions').Angular9;
 const Angular8 = require('./utils/packages-versions').Angular8;
-
-const HerokuConnect = require('./utils/packages-versions').sync;
 
 const Firebase = require('./utils/packages-versions').auth_firebase;
 const Auth0 = require('./utils/packages-versions').auth_auth0;
@@ -44,11 +43,11 @@ module.exports = class extends Generator {
         choices: [
           {
             name: `Angular 8`,
-            value: 'angular8'
+            value: true
           },
           {
             name: `Angular 9`,
-            value: 'angular9'
+            value: false
           }
         ]
       },
@@ -149,14 +148,14 @@ module.exports = class extends Generator {
         name: 'modules',
         message: 'Select the modules you want to include: (Angular 8)',
         choices: Angular8,
-        when: ctx => ctx.version === 'angular8'
+        when: ctx => ctx.version === true
       },
       {
         type: 'checkbox',
         name: 'modules',
         message: 'Select the modules you want to include: (Angular 9)',
         choices: Angular9,
-        when: ctx => ctx.version === 'angular9'
+        when: ctx => ctx.version === false
       },
       {
         type: 'confirm',
@@ -202,57 +201,50 @@ module.exports = class extends Generator {
   configuring() {
 
     if (this.props.authService === 'auth0') {
-      let auth0 = this.props.version === 'angular8'
+      let auth0 = this.props.version
         ? Auth0.Angular8
         : Auth0.Angular9;
       this.env.options = { ... this.env.options, auth0};
-
-      this.env.arguments.push(
-        {key: 'AUTH0_CLIENT_ID', value: this.props.AUTH0_CLIENT_ID},
-        {key: 'AUTH0_CLIENT_SECRET', value: this.props.AUTH0_CLIENT_SECRET},
-        {key: 'AUTH0_DOMAIN', value: this.props.AUTH0_DOMAIN}
-      );
-    } else if (this.props.authService === 'firebase'){
-      let firebase = this.props.version === 'angular8'
+    } else {
+      let firebase = this.props.version
       ? Firebase.Angular8
       : Firebase.Angular9;
-      this.env.options = { ... this.env.options, firebase };
+      this.env.options = { ... this.env.options, firebase};
+    }
 
-      this.env.arguments.push(
-        {key: 'FIREBASE_API_KEY', value: this.props.apiKey},
-        {key: 'FIREBASE_DOMAIN', value: this.props.authDomain},
-        {key: 'FIREBASE_DATABASE', value: this.props.databaseURL},
-        {key: 'FIREBASE_PROJECT_ID', value: this.props.projectId},
-        {key: 'FIREBASE_BUCKET', value: this.props.storageBucket},
-        {key: 'FIREBASE_SENDER_ID', value: this.props.senderId},
-        {key: 'FIREBASE_APP_ID', value: this.props.appId},
-        {key: 'FIREBASE_MEASUREMENT', value: this.props.measurementId},
-      );
+    if (this.props.modules.find(x => x.name === 'cap-storage-aws')) {
+      let aws = this.props.modules.find(x => x.name === 'cap-storage-aws');
+      this.env.options = { ... this.env.options, aws };
+    }
+
+    if (this.props.modules.find(x => x.name === 'cap-live-chat')) {
+      let liveChat = this.props.modules.find(x => x.name === 'cap-live-chat');
+      this.env.options = { ... this.env.options, liveChat };
+    }
+
+    if (this.props.pwa) {
+      this.props.modules.push({ name: 'cap-pwa' });
+    }
+
+    if (this.props.deploy) {
+      let deploy = this.props.version
+        ? { typescript: '~3.5.3', node: '~12.14.1', npm: '~6.13.6' }
+        : { typescript: '~3.8.3', node: '~12.18.0', npm: '~6.14.4' };
+      this.env.options = { ... this.env.options, deploy };
+      this.props.modules.push({ name: 'cap-deploy' });
     }
 
     if (this.props.sync) {
-      let sfCore = this.props.version === 'angular8'
+      let sfCore = this.props.version
         ? HerokuConnect.Angular8
         : HerokuConnect.Angular9;
       this.env.options = { ... this.env.options, sfCore };
       this.props.modules.push({ name: 'cap-heroku-connect' });
     }
-
-    if (this.props.deploy) {
-      let deploy = this.props.version === 'angular8'
-        ? { typescript: '~3.5.3', node: 'none' }
-        : { typescript: '~3.8.3', node: 'none' };
-      this.env.options = { ... this.env.options, deploy };
-      this.props.modules.push({ name: 'cap-deploy' });
-    }
   }
 
   writing() {
     this.props.appName = slugify(this.props.appName);
-
-    if (this.props.pwa) {
-      this.props.modules.push({ name: 'cap-pwa' });
-    }
   }
 
   async install() {
@@ -294,6 +286,12 @@ module.exports = class extends Generator {
 
     if (this.props.authService === 'auth0') {
 
+      this.env.arguments.push(
+        { key: 'AUTH0_CLIENT_ID', value: this.props.AUTH0_CLIENT_ID },
+        { key: 'AUTH0_CLIENT_SECRET', value: this.props.AUTH0_CLIENT_SECRET },
+        { key: 'AUTH0_DOMAIN', value: this.props.AUTH0_DOMAIN }
+      );
+
       this.spawnCommandSync(
         'ng',
         [
@@ -313,6 +311,17 @@ module.exports = class extends Generator {
       );
 
     } else if (this.props.authService === 'firebase') {
+
+      this.env.arguments.push(
+        { key: 'FIREBASE_API_KEY', value: this.props.apiKey },
+        { key: 'FIREBASE_DOMAIN', value: this.props.authDomain },
+        { key: 'FIREBASE_DATABASE', value: this.props.databaseURL },
+        { key: 'FIREBASE_PROJECT_ID', value: this.props.projectId },
+        { key: 'FIREBASE_BUCKET', value: this.props.storageBucket },
+        { key: 'FIREBASE_SENDER_ID', value: this.props.senderId },
+        { key: 'FIREBASE_APP_ID', value: this.props.appId },
+        { key: 'FIREBASE_MEASUREMENT', value: this.props.measurementId }
+      );
 
       this.spawnCommandSync(
         'ng',
