@@ -8,6 +8,7 @@ module.exports = class extends Generator {
     const path = this.destinationPath(this.options.name).split('/')
 
     if (!(this.options.modules.find(x => x.name === 'cap-ssr' || x.name === 'cap-pwa'))) {
+    // if (!(this.options.modules.find(x => x.name === 'cap-ssr'))) {
       this.fs.copyTpl(
         this.templatePath('server/**'),
         this.destinationPath(this.options.name),
@@ -45,6 +46,7 @@ module.exports = class extends Generator {
         : 'package.json'),
       `"build": "ng build",`,
       this.options.modules.find(x => x.name === 'cap-ssr' || x.name === 'cap-pwa')
+      // this.options.modules.find(x => x.name === 'cap-ssr')
         ? `"postinstall": "npm run config",`
         : `"postinstall": "npm run config && ng build --aot --prod",`
     );
@@ -55,6 +57,7 @@ module.exports = class extends Generator {
         : 'package.json'),
       `"start": "ng serve",`,
       this.options.modules.find(x => x.name === 'cap-ssr' || x.name === 'cap-pwa')
+      // this.options.modules.find(x => x.name === 'cap-ssr')
         ?`"start": "npm run config",
     "config": "node set-env.ts",`
         : `"start": "npm run config && node server.js",
