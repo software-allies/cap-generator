@@ -36,5 +36,13 @@ module.exports = [
       version: '0.0.1'
     },
     short: 'CAP HerokuConnect'
+  },
+  {
+    name: 'CAP-Contentful',
+    value: {
+      name: 'cap-angular-contentful',
+      version: '0.1.7'
+    },
+    short: 'CAP Contentful'
   }
 ];

@@ -3,7 +3,7 @@ module.exports = [
     name: 'CAP-Storage-AWS-Module',
     value: {
       name: 'cap-storage-aws',
-      version: '3.0.3'
+      version: '3.0.9'
     },
     short: 'CAP AWS'
   },
@@ -23,4 +23,12 @@ module.exports = [
     },
     short: 'CAP SSR'
   },
+  {
+    name: 'CAP-Contentful',
+    value: {
+      name: 'cap-angular-contentful',
+      version: '0.1.7'
+    },
+    short: 'CAP Contentful'
+  }
 ];

@@ -12,11 +12,10 @@ module.exports = class extends Generator {
 
   constructor(args, opts) {
     super(args, opts);
-    this.argument("appName", { type: String, required: false });
+    this.argument('appName', { type: String, required: false });
   }
 
   prompting() {
-
     this.log(
       yosay(`${chalk.red('CAP Generator\n Build amazing apps faster and better')}`)
     );

@@ -38,5 +38,13 @@ module.exports = [
       version: '0.0.0'
     },
     short: 'CAP PWA'
+  },
+  {
+    name: 'CAP-Contentful',
+    value: {
+      name: 'cap-angular-contentful',
+      version: '0.1.7'
+    },
+    short: 'CAP Contentful'
   }
 ];
