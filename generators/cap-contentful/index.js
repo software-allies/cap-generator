@@ -84,6 +84,7 @@ delivery_accessToken: '',
       [
         'add',
         'cap-angular-schematic-contentful@latest',
+        this.options.credentials.version ? `--version=8` : '--version=9',
         `--space_id=${this.props.space_id}`,
         `--environment=${this.props.environment}`,
         `--delivery_accessToken=${this.props.delivery_accessToken}`

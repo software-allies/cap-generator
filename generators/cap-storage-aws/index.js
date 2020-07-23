@@ -106,13 +106,13 @@ endpoint: '',`
       'ng',
       [
         'add',
-        'cap-angular-schematic-storage-aws@latest',
+        `cap-angular-schematic-storage-aws@${this.options.env.options.aws.version}`,
         `--bucket=${this.props.awsBucket}`,
         `--accessKeyId=${this.props.awsAccessKeyId}`,
         `--secretAccessKey=${this.props.awsSecretAccessKey}`,
         `--region=${this.props.awsRegion}`,
-        `--folder=${this.props.awsFolder}`,
-        `--endpoint=${this.props.endpoint}`
+        `--folder=${this.props.awsFolder}`
+        // `--endpoint=${this.props.endpoint}`
       ],
       {
         cwd: this.destinationPath(this.options.name)

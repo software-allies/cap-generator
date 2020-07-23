@@ -5,10 +5,10 @@ const ts_ast = require('../app/utils/AST-files');
 
 module.exports = class extends Generator {
   async writing() {
-
     const path = this.destinationPath(this.options.name).split('/')
 
-    if (!(this.options.modules.find(x => x.name === 'cap-ssr'))) {
+    if (!(this.options.modules.find(x => x.name === 'cap-ssr' || x.name === 'cap-pwa'))) {
+    // if (!(this.options.modules.find(x => x.name === 'cap-ssr'))) {
       this.fs.copyTpl(
         this.templatePath('server/**'),
         this.destinationPath(this.options.name),
@@ -33,11 +33,11 @@ module.exports = class extends Generator {
         : 'package.json'),
       `"dependencies": {`,
       `"engines": {
-    "node": "~12.14.1",
-    "npm": "~6.13.6"
+    "node": "${this.options.env.options.deploy.node}",
+    "npm": "${this.options.env.options.deploy.npm}"
   },
   "dependencies": {
-    "typescript": "~3.5.3",`
+    "typescript": "${this.options.env.options.deploy.typescript}",`
     );
 
     await ts_ast.astFiles(
@@ -45,7 +45,8 @@ module.exports = class extends Generator {
         ? `${this.options.name}/package.json`
         : 'package.json'),
       `"build": "ng build",`,
-      this.options.modules.find(x => x.name === 'cap-ssr')
+      this.options.modules.find(x => x.name === 'cap-ssr' || x.name === 'cap-pwa')
+      // this.options.modules.find(x => x.name === 'cap-ssr')
         ? `"postinstall": "npm run config",`
         : `"postinstall": "npm run config && ng build --aot --prod",`
     );
@@ -55,7 +56,8 @@ module.exports = class extends Generator {
         ? `${this.options.name}/package.json`
         : 'package.json'),
       `"start": "ng serve",`,
-      this.options.modules.find(x => x.name === 'cap-ssr')
+      this.options.modules.find(x => x.name === 'cap-ssr' || x.name === 'cap-pwa')
+      // this.options.modules.find(x => x.name === 'cap-ssr')
         ?`"start": "npm run config",
     "config": "node set-env.ts",`
         : `"start": "npm run config && node server.js",
@@ -64,7 +66,7 @@ module.exports = class extends Generator {
 
   }
 
-  install(){
+  install() {
     this.options.env.arguments.map( async x => {
       await exec(`heroku config:set ${x.key}=${x.value} --app=${this.options.angularHerokuApp}`);
     });
