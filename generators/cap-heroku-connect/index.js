@@ -53,7 +53,6 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    console.log(this.options.env.options.sfCore)
     this.props.path = slugify(this.props.path);
 
     /*switch (this.props.sync) {
