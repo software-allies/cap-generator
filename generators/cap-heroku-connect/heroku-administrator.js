@@ -97,6 +97,7 @@ exports.run = (promise, messages, appName) => {
         resolve(response);
       }
     } catch (error) {
+      console.log('error: ', error);
       switch (error.code) {
         case 1:
           if (error.stderr.includes('No connection(s) found')) {

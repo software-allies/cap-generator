@@ -182,24 +182,38 @@ const startConfigurationApp = async (name, path) => {
     console.log('error: ', error);
     try {
       if (error.code === 1) {
-        await herokuService.run(command.openApp(name), loadMessages.schemaConnection);
+        if (name) {
+          let token = await herokuService.run(
+            command.tokenApplication,
+            loadMessages.tokenApplication
+          );
 
-        await herokuService.run(
-          command.schemaConnection,
-          loadMessages.schemaConnection,
-          name
-        );
-        await herokuService.run(
-          command.salesforceAuth,
-          loadMessages.salesforceAuth,
-          name
-        );
+          let config = {
+            name: name,
+            token: token.stdout
+          };
 
-        let map = {
-          path: path,
-          name: name
-        };
-        await herokuService.run(command.mapping, loadMessages.mapping, map);
+          await herokuService.run(command.curlPost, loadMessages.curlPost, config);
+
+          await herokuService.run(
+            command.schemaConnection,
+            loadMessages.schemaConnection,
+            name
+          );
+
+          await herokuService.run(
+            command.salesforceAuth,
+            loadMessages.salesforceAuth,
+            name
+          );
+
+          let map = {
+            path: path,
+            name: name
+          };
+
+          await herokuService.run(command.mapping, loadMessages.mapping, map);
+        }
       }
     } catch (error) {
       console.log('error: ', error);

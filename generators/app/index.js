@@ -18,11 +18,10 @@ module.exports = class extends Generator {
 
   constructor(args, opts) {
     super(args, opts);
-    this.argument("appName", { type: String, required: false });
+    this.argument('appName', { type: String, required: false });
   }
 
   prompting() {
-
     this.log(
       yosay(`${chalk.red('CAP Generator\n Build amazing apps faster and better')}`)
     );
@@ -199,27 +198,27 @@ module.exports = class extends Generator {
   }
 
   configuring() {
-
     if (this.props.authService === 'auth0') {
-      let auth0 = this.props.version
-        ? Auth0.Angular8
-        : Auth0.Angular9;
-      this.env.options = { ... this.env.options, auth0};
+      let auth0 = this.props.version ? Auth0.Angular8 : Auth0.Angular9;
+      this.env.options = { ...this.env.options, auth0 };
     } else {
-      let firebase = this.props.version
-      ? Firebase.Angular8
-      : Firebase.Angular9;
-      this.env.options = { ... this.env.options, firebase};
+      let firebase = this.props.version ? Firebase.Angular8 : Firebase.Angular9;
+      this.env.options = { ...this.env.options, firebase };
     }
 
     if (this.props.modules.find(x => x.name === 'cap-storage-aws')) {
       let aws = this.props.modules.find(x => x.name === 'cap-storage-aws');
-      this.env.options = { ... this.env.options, aws };
+      this.env.options = { ...this.env.options, aws };
     }
 
     if (this.props.modules.find(x => x.name === 'cap-live-chat')) {
       let liveChat = this.props.modules.find(x => x.name === 'cap-live-chat');
-      this.env.options = { ... this.env.options, liveChat };
+      this.env.options = { ...this.env.options, liveChat };
+    }
+
+    if (this.props.modules.find(x => x.name === 'cap-angular-contentful')) {
+      let contentful = this.props.modules.find(x => x.name === 'cap-angular-contentful');
+      this.env.options = { ...this.env.options, contentful };
     }
 
     if (this.props.pwa) {
@@ -230,15 +229,13 @@ module.exports = class extends Generator {
       let deploy = this.props.version
         ? { typescript: '~3.5.3', node: '~12.14.1', npm: '~6.13.6' }
         : { typescript: '~3.8.3', node: '~12.18.0', npm: '~6.14.4' };
-      this.env.options = { ... this.env.options, deploy };
+      this.env.options = { ...this.env.options, deploy };
       this.props.modules.push({ name: 'cap-deploy' });
     }
 
     if (this.props.sync) {
-      let sfCore = this.props.version
-        ? HerokuConnect.Angular8
-        : HerokuConnect.Angular9;
-      this.env.options = { ... this.env.options, sfCore };
+      let sfCore = this.props.version ? HerokuConnect.Angular8 : HerokuConnect.Angular9;
+      this.env.options = { ...this.env.options, sfCore };
       this.props.modules.push({ name: 'cap-heroku-connect' });
     }
   }
@@ -248,7 +245,6 @@ module.exports = class extends Generator {
   }
 
   async install() {
-
     this.spawnCommandSync('ng', [
       'new',
       this.props.appName,
@@ -257,32 +253,23 @@ module.exports = class extends Generator {
       'scss'
     ]);
 
-    this.spawnCommandSync(
-      'npm',
-      [
-        'install',
-        '--save',
-        'express',
-        'path',
-        'dotenv'
-      ], {
+    this.spawnCommandSync('npm', ['install', '--save', 'express', 'path', 'dotenv'], {
       cwd: this.destinationPath(this.props.appName)
     });
 
     this.spawnCommandSync(
       'ng',
-      [
-        'add',
-        'cap-angular-schematic-bootstrap@latest',
-        '4.0.0',
-        true
-      ],
+      ['add', 'cap-angular-schematic-bootstrap@latest', '4.0.0', true],
       {
         cwd: this.destinationPath(this.props.appName)
       }
     );
 
-    await ts_ast.astFiles(this.destinationPath(`${this.props.appName}/tsconfig.json`), `"target": "es2015"`, `"target": "es5"`);
+    await ts_ast.astFiles(
+      this.destinationPath(`${this.props.appName}/tsconfig.json`),
+      `"target": "es2015"`,
+      `"target": "es5"`
+    );
 
     if (this.props.authService === 'auth0') {
 
@@ -294,13 +281,12 @@ module.exports = class extends Generator {
 
       this.spawnCommandSync(
         'ng',
+        // eslint-disable-next-line no-sparse-arrays
         [
           'add',
           `cap-angular-schematic-auth-auth0@${this.env.options.auth0.version}`,
-         this.props.deploy
-            ? `--credentials=${false}`
-            : `--credentials=${true}`
-          ,`--clientID=${this.props.AUTH0_CLIENT_ID}`,
+          this.props.deploy ? `--credentials=${false}` : `--credentials=${true}`,
+          `--clientID=${this.props.AUTH0_CLIENT_ID}`,
           `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
           `--domain=${this.props.AUTH0_DOMAIN}`,
           `--endPoint=`
@@ -309,9 +295,7 @@ module.exports = class extends Generator {
           cwd: this.destinationPath(this.props.appName)
         }
       );
-
     } else if (this.props.authService === 'firebase') {
-
       this.env.arguments.push(
         { key: 'FIREBASE_API_KEY', value: this.props.apiKey },
         { key: 'FIREBASE_DOMAIN', value: this.props.authDomain },
@@ -325,13 +309,12 @@ module.exports = class extends Generator {
 
       this.spawnCommandSync(
         'ng',
+        // eslint-disable-next-line no-sparse-arrays
         [
           'add',
           `cap-angular-schematic-auth-firebase@${this.env.options.firebase.version}`,
-          this.props.deploy
-            ? `--credentials=${false}`
-            : `--credentials=${true}`
-          ,`--apiKey=${this.props.apiKey}`,
+          this.props.deploy ? `--credentials=${false}` : `--credentials=${true}`,
+          `--apiKey=${this.props.apiKey}`,
           `--authDomain=${this.props.authDomain}`,
           `--databaseURL=${this.props.databaseURL}`,
           `--projectId=${this.props.projectId}`,
@@ -356,9 +339,7 @@ module.exports = class extends Generator {
         true,
         true,
         this.props.authService,
-        this.props.modules.find(x => x.name === 'cap-heroku-connect')
-          ? true
-          : false
+        this.props.modules.find(x => x.name === 'cap-heroku-connect') ? true : false
       ],
       {
         cwd: this.destinationPath(this.props.appName)
@@ -367,10 +348,9 @@ module.exports = class extends Generator {
 
     if (this.props.deploy) {
       await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
-      this.props.appNameHeroku = this.props.appName+ '-' +Date.now();
+      this.props.appNameHeroku = this.props.appName + '-' + Date.now();
       this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
     }
-
   }
 
   end() {

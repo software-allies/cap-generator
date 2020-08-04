@@ -31,6 +31,10 @@ const envConfigFileProd = `export const environment = {
   secretAccessKey: '${process.env.AWS_SECRET_ACCESS_KEY}',
   region: '${process.env.AWS_REGION}',
   folder: '${process.env.AWS_FOLDER}',
+  <% } %><% if (modules.find(x => x.name === 'cap-storage-aws')) { -%>
+  space_id: '${process.env.SPACE_ID}',
+  environment: '${process.env.ENVIRONMENT}',
+  delivery_accessToken: '${process.env.DELIVERY_ACCESSTOKEN}',
   <% } %><% if (modules.find(x => x.name === 'cap-heroku-connect')) { -%>
   sfApiUrl: '${process.env.API_URL}',<% } %>
   production: true,
