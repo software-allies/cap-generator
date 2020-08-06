@@ -55,8 +55,8 @@ module.exports = class extends Generator {
         ? `"start": "npm run config",`
         : `"start": "ng serve",`,
       this.options.modules.find(x => x.name === 'cap-deploy')
-        ? `"start": "npm run config && npm run serve:ssr",`
-        : `"start": "npm run config && node server.js",`
+      ? `"start": "npm run config && npm run serve:ssr",`
+      : `"start": "npm run config && node server.js",`
     );
   }
 }

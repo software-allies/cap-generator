@@ -53,7 +53,6 @@ module.exports = class extends Generator {
   }
 
   writing() {
-
     this.props.path = slugify(this.props.path);
 
     /*switch (this.props.sync) {
@@ -157,7 +156,7 @@ module.exports = {
         'ng',
         [
           'add',
-          'cap-angular-schematic-sfcore@latest',
+          `cap-angular-schematic-sfcore@${this.options.env.options.sfCore.version}`,
           this.props.deploy
           ? `--credentials=${false}`
           : `--credentials=${true}`,

@@ -1,7 +1,9 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const { exec, spawn } = require('promisify-child-process');
+const ts_ast = require('../app/utils/AST-files');
+
+// const chalk = require('chalk');
+// const { exec, spawn } = require('promisify-child-process');
 
 module.exports = class extends Generator {
   /**
@@ -40,11 +42,25 @@ module.exports = class extends Generator {
   }*/
 
   async install() {
+
     this.spawnCommandSync(
       'ng',
       [
         'add',
         '@angular/pwa',
+        '--clientProject',
+        this.options.name
+      ],
+      {
+        cwd:  this.destinationPath(this.options.name)
+      }
+    );
+
+    this.spawnCommandSync(
+      'ng',
+      [
+        'add',
+        '@nguniversal/express-engine',
         '--clientProject',
         this.options.name
       ],
@@ -70,6 +86,30 @@ module.exports = class extends Generator {
         }
       );
     }
+
+    await ts_ast.astFiles(
+      this.destinationPath(this.options.name
+        ? `${this.options.name}/package.json`
+        : 'package.json'),
+      this.options.modules.find(x => x.name === 'cap-pwa')
+        ? `"postinstall": "npm run config",`
+        : `"build": "ng build",`
+        ,this.options.modules.find(x => x.name === 'cap-pwa')
+        ? `"postinstall": "npm run config && npm run build:ssr",`
+        : `"postinstall": "npm run build:ssr",`
+    );
+
+    await ts_ast.astFiles(
+      this.destinationPath(this.options.name
+        ? `${this.options.name}/package.json`
+        : 'package.json'),
+      this.options.modules.find(x => x.name === 'cap-pwa')
+        ? `"start": "npm run config",`
+        : `"start": "ng serve",`,
+      this.options.modules.find(x => x.name === 'cap-pwa')
+        ? `"start": "npm run config && npm run serve:ssr",`
+        : `"start": "npm run config && node server.js",`
+    );
 
     /*if (this.props.services.find(x => x.name === 'webPush')) {
       this.spawnCommandSync(
