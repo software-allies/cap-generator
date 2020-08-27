@@ -47,9 +47,7 @@ module.exports = class extends Generator {
       'ng',
       [
         'add',
-        '@angular/pwa',
-        '--clientProject',
-        this.options.name
+        `@angular/pwa@${this.options.env.options.pwa.pwaPackageVersion}`
       ],
       {
         cwd:  this.destinationPath(this.options.name)
@@ -60,7 +58,7 @@ module.exports = class extends Generator {
       'ng',
       [
         'add',
-        '@nguniversal/express-engine',
+        `@nguniversal/express-engine@${this.options.env.options.pwa.ngUniversalVersion}`,
         '--clientProject',
         this.options.name
       ],
@@ -75,7 +73,7 @@ module.exports = class extends Generator {
         'ng',
         [
           'generate',
-          '@schematics/angular:appShell',
+          `@schematics/angular:appShell`,
           '--clientProject',
           this.options.name,
           '--universalProject',
