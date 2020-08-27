@@ -222,6 +222,10 @@ module.exports = class extends Generator {
     }
 
     if (this.props.pwa) {
+      let pwa = this.props.version
+        ? { pwaPackage: '@angular/pwa', pwaPackageVersion:'~0.803.29', ngUniversal: '@nguniversal/express-engine', ngUniversalVersion: '^8.2.6', appShell: '@schematics/angular:appShell', appShellVersion: '~8.3.29' }
+        : { pwaPackage: '@angular/pwa', pwaPackageVersion:'~0.901.12', ngUniversal: '@nguniversal/express-engine', ngUniversalVersion: '~9.0.0', appShell: '@schematics/angular:appShell', appShellVersion: '~9.1.12' };
+      this.env.options = { ...this.env.options, pwa };
       this.props.modules.push({ name: 'cap-pwa' });
     }
 
