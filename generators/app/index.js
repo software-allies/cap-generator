@@ -1,9 +1,11 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const ts_ast = require('./utils/AST-files');
 const slugify = require('underscore.string/slugify');
 const chalk = require('chalk');
 const yosay = require('yosay');
+const { v4: uuidv4 } = require('uuid');
+
+const ts_ast = require('./utils/AST-files');
 
 const herokuConnectScript = require('../cap-heroku-connect/heroku-connect');
 const HerokuConnect = require('./utils/packages-versions').sync;
@@ -223,8 +225,8 @@ module.exports = class extends Generator {
 
     if (this.props.pwa) {
       let pwa = this.props.version
-        ? { pwaPackage: '@angular/pwa', pwaPackageVersion:'~0.803.29', ngUniversal: '@nguniversal/express-engine', ngUniversalVersion: '^8.2.6', appShell: '@schematics/angular:appShell', appShellVersion: '~8.3.29' }
-        : { pwaPackage: '@angular/pwa', pwaPackageVersion:'~0.901.12', ngUniversal: '@nguniversal/express-engine', ngUniversalVersion: '~9.0.0', appShell: '@schematics/angular:appShell', appShellVersion: '~9.1.12' };
+        ? { pwaPackage: '@angular/pwa', pwaPackageVersion: '~0.803.29', ngUniversal: '@nguniversal/express-engine', ngUniversalVersion: '^8.2.6', appShell: '@schematics/angular:appShell', appShellVersion: '~8.3.29' }
+        : { pwaPackage: '@angular/pwa', pwaPackageVersion: '~0.901.12', ngUniversal: '@nguniversal/express-engine', ngUniversalVersion: '~9.0.0', appShell: '@schematics/angular:appShell', appShellVersion: '~9.1.12' };
       this.env.options = { ...this.env.options, pwa };
       this.props.modules.push({ name: 'cap-pwa' });
     }
@@ -246,6 +248,7 @@ module.exports = class extends Generator {
 
   writing() {
     this.props.appName = slugify(this.props.appName);
+
   }
 
   async install() {
@@ -352,7 +355,15 @@ module.exports = class extends Generator {
 
     if (this.props.deploy) {
       await herokuConnectScript.verifyInstallation(this.props.email, this.props.password);
-      this.props.appNameHeroku = this.props.appName + '-' + Date.now();
+
+      // This.props.appNameHeroku = this.props.appName + '-' + Date.now();
+      // The Date.now() returns a string with 13 characters
+      let auxUUID = uuidv4();
+      let lengthUUID = 29 - this.props.appName.length;
+      let newUUID = auxUUID.slice(0, lengthUUID);
+      if (newUUID.charAt(newUUID.length) === '-')
+        newUUID = newUUID.slice(0, newUUID.length - 1);
+      this.props.appNameHeroku = `${this.props.appName}-${newUUID}`;
       this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
     }
   }

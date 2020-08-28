@@ -1,6 +1,7 @@
 const herokuService = require('./heroku-administrator');
 const command = require('./exec-functions');
 const loadMessages = require('./load-messages');
+const { v4: uuidv4 } = require('uuid');
 let herokuConfiguration = {};
 
 exports.verifyInstallation = async (email, password) => {
@@ -86,8 +87,13 @@ exports.verifyInstallation = async (email, password) => {
 
 const appsCreation = async appName => {
   try {
-    let timestamp = Math.floor(Date.now() / 1000);
-    appName = `${appName.slice(0, 19)}-${timestamp}`;
+    let auxUUID = uuidv4();
+    let lengthUUID = 29 - appName.length;
+    // Let timestamp = Math.floor(Date.now() / 1000);
+    let newUUID = auxUUID.slice(0, lengthUUID);
+    if (newUUID.charAt(newUUID.length) === '-')
+      newUUID = newUUID.slice(0, newUUID.length - 1);
+    appName = `${appName}-${newUUID}`;
     appName = appName.trim();
     let urls = await herokuService.run(
       command.herokuCreateApp,
