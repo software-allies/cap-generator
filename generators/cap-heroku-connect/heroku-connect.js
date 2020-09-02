@@ -91,7 +91,7 @@ const appsCreation = async appName => {
     let lengthUUID = 29 - appName.length;
     // Let timestamp = Math.floor(Date.now() / 1000);
     let newUUID = auxUUID.slice(0, lengthUUID);
-    if (newUUID.charAt(newUUID.length) === '-')
+    if (newUUID.charAt(newUUID.length - 1) === '-')
       newUUID = newUUID.slice(0, newUUID.length - 1);
     appName = `${appName}-${newUUID}`;
     appName = appName.trim();

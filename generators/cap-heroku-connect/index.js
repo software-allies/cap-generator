@@ -37,6 +37,13 @@ module.exports = class extends Generator {
         name: 'path',
         message: "What's the name of your API?",
         default: `${this.options.name}-api`,
+        validate: name => {
+          if (name.length > 25) {
+            console.log('\nThe name contains more than 25 characters\n');
+            return false;
+          }
+          return true;
+        }
         // when: ctx => ctx.sync === 'HerokuConnect'
       },
       {
@@ -158,8 +165,8 @@ module.exports = {
           'add',
           `cap-angular-schematic-sfcore@${this.options.env.options.sfCore.version}`,
           this.props.deploy
-          ? `--credentials=${false}`
-          : `--credentials=${true}`,
+            ? `--credentials=${false}`
+            : `--credentials=${true}`,
           this.props.deploy
             ? `--apiEndPoint=${urlDataBase.herokuURL.trim()}api`
             : '--apiEndPoint=http://localhost:3000/api'
@@ -168,7 +175,7 @@ module.exports = {
           cwd: this.destinationPath(this.options.name)
         }
       );
-
+      console.log('this,this.options.angularHerokuApp', this.options.angularHerokuApp);
       if (this.options.deployFrontEnd) {
         await herokuDeploy.herokuCLI(
           this.options.name,

@@ -35,7 +35,14 @@ module.exports = class extends Generator {
         message: "What's the name of your application?",
         default: this.options.appName || this.appname,
         require: true,
-        required: true
+        required: true,
+        validate: name => {
+          if (name.length > 20) {
+            console.log('\nThe name contains more than 20 characters\n');
+            return false;
+          }
+          return true;
+        }
       },
       {
         type: 'list',
@@ -361,10 +368,18 @@ module.exports = class extends Generator {
       let auxUUID = uuidv4();
       let lengthUUID = 29 - this.props.appName.length;
       let newUUID = auxUUID.slice(0, lengthUUID);
-      if (newUUID.charAt(newUUID.length) === '-')
-        newUUID = newUUID.slice(0, newUUID.length - 1);
       this.props.appNameHeroku = `${this.props.appName}-${newUUID}`;
-      this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
+      if (this.props.appNameHeroku.charAt(this.props.appNameHeroku.length - 1) === '-') {
+        this.spawnCommandSync('heroku', [
+          'apps:create',
+          (this.props.appNameHeroku = this.props.appNameHeroku.slice(
+            0,
+            this.props.appNameHeroku.length - 1
+          ))
+        ]);
+      } else {
+        this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
+      }
     }
   }
 
