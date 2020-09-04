@@ -1,6 +1,7 @@
 const herokuService = require('./heroku-administrator');
 const command = require('./exec-functions');
 const loadMessages = require('./load-messages');
+const { v4: uuidv4 } = require('uuid');
 let herokuConfiguration = {};
 
 exports.verifyInstallation = async (email, password) => {
@@ -86,8 +87,13 @@ exports.verifyInstallation = async (email, password) => {
 
 const appsCreation = async appName => {
   try {
-    let timestamp = Math.floor(Date.now() / 1000);
-    appName = `${appName.slice(0, 19)}-${timestamp}`;
+    let auxUUID = uuidv4();
+    let lengthUUID = 29 - appName.length;
+    // Let timestamp = Math.floor(Date.now() / 1000);
+    let newUUID = auxUUID.slice(0, lengthUUID);
+    if (newUUID.charAt(newUUID.length - 1) === '-')
+      newUUID = newUUID.slice(0, newUUID.length - 1);
+    appName = `${appName}-${newUUID}`;
     appName = appName.trim();
     let urls = await herokuService.run(
       command.herokuCreateApp,
@@ -182,24 +188,38 @@ const startConfigurationApp = async (name, path) => {
     console.log('error: ', error);
     try {
       if (error.code === 1) {
-        await herokuService.run(command.openApp(name), loadMessages.schemaConnection);
+        if (name) {
+          let token = await herokuService.run(
+            command.tokenApplication,
+            loadMessages.tokenApplication
+          );
 
-        await herokuService.run(
-          command.schemaConnection,
-          loadMessages.schemaConnection,
-          name
-        );
-        await herokuService.run(
-          command.salesforceAuth,
-          loadMessages.salesforceAuth,
-          name
-        );
+          let config = {
+            name: name,
+            token: token.stdout
+          };
 
-        let map = {
-          path: path,
-          name: name
-        };
-        await herokuService.run(command.mapping, loadMessages.mapping, map);
+          await herokuService.run(command.curlPost, loadMessages.curlPost, config);
+
+          await herokuService.run(
+            command.schemaConnection,
+            loadMessages.schemaConnection,
+            name
+          );
+
+          await herokuService.run(
+            command.salesforceAuth,
+            loadMessages.salesforceAuth,
+            name
+          );
+
+          let map = {
+            path: path,
+            name: name
+          };
+
+          await herokuService.run(command.mapping, loadMessages.mapping, map);
+        }
       }
     } catch (error) {
       console.log('error: ', error);

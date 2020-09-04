@@ -1,6 +1,6 @@
 {
   "name": "generator-cap",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "description": "CAP (Connected Apps Platform) is an open-source suite of technologies for rapidly creating web and mobile applications that synchronize data with Salesforce and other systems.",
   "homepage": "https://www.npmjs.com/package/generator-cap",
   "author": {
@@ -23,7 +23,9 @@
     "Salesforce",
     "SFDC",
     "External App",
-    "Integration"
+    "Integration",
+    "Heroku",
+    "Heroku Connect"
   ],
   "devDependencies": {
     "eslint": "^4.19.1",
@@ -50,6 +52,7 @@
     "request": "^2.88.0",
     "ts-simple-ast": "^13.0.0",
     "underscore.string": "^3.3.5",
+    "uuid": "^8.3.0",
     "yeoman-generator": "^4.0.0",
     "yosay": "^2.0.1"
   },
