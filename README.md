@@ -16,7 +16,7 @@ First, install [Yeoman](http://yeoman.io) (we assume you have pre-installed [nod
 npm install -g yo
 ```
 
-You must also have Angular/CLI to build web applications (We recommend having version ^8 for greater compatibility and stability).
+You must also have Angular/CLI to build web applications.
 
 ```bash
 npm i -g @angular/cli
@@ -64,6 +64,11 @@ It will prompt you a series of question regarding to your project
  ´   `  |° ´ Y ` 
 
 ? What's the name of your application? front-end
+
+? Select the Angular version you have installed (Use arrow keys)
+❯ Angular 8 
+  Angular 9 
+  
 ? Choose an authentication service: Firebase
   Auth0 
 ❯ Firebase
@@ -77,10 +82,10 @@ It will prompt you a series of question regarding to your project
 ? Set your app ID:  
 ? Set your measurement ID: 
 
-? Select the modules you want to include:
-❯◯ CAP-Storage-AWS-Module
- ◯ CAP-Live-Chat
- ◯ CAP-SSR
+❯◯ CAP-Storage-Amazon-Web-Services
+ ◯ CAP-Server-Side-Rendering
+ ◯ CAP-SalesForce-Live-Chat
+ ◯ CAP-Angular-Contentful
  
 ? Do you want your app to work like PWA (Progressive Web Application)? Yes
 ? Do you want to deploy your application in Heroku? Yes
