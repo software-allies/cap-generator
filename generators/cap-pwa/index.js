@@ -85,7 +85,7 @@ module.exports = class extends Generator {
       );
     }
 
-    await ts_ast.astFiles(
+    await ts_ast.astFunctions.astFiles(
       this.destinationPath(this.options.name
         ? `${this.options.name}/package.json`
         : 'package.json'),
@@ -97,7 +97,7 @@ module.exports = class extends Generator {
         : `"postinstall": "npm run build:ssr",`
     );
 
-    await ts_ast.astFiles(
+    await ts_ast.astFunctions.astFiles(
       this.destinationPath(this.options.name
         ? `${this.options.name}/package.json`
         : 'package.json'),

@@ -57,7 +57,7 @@ module.exports = class extends Generator {
       );
     }
 
-    await ast.astFiles(
+    await ast.astFunctions.astFiles(
       this.destinationPath(
         this.options.name
           ? `${this.options.name}/src/environments/environment.ts`

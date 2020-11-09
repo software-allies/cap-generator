@@ -185,7 +185,6 @@ const startConfigurationApp = async (name, path) => {
     // );
     await herokuService.run(command.mapping, loadMessages.mapping, map);
   } catch (error) {
-    console.log('error: ', error);
     try {
       if (error.code === 1) {
         if (name) {

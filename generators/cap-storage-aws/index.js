@@ -1,8 +1,8 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
-const { exec, spawn } = require('promisify-child-process');
-const ts_ast = require ('../app/utils/AST-files');
+const { exec } = require('promisify-child-process');
+const ts_ast = require('../app/utils/AST-files');
 
 module.exports = class extends Generator {
   /**
@@ -78,7 +78,7 @@ module.exports = class extends Generator {
       );
     }
 
-    await ts_ast.astFiles(
+    await ts_ast.astFunctions.astFiles(
       this.destinationPath(
         this.options.name
           ? `${this.options.name}/src/environments/environment.ts`
