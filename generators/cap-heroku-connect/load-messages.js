@@ -1,4 +1,9 @@
 let loadMessages = {
+  loopback: {
+    actionMessage: 'Installing Loopback',
+    responseMessage: 'Loopback is already installed.',
+    errorMessage: 'Loopback is not installed.'
+  },
   herokuV: {
     actionMessage: 'Searching a Heroku CLI version...',
     responseMessage: 'Heroku CLI is already installed.',
