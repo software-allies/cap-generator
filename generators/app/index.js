@@ -255,10 +255,11 @@ module.exports = class extends Generator {
 
   writing() {
     this.props.appName = slugify(this.props.appName);
-
   }
 
   async install() {
+    /*
+    T
     this.spawnCommandSync('ng', [
       'new',
       this.props.appName,
@@ -279,7 +280,7 @@ module.exports = class extends Generator {
       }
     );
 
-    await ts_ast.astFiles(
+    await ts_ast.astFunctions.astFiles(
       this.destinationPath(`${this.props.appName}/tsconfig.json`),
       `"target": "es2015"`,
       `"target": "es5"`
@@ -380,7 +381,8 @@ module.exports = class extends Generator {
       } else {
         this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
       }
-    }
+    } 
+    */
   }
 
   end() {
