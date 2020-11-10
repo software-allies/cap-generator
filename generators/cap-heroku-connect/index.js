@@ -4,7 +4,6 @@ const chalk = require('chalk');
 var exec = require('child-process-promise').exec;
 const HerokuConnect = require('./heroku-connect');
 const herokuDeploy = require('./heroku-deploy');
-const loopback = require('./loopback-build');
 const loopbackConfig = require('./loopback-configuration');
 const firebaseJwt = require('./firebase-jwt');
 const tsAst = require('../app/utils/AST-files');
@@ -195,7 +194,7 @@ module.exports = class extends Generator {
     } else {
       try {
         let lb4Version = await exec('lb4 -v');
-        if (lb4Version.stdout.includes('@loopback/cli version: 1.26.0')) {
+        if (lb4Version.stderr === '') {
           let urlDataBase = await HerokuConnect.herokuCLI(
             this.props.path,
             this.templatePath('cap-heroku-connect-api/mapping'),
@@ -211,7 +210,7 @@ module.exports = class extends Generator {
             db: credentials[3].split('/')[1],
             url: urlDataBase.postgresURL
           };
-          this.composeWith(require.resolve('./lb4.js'), {
+          this.composeWith(require.resolve('./loopback-4.js'), {
             path: this.props.path,
             credentials: env
           });
@@ -221,4 +220,6 @@ module.exports = class extends Generator {
       }
     }
   }
+
+  end() {}
 };

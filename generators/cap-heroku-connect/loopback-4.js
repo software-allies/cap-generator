@@ -1,5 +1,6 @@
 const Generator = require('yeoman-generator');
 const astUtilities = require('../app/utils/AST-files');
+const { exec } = require('promisify-child-process');
 let path = '';
 let credentials = {};
 
@@ -59,7 +60,7 @@ module.exports = class extends Generator {
     }
   }
 
-  end() {
+  async end() {
     try {
       astUtilities.astFunctions.replaceText(
         this.destinationPath(`${path}/src/controllers/index.ts`),
@@ -79,20 +80,42 @@ export * from './cap-user-c-cap-file-c.controller';
       );
 
       astUtilities.astFunctions.replaceText(
-        this.destinationPath(`${path}/src/datasources/db.datasource.config.json`),
+        this.destinationPath(`${path}/src/datasources/db.datasource.ts`),
         `
-{
-  "name": "db",
-  "connector": "postgresql",
-  "url": "${credentials.url}",
-  "host": "${credentials.host}",
-  "port": ${credentials.port},
-  "user": "${credentials.user}",
-  "password": "${credentials.password}",
-  "database": "${credentials.db}"
-}
+import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
+import {juggler} from '@loopback/repository';
+
+const config = {
+  name: 'db',
+  connector: 'postgresql',
+  url: '${credentials.url}',
+  host: '${credentials.host}',
+  port: ${credentials.port},
+  user: '${credentials.user}',
+  password: '${credentials.password}',
+  database: '${credentials.db}',
+  ssl: {rejectUnauthorized: false}
+};
+
+@lifeCycleObserver('datasource')
+export class DbDataSource extends juggler.DataSource
+  implements LifeCycleObserver {
+  static dataSourceName = 'db';
+  static readonly defaultConfig = config;
+
+  constructor(
+    @inject('datasources.config.db', {optional: true})
+    dsConfig: object = config,
+  ) {
+    super(dsConfig);
+  }
+}       
         `
       );
+
+      await exec('npm install loopback-connector-postgresql --save', {
+        cwd: this.destinationPath(path)
+      });
     } catch (error) {
       console.log('error: ', error);
     }
