@@ -1,4 +1,5 @@
 const Parser = require('ts-simple-ast').default;
+const editJsonFile = require('edit-json-file');
 
 const { Directory } = require('ts-simple-ast');
 
@@ -39,8 +40,19 @@ const moveFiles = async (path, destintionPath) => {
   }
 };
 
+const editJSONFile = (filePath, property, newValue) => {
+  try {
+    let file = editJsonFile(filePath);
+    file.set(property, newValue);
+    file.save();
+  } catch (error) {
+    console.log('error: ', error);
+  }
+};
+
 exports.astFunctions = {
   astFiles,
   replaceText,
-  moveFiles
+  moveFiles,
+  editJSONFile
 };

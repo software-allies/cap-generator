@@ -3,12 +3,14 @@ const astUtilities = require('../app/utils/AST-files');
 const { exec } = require('promisify-child-process');
 let path = '';
 let credentials = {};
+let appName = '';
 
 module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
     path = opts.path;
     credentials = opts.credentials;
+    appName = opts.appName;
   }
 
   async prompting() {}
@@ -115,6 +117,11 @@ export class DbDataSource extends juggler.DataSource
 
       await exec('npm install loopback-connector-postgresql --save', {
         cwd: this.destinationPath(path)
+      });
+
+      this.composeWith(require.resolve('./loopback-4-deploy.js'), {
+        path,
+        appName
       });
     } catch (error) {
       console.log('error: ', error);

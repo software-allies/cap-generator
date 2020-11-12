@@ -212,7 +212,8 @@ module.exports = class extends Generator {
           };
           this.composeWith(require.resolve('./loopback-4.js'), {
             path: this.props.path,
-            credentials: env
+            credentials: env,
+            appName: urlDataBase.appName
           });
         }
       } catch (error) {
