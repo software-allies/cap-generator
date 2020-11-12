@@ -4,6 +4,7 @@ const chalk = require('chalk');
 var exec = require('child-process-promise').exec;
 const HerokuConnect = require('./heroku-connect');
 const herokuDeploy = require('./heroku-deploy');
+const loopback3 = require('./loopback-3');
 const loopbackConfig = require('./loopback-configuration');
 const firebaseJwt = require('./firebase-jwt');
 const tsAst = require('../app/utils/AST-files');
@@ -56,29 +57,58 @@ module.exports = class extends Generator {
     });
   }
 
+  async configuring() {
+    this.env.options.database = await HerokuConnect.herokuCLI(
+      this.props.path,
+      this.templatePath('cap-heroku-connect-api/mapping'),
+      this.options.credentials.email,
+      this.options.credentials.password
+    );
+
+    await this.spawnCommandSync(
+      'ng',
+      [
+        'add',
+        `cap-angular-schematic-sfcore@${this.options.env.options.sfCore.version}`,
+        this.props.deploy
+          ? `--credentials=${false}`
+          : `--credentials=${true}`,
+        this.props.deploy
+          ? `--apiEndPoint=${this.env.options.database.herokuURL.trim()}api`
+          : '--apiEndPoint=http://localhost:3000/api'
+      ],
+      {
+        cwd: this.destinationPath(this.options.name)
+      }
+    );
+
+    await tsAst.astFunctions.astFiles(
+      this.destinationPath(
+        `${this.options.name}/src/app/modules/cap-authentication/cap-authentication.module.ts`
+      ),
+      `endPoint: ''`,
+      this.props.deploy
+        ? `endPoint: '${this.env.options.database.herokuURL.trim()}api/CapUserCs'`
+        : `endPoint: 'http://localhost:3000/api/CapUserCs'`
+    );
+    console.log('configuring');
+    console.log('this.env.options.database', this.env.options.database)
+  }
+
   async writing() {
     this.props.path = slugify(this.props.path);
-
     if (this.props.lbVersion) {
       exec('lb --version', async error => {
         if (error) {
           this.log(
             'error: you dont have loopback installed, wait a moment we will proceed to install loopback'
           );
-          await loopback.loopbackCLI(this.props.path, true);
+          await loopback3.loopbackCLI(this.props.path, true);
         } else {
-          await loopback.loopbackCLI(this.props.path, false);
+          await loopback3.loopbackCLI(this.props.path, false);
         }
 
-        let urlDataBase = await HerokuConnect.herokuCLI(
-          this.props.path,
-          this.templatePath('cap-heroku-connect-api/mapping'),
-          this.options.credentials.email,
-          this.options.credentials.password
-        );
-        // Console.log('urlDataBase: ', urlDataBase);
-
-        this.fs.copyTpl(
+        await this.fs.copyTpl(
           this.templatePath('cap-heroku-connect-api/models/**'),
           this.destinationPath(`${this.props.path}`),
           {}
@@ -89,7 +119,7 @@ module.exports = class extends Generator {
             ? await firebaseJwt.getGoogleCredentials(this.options.credentials.projectId)
             : null;
 
-        this.fs.copyTpl(
+        await this.fs.copyTpl(
           this.templatePath('cap-heroku-connect-api/auth/**'),
           this.destinationPath(`${this.props.path}/server/`),
           {
@@ -116,13 +146,13 @@ module.exports = class extends Generator {
           }
         );
 
-        this.fs.write(
+        await this.fs.write(
           this.destinationPath(`${this.props.path}/server/datasources.local.js`),
           `
     module.exports = {
       "heroku": {
         "url": ${
-          this.props.deploy ? 'process.env.DATABASE_URL' : `"${urlDataBase.postgresURL}"`
+          this.props.deploy ? 'process.env.DATABASE_URL' : `"${this.env.options.database.postgresURL}"`
           }+"?ssl=true",
         "name": "heroku",
         "connector": "postgresql"
@@ -133,14 +163,17 @@ module.exports = class extends Generator {
         await loopbackConfig.loopbackConfiguration(
           this.props.path,
           this.destinationPath(`${this.props.path}`),
-          urlDataBase ? urlDataBase.postgresURL : '',
+          this.env.options.database ? this.env.options.database.postgresURL : '',
           this.props.deploy
         );
 
+        /**
+         * Deploy Loopback 3 app
+         */
         if (this.props.deploy) {
           await herokuDeploy.herokuCLI(
             this.props.path,
-            urlDataBase ? urlDataBase.appName : '',
+            this.env.options.database ? this.env.options.database.appName : '',
             'AUTH_URL',
             this.options.credentials.authService === 'auth0'
               ? this.options.credentials.AUTH0_DOMAIN
@@ -151,69 +184,57 @@ module.exports = class extends Generator {
           );
         }
 
-        await tsAst.astFunctions.astFiles(
-          this.destinationPath(
-            `${
-            this.options.name
-            }/src/app/modules/cap-authentication/cap-authentication.module.ts`
-          ),
-          `endPoint: ''`,
-          this.props.deploy
-            ? `endPoint: '${urlDataBase.herokuURL.trim()}api/CapUserCs'`
-            : `endPoint: 'http://localhost:3000/api/CapUserCs'`
-        );
-
-        this.spawnCommandSync(
-          'ng',
-          [
-            'add',
-            `cap-angular-schematic-sfcore@${this.options.env.options.sfCore.version}`,
-            this.props.deploy ? `--credentials=${false}` : `--credentials=${true}`,
-            this.props.deploy
-              ? `--apiEndPoint=${urlDataBase.herokuURL.trim()}api`
-              : '--apiEndPoint=http://localhost:3000/api'
-          ],
-          {
-            cwd: this.destinationPath(this.options.name)
-          }
-        );
+        /**
+         * Deploy FrontEnd
+         */
         if (this.options.deployFrontEnd) {
           await herokuDeploy.herokuCLI(
             this.options.name,
             this.options.angularHerokuApp,
             'API_URL',
-            `${urlDataBase.herokuURL.trim()}api`,
+            `${this.env.options.database.herokuURL.trim()}api`,
             true
           );
         }
+
       }).catch(function(err) {
         console.error('ERROR: ', err);
       });
-      /* Break;
-    } */
+
+
     } else {
       try {
         let lb4Version = await exec('lb4 -v');
         if (lb4Version.stderr === '') {
-          let urlDataBase = await HerokuConnect.herokuCLI(
-            this.props.path,
-            this.templatePath('cap-heroku-connect-api/mapping'),
-            this.options.credentials.email,
-            this.options.credentials.password
-          );
-          let credentials = urlDataBase.postgresURL.split(`:`);
+          let credentials = this.env.options.database.postgresURL.split(`:`);
           let env = {
             user: credentials[1].split('//')[1],
             password: credentials[2].split('@')[0],
             host: credentials[2].split('@')[1],
             port: credentials[3].split('/')[0],
             db: credentials[3].split('/')[1],
-            url: urlDataBase.postgresURL
+            url: this.env.options.database.postgresURL
           };
           this.composeWith(require.resolve('./loopback-4.js'), {
             path: this.props.path,
             credentials: env
           });
+          /**
+           * Deploy Loopback 4 app
+           */
+
+          /**
+           * Deploy FrontEnd
+           */
+          if (this.options.deployFrontEnd) {
+            await herokuDeploy.herokuCLI(
+              this.options.name,
+              this.options.angularHerokuApp,
+              'API_URL',
+              `${this.env.options.database.herokuURL.trim()}api`,
+              true
+            );
+          }
         }
       } catch (error) {
         console.log('error: ', error);
@@ -221,5 +242,9 @@ module.exports = class extends Generator {
     }
   }
 
-  end() {}
+  end() {
+  /**
+   * Deploy Loopback 4 app
+   */
+  }
 };
