@@ -258,8 +258,6 @@ module.exports = class extends Generator {
   }
 
   async install() {
-    /*
-    T
     this.spawnCommandSync('ng', [
       'new',
       this.props.appName,
@@ -277,6 +275,23 @@ module.exports = class extends Generator {
       ['add', 'cap-angular-schematic-bootstrap@latest', '4.0.0', true],
       {
         cwd: this.destinationPath(this.props.appName)
+      }
+    );
+
+    await this.fs.copyTpl(
+      this.templatePath('server/**'),
+      this.destinationPath(this.props.appName),
+      {
+        appName: this.props.appName
+      }
+    );
+
+    await this.fs.copyTpl(
+      this.templatePath('env/**'),
+      this.destinationPath(this.props.appName),
+      {
+        modules: this.props.modules,
+        auth: this.props.authService
       }
     );
 
@@ -381,8 +396,7 @@ module.exports = class extends Generator {
       } else {
         this.spawnCommandSync('heroku', ['apps:create', this.props.appNameHeroku]);
       }
-    } 
-    */
+    }
   }
 
   end() {
