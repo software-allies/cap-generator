@@ -4,29 +4,8 @@ const { exec } = require('promisify-child-process');
 const ts_ast = require('../app/utils/AST-files');
 
 module.exports = class extends Generator {
+
   async writing() {
-    const path = this.destinationPath(this.options.name).split('/')
-
-    if (!(this.options.modules.find(x => x.name === 'cap-ssr' || x.name === 'cap-pwa'))) {
-    // if (!(this.options.modules.find(x => x.name === 'cap-ssr'))) {
-      this.fs.copyTpl(
-        this.templatePath('server/**'),
-        this.destinationPath(this.options.name),
-        {
-          appName: this.options.name ? this.options.name : path[path.length - 1]
-        }
-      );
-    }
-
-    this.fs.copyTpl(
-      this.templatePath('env/**'),
-      this.destinationPath(this.options.name),
-      {
-        modules: this.options.modules,
-        auth: this.options.credentials.authService
-      }
-    );
-
     await ts_ast.astFunctions.astFiles(
       this.destinationPath(this.options.name
         ? `${this.options.name}/package.json`
