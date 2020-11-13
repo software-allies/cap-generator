@@ -18,7 +18,7 @@ async function herokuPush(path) {
   const { stdout, stderr } = await child;
 }
 
-const confgVarsHeroku = async (path, herokuApp, key ,value) =>
+const confgVarsHeroku = async (path, herokuApp, key, value) =>
   exec(`heroku config:set ${key}=${value} -a ${herokuApp}`, { cwd: `./${path}` });
 
 const herokuCLI = async (appName, appHeroku, variableKey ,variableValue, publishHerokuVar) => {

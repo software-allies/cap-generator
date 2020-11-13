@@ -196,15 +196,18 @@ module.exports = class extends Generator {
             true
           );
         }
-
-      }).catch(function(err) {
+      }).catch(function (err) {
         console.error('ERROR: ', err);
       });
-
-
     } else {
       try {
         let lb4Version = await exec('lb4 -v');
+
+        let jkws =
+          this.options.credentials.authService === 'firebase'
+            ? await firebaseJwt.getGoogleCredentials(this.options.credentials.projectId)
+            : null;
+
         if (lb4Version.stderr === '') {
           let credentials = this.env.options.database.postgresURL.split(`:`);
           let env = {
@@ -215,15 +218,25 @@ module.exports = class extends Generator {
             db: credentials[3].split('/')[1],
             url: this.env.options.database.postgresURL
           };
-          this.composeWith(require.resolve('./loopback-4.js'), {
-            path: this.props.path,
-            credentials: env,
-            appName: urlDataBase.appName
-          });
+
           /**
            * Deploy Loopback 4 app
            */
-
+          this.composeWith(require.resolve('./loopback-4.js'), {
+            path: this.props.path,
+            credentials: env,
+            appName: this.env.options.database.appName,
+            deploy: {
+              isDeployed: this.props.deploy,
+              key: 'AUTH_URL',
+              value:
+                this.options.credentials.authService === 'auth0'
+                  ? this.options.credentials.AUTH0_DOMAIN
+                  : `https://${
+                      this.options.credentials.projectId
+                    }.firebaseio.com/jwks/${jkws}.json`
+            }
+          });
           /**
            * Deploy FrontEnd
            */
@@ -244,8 +257,8 @@ module.exports = class extends Generator {
   }
 
   end() {
-  /**
-   * Deploy Loopback 4 app
-   */
+    /**
+     * Deploy Loopback 4 app
+     */
   }
 };

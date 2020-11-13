@@ -4,6 +4,7 @@ const { exec } = require('promisify-child-process');
 let path = '';
 let credentials = {};
 let appName = '';
+let deploy = {};
 
 module.exports = class extends Generator {
   constructor(args, opts) {
@@ -11,6 +12,7 @@ module.exports = class extends Generator {
     path = opts.path;
     credentials = opts.credentials;
     appName = opts.appName;
+    deploy = opts.deploy;
   }
 
   async prompting() {}
@@ -119,10 +121,13 @@ export class DbDataSource extends juggler.DataSource
         cwd: this.destinationPath(path)
       });
 
-      this.composeWith(require.resolve('./loopback-4-deploy.js'), {
-        path,
-        appName
-      });
+      if (deploy.isDeployed) {
+        this.composeWith(require.resolve('./loopback-4-deploy.js'), {
+          path: path,
+          appName,
+          deploy
+        });
+      }
     } catch (error) {
       console.log('error: ', error);
     }
