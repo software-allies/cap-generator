@@ -58,6 +58,12 @@ module.exports = class extends Generator {
           this.destinationPath(`${path}/src/repositories`),
           {}
         );
+
+        await this.fs.copyTpl(
+          this.templatePath('cap-heroku-connect-api/lb4/lb4-api/index.js'),
+          this.destinationPath(`${path}`),
+          {}
+        );
       }
     } catch (error) {
       console.log('error: ', error);
