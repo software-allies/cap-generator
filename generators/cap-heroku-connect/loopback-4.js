@@ -60,7 +60,7 @@ module.exports = class extends Generator {
         );
 
         await this.fs.copyTpl(
-          this.templatePath('cap-heroku-connect-api/lb4/lb4-api/index.js'),
+          this.templatePath('cap-heroku-connect-api/lb4/lb4-api/index/**'),
           this.destinationPath(`${path}`),
           {}
         );
@@ -119,7 +119,7 @@ export class DbDataSource extends juggler.DataSource
   ) {
     super(dsConfig);
   }
-}       
+}
         `
       );
 
