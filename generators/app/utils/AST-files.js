@@ -43,16 +43,23 @@ const moveFiles = async (path, destintionPath) => {
 const editJSONFile = (filePath, property, newValue) => {
   try {
     let file = editJsonFile(filePath);
+    console.log('file: ', file);
     file.set(property, newValue);
     file.save();
+    console.log('file: ', file);
   } catch (error) {
     console.log('error: ', error);
   }
+};
+const getJSONObject = (filePath, property) => {
+  let file = editJsonFile(filePath);
+  return file.get(property);
 };
 
 exports.astFunctions = {
   astFiles,
   replaceText,
   moveFiles,
-  editJSONFile
+  editJSONFile,
+  getJSONObject
 };
