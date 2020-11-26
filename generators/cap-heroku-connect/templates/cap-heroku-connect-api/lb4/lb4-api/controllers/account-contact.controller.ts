@@ -26,7 +26,7 @@ export class AccountContactController {
     @repository(AccountRepository) protected accountRepository: AccountRepository,
   ) { }
 
-  @get('/accounts/{id}/contacts', {
+  @get('/Accounts/{id}/contacts', {
     responses: {
       '200': {
         description: 'Array of Account has many Contact',
@@ -45,7 +45,7 @@ export class AccountContactController {
     return this.accountRepository.contacts(id).find(filter);
   }
 
-  @post('/accounts/{id}/contacts', {
+  @post('/Accounts/{id}/contacts', {
     responses: {
       '200': {
         description: 'Account model instance',
@@ -70,7 +70,7 @@ export class AccountContactController {
     return this.accountRepository.contacts(id).create(contact);
   }
 
-  @patch('/accounts/{id}/contacts', {
+  @patch('/Accounts/{id}/contacts', {
     responses: {
       '200': {
         description: 'Account.Contact PATCH success count',
@@ -93,7 +93,7 @@ export class AccountContactController {
     return this.accountRepository.contacts(id).patch(contact, where);
   }
 
-  @del('/accounts/{id}/contacts', {
+  @del('/Accounts/{id}/contacts', {
     responses: {
       '200': {
         description: 'Account.Contact DELETE success count',
