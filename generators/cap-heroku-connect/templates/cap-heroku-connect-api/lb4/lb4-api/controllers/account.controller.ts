@@ -25,7 +25,7 @@ export class AccountController {
     public accountRepository : AccountRepository,
   ) {}
 
-  @post('/accounts', {
+  @post('/Accounts', {
     responses: {
       '200': {
         description: 'Account model instance',
@@ -49,7 +49,7 @@ export class AccountController {
     return this.accountRepository.create(account);
   }
 
-  @get('/accounts/count', {
+  @get('/Accounts/count', {
     responses: {
       '200': {
         description: 'Account model count',
@@ -63,7 +63,7 @@ export class AccountController {
     return this.accountRepository.count(where);
   }
 
-  @get('/accounts', {
+  @get('/Accounts', {
     responses: {
       '200': {
         description: 'Array of Account model instances',
@@ -84,7 +84,7 @@ export class AccountController {
     return this.accountRepository.find(filter);
   }
 
-  @patch('/accounts', {
+  @patch('/Accounts', {
     responses: {
       '200': {
         description: 'Account PATCH success count',
@@ -106,7 +106,7 @@ export class AccountController {
     return this.accountRepository.updateAll(account, where);
   }
 
-  @get('/accounts/{id}', {
+  @get('/Accounts/{id}', {
     responses: {
       '200': {
         description: 'Account model instance',
@@ -125,7 +125,7 @@ export class AccountController {
     return this.accountRepository.findById(id, filter);
   }
 
-  @patch('/accounts/{id}', {
+  @patch('/Accounts/{id}', {
     responses: {
       '204': {
         description: 'Account PATCH success',
@@ -146,7 +146,7 @@ export class AccountController {
     await this.accountRepository.updateById(id, account);
   }
 
-  @put('/accounts/{id}', {
+  @put('/Accounts/{id}', {
     responses: {
       '204': {
         description: 'Account PUT success',
@@ -160,7 +160,7 @@ export class AccountController {
     await this.accountRepository.replaceById(id, account);
   }
 
-  @del('/accounts/{id}', {
+  @del('/Accounts/{id}', {
     responses: {
       '204': {
         description: 'Account DELETE success',
