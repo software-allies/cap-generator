@@ -25,7 +25,7 @@ export class LeadController {
     public leadRepository : LeadRepository,
   ) {}
 
-  @post('/leads', {
+  @post('/Leads', {
     responses: {
       '200': {
         description: 'Lead model instance',
@@ -49,7 +49,7 @@ export class LeadController {
     return this.leadRepository.create(lead);
   }
 
-  @get('/leads/count', {
+  @get('/Leads/count', {
     responses: {
       '200': {
         description: 'Lead model count',
@@ -63,7 +63,7 @@ export class LeadController {
     return this.leadRepository.count(where);
   }
 
-  @get('/leads', {
+  @get('/Leads', {
     responses: {
       '200': {
         description: 'Array of Lead model instances',
@@ -84,7 +84,7 @@ export class LeadController {
     return this.leadRepository.find(filter);
   }
 
-  @patch('/leads', {
+  @patch('/Leads', {
     responses: {
       '200': {
         description: 'Lead PATCH success count',
@@ -106,7 +106,7 @@ export class LeadController {
     return this.leadRepository.updateAll(lead, where);
   }
 
-  @get('/leads/{id}', {
+  @get('/Leads/{id}', {
     responses: {
       '200': {
         description: 'Lead model instance',
@@ -125,7 +125,7 @@ export class LeadController {
     return this.leadRepository.findById(id, filter);
   }
 
-  @patch('/leads/{id}', {
+  @patch('/Leads/{id}', {
     responses: {
       '204': {
         description: 'Lead PATCH success',
@@ -146,7 +146,7 @@ export class LeadController {
     await this.leadRepository.updateById(id, lead);
   }
 
-  @put('/leads/{id}', {
+  @put('/Leads/{id}', {
     responses: {
       '204': {
         description: 'Lead PUT success',
@@ -160,7 +160,7 @@ export class LeadController {
     await this.leadRepository.replaceById(id, lead);
   }
 
-  @del('/leads/{id}', {
+  @del('/Leads/{id}', {
     responses: {
       '204': {
         description: 'Lead DELETE success',
