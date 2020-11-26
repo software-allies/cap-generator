@@ -25,7 +25,7 @@ export class CapUserCController {
     public capUserCRepository : CapUserCRepository,
   ) {}
 
-  @post('/cap-user-cs', {
+  @post('/CapUserCs', {
     responses: {
       '200': {
         description: 'CapUserC model instance',
@@ -49,7 +49,7 @@ export class CapUserCController {
     return this.capUserCRepository.create(capUserC);
   }
 
-  @get('/cap-user-cs/count', {
+  @get('/CapUserCs/count', {
     responses: {
       '200': {
         description: 'CapUserC model count',
@@ -63,7 +63,7 @@ export class CapUserCController {
     return this.capUserCRepository.count(where);
   }
 
-  @get('/cap-user-cs', {
+  @get('/CapUserCs', {
     responses: {
       '200': {
         description: 'Array of CapUserC model instances',
@@ -84,7 +84,7 @@ export class CapUserCController {
     return this.capUserCRepository.find(filter);
   }
 
-  @patch('/cap-user-cs', {
+  @patch('/CapUserCs', {
     responses: {
       '200': {
         description: 'CapUserC PATCH success count',
@@ -106,7 +106,7 @@ export class CapUserCController {
     return this.capUserCRepository.updateAll(capUserC, where);
   }
 
-  @get('/cap-user-cs/{id}', {
+  @get('/CapUserCs/{id}', {
     responses: {
       '200': {
         description: 'CapUserC model instance',
@@ -125,7 +125,7 @@ export class CapUserCController {
     return this.capUserCRepository.findById(id, filter);
   }
 
-  @patch('/cap-user-cs/{id}', {
+  @patch('/CapUserCs/{id}', {
     responses: {
       '204': {
         description: 'CapUserC PATCH success',
@@ -146,7 +146,7 @@ export class CapUserCController {
     await this.capUserCRepository.updateById(id, capUserC);
   }
 
-  @put('/cap-user-cs/{id}', {
+  @put('/CapUserCs/{id}', {
     responses: {
       '204': {
         description: 'CapUserC PUT success',
@@ -160,7 +160,7 @@ export class CapUserCController {
     await this.capUserCRepository.replaceById(id, capUserC);
   }
 
-  @del('/cap-user-cs/{id}', {
+  @del('/CapUserCs/{id}', {
     responses: {
       '204': {
         description: 'CapUserC DELETE success',
