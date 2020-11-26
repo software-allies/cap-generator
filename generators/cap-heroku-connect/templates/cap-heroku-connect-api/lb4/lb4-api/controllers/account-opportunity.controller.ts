@@ -26,7 +26,7 @@ export class AccountOpportunityController {
     @repository(AccountRepository) protected accountRepository: AccountRepository,
   ) { }
 
-  @get('/accounts/{id}/opportunities', {
+  @get('/Accounts/{id}/opportunities', {
     responses: {
       '200': {
         description: 'Array of Account has many Opportunity',
@@ -45,7 +45,7 @@ export class AccountOpportunityController {
     return this.accountRepository.opportunities(id).find(filter);
   }
 
-  @post('/accounts/{id}/opportunities', {
+  @post('/Accounts/{id}/opportunities', {
     responses: {
       '200': {
         description: 'Account model instance',
@@ -70,7 +70,7 @@ export class AccountOpportunityController {
     return this.accountRepository.opportunities(id).create(opportunity);
   }
 
-  @patch('/accounts/{id}/opportunities', {
+  @patch('/Accounts/{id}/opportunities', {
     responses: {
       '200': {
         description: 'Account.Opportunity PATCH success count',
@@ -93,7 +93,7 @@ export class AccountOpportunityController {
     return this.accountRepository.opportunities(id).patch(opportunity, where);
   }
 
-  @del('/accounts/{id}/opportunities', {
+  @del('/Accounts/{id}/opportunities', {
     responses: {
       '200': {
         description: 'Account.Opportunity DELETE success count',
