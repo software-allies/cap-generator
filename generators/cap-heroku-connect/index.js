@@ -245,7 +245,7 @@ module.exports = class extends Generator {
               this.options.name,
               this.options.angularHerokuApp,
               'API_URL',
-              `${this.env.options.database.herokuURL.trim()}api`,
+              `${this.env.options.database.herokuURL.trim()}`,
               true
             );
           }
