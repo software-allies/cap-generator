@@ -25,7 +25,7 @@ export class ContactController {
     public contactRepository : ContactRepository,
   ) {}
 
-  @post('/contacts', {
+  @post('/Contacts', {
     responses: {
       '200': {
         description: 'Contact model instance',
@@ -49,7 +49,7 @@ export class ContactController {
     return this.contactRepository.create(contact);
   }
 
-  @get('/contacts/count', {
+  @get('/Contacts/count', {
     responses: {
       '200': {
         description: 'Contact model count',
@@ -63,7 +63,7 @@ export class ContactController {
     return this.contactRepository.count(where);
   }
 
-  @get('/contacts', {
+  @get('/Contacts', {
     responses: {
       '200': {
         description: 'Array of Contact model instances',
@@ -84,7 +84,7 @@ export class ContactController {
     return this.contactRepository.find(filter);
   }
 
-  @patch('/contacts', {
+  @patch('/Contacts', {
     responses: {
       '200': {
         description: 'Contact PATCH success count',
@@ -106,7 +106,7 @@ export class ContactController {
     return this.contactRepository.updateAll(contact, where);
   }
 
-  @get('/contacts/{id}', {
+  @get('/Contacts/{id}', {
     responses: {
       '200': {
         description: 'Contact model instance',
@@ -125,7 +125,7 @@ export class ContactController {
     return this.contactRepository.findById(id, filter);
   }
 
-  @patch('/contacts/{id}', {
+  @patch('/Contacts/{id}', {
     responses: {
       '204': {
         description: 'Contact PATCH success',
@@ -146,7 +146,7 @@ export class ContactController {
     await this.contactRepository.updateById(id, contact);
   }
 
-  @put('/contacts/{id}', {
+  @put('/Contacts/{id}', {
     responses: {
       '204': {
         description: 'Contact PUT success',
@@ -160,7 +160,7 @@ export class ContactController {
     await this.contactRepository.replaceById(id, contact);
   }
 
-  @del('/contacts/{id}', {
+  @del('/Contacts/{id}', {
     responses: {
       '204': {
         description: 'Contact DELETE success',
