@@ -25,7 +25,7 @@ export class CapFileCController {
     public capFileCRepository : CapFileCRepository,
   ) {}
 
-  @post('/cap-file-cs', {
+  @post('/CapFileCs', {
     responses: {
       '200': {
         description: 'CapFileC model instance',
@@ -49,7 +49,7 @@ export class CapFileCController {
     return this.capFileCRepository.create(capFileC);
   }
 
-  @get('/cap-file-cs/count', {
+  @get('/CapFileCs/count', {
     responses: {
       '200': {
         description: 'CapFileC model count',
@@ -63,7 +63,7 @@ export class CapFileCController {
     return this.capFileCRepository.count(where);
   }
 
-  @get('/cap-file-cs', {
+  @get('/CapFileCs', {
     responses: {
       '200': {
         description: 'Array of CapFileC model instances',
@@ -84,7 +84,7 @@ export class CapFileCController {
     return this.capFileCRepository.find(filter);
   }
 
-  @patch('/cap-file-cs', {
+  @patch('/CapFileCs', {
     responses: {
       '200': {
         description: 'CapFileC PATCH success count',
@@ -106,7 +106,7 @@ export class CapFileCController {
     return this.capFileCRepository.updateAll(capFileC, where);
   }
 
-  @get('/cap-file-cs/{id}', {
+  @get('/CapFileCs/{id}', {
     responses: {
       '200': {
         description: 'CapFileC model instance',
@@ -125,7 +125,7 @@ export class CapFileCController {
     return this.capFileCRepository.findById(id, filter);
   }
 
-  @patch('/cap-file-cs/{id}', {
+  @patch('/CapFileCs/{id}', {
     responses: {
       '204': {
         description: 'CapFileC PATCH success',
@@ -146,7 +146,7 @@ export class CapFileCController {
     await this.capFileCRepository.updateById(id, capFileC);
   }
 
-  @put('/cap-file-cs/{id}', {
+  @put('/CapFileCs/{id}', {
     responses: {
       '204': {
         description: 'CapFileC PUT success',
@@ -160,7 +160,7 @@ export class CapFileCController {
     await this.capFileCRepository.replaceById(id, capFileC);
   }
 
-  @del('/cap-file-cs/{id}', {
+  @del('/CapFileCs/{id}', {
     responses: {
       '204': {
         description: 'CapFileC DELETE success',
