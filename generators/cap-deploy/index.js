@@ -42,12 +42,12 @@ module.exports = class extends Generator {
         : `"start": "npm run config && node server.js",
     "config": "node set-env.ts",`
     );
-  }
-
-  install() {
     this.options.env.arguments.map(async x => {
       await exec(`heroku config:set ${x.key}=${x.value} --app=${this.options.angularHerokuApp}`);
     });
+  }
+
+  install() {
     if (this.options.deployFrontEnd && !(this.options.modules.find(x => x.name === 'cap-heroku-connect'))) {
       // this.spawnCommandSync('heroku', ['apps:create', this.options.angularHerokuApp]);
       this.spawnCommandSync('git', ['init'], {cwd: this.destinationPath(this.options.name)});
