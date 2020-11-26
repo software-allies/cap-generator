@@ -25,7 +25,7 @@ export class OpportunityController {
     public opportunityRepository : OpportunityRepository,
   ) {}
 
-  @post('/opportunities', {
+  @post('/Opportunitys', {
     responses: {
       '200': {
         description: 'Opportunity model instance',
@@ -49,7 +49,7 @@ export class OpportunityController {
     return this.opportunityRepository.create(opportunity);
   }
 
-  @get('/opportunities/count', {
+  @get('/Opportunitys/count', {
     responses: {
       '200': {
         description: 'Opportunity model count',
@@ -63,7 +63,7 @@ export class OpportunityController {
     return this.opportunityRepository.count(where);
   }
 
-  @get('/opportunities', {
+  @get('/Opportunitys', {
     responses: {
       '200': {
         description: 'Array of Opportunity model instances',
@@ -84,7 +84,7 @@ export class OpportunityController {
     return this.opportunityRepository.find(filter);
   }
 
-  @patch('/opportunities', {
+  @patch('/Opportunitys', {
     responses: {
       '200': {
         description: 'Opportunity PATCH success count',
@@ -106,7 +106,7 @@ export class OpportunityController {
     return this.opportunityRepository.updateAll(opportunity, where);
   }
 
-  @get('/opportunities/{id}', {
+  @get('/Opportunitys/{id}', {
     responses: {
       '200': {
         description: 'Opportunity model instance',
@@ -125,7 +125,7 @@ export class OpportunityController {
     return this.opportunityRepository.findById(id, filter);
   }
 
-  @patch('/opportunities/{id}', {
+  @patch('/Opportunitys/{id}', {
     responses: {
       '204': {
         description: 'Opportunity PATCH success',
@@ -146,7 +146,7 @@ export class OpportunityController {
     await this.opportunityRepository.updateById(id, opportunity);
   }
 
-  @put('/opportunities/{id}', {
+  @put('/Opportunitys/{id}', {
     responses: {
       '204': {
         description: 'Opportunity PUT success',
@@ -160,7 +160,7 @@ export class OpportunityController {
     await this.opportunityRepository.replaceById(id, opportunity);
   }
 
-  @del('/opportunities/{id}', {
+  @del('/Opportunitys/{id}', {
     responses: {
       '204': {
         description: 'Opportunity DELETE success',
