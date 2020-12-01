@@ -9,6 +9,7 @@ const loopbackConfig = require('./loopback-configuration');
 const firebaseJwt = require('./firebase-jwt');
 const tsAst = require('../app/utils/AST-files');
 const slugify = require('underscore.string/slugify');
+const lb4Installation = require('./loopback-4-installation');
 
 module.exports = class extends Generator {
   prompting() {
@@ -200,14 +201,14 @@ module.exports = class extends Generator {
       });
     } else {
       try {
-        let lb4Version = await exec('lb4 -v');
-
         let jkws =
           this.options.credentials.authService === 'firebase'
             ? await firebaseJwt.getGoogleCredentials(this.options.credentials.projectId)
             : null;
 
-        if (lb4Version.stderr === '') {
+        //Verifying lb4 installation 
+        let isLb4Installed = await lb4Installation();
+        if (isLb4Installed) {
           let credentials = this.env.options.database.postgresURL.split(`:`);
           let env = {
             user: credentials[1].split('//')[1],
@@ -232,8 +233,8 @@ module.exports = class extends Generator {
                 this.options.credentials.authService === 'auth0'
                   ? this.options.credentials.AUTH0_DOMAIN
                   : `https://${
-                      this.options.credentials.projectId
-                    }.firebaseio.com/jwks/${jkws}.json`
+                  this.options.credentials.projectId
+                  }.firebaseio.com/jwks/${jkws}.json`
             }
           });
           /**
