@@ -89,11 +89,16 @@ module.exports = class extends Generator {
       ),
       `endPoint: ''`,
       this.props.deploy
-        ? `endPoint: '${this.env.options.database.herokuURL.trim()}api/CapUserCs'`
-        : `endPoint: 'http://localhost:3000/api/CapUserCs'`
+        ? this.props.lbVersion
+          ? `endPoint: '${this.env.options.database.herokuURL.trim()}api/CapUserCs'`
+          : `endPoint: '${this.env.options.database.herokuURL.trim()}/CapUserCs'`
+        :
+          this.props.lbVersion
+          ? `endPoint: 'http://localhost:3000/api/CapUserCs'`
+          : `endPoint: 'http://localhost:3000/CapUserCs'`
     );
-    console.log('configuring');
-    console.log('this.env.options.database', this.env.options.database)
+    // console.log('configuring');
+    // console.log('this.env.options.database', this.env.options.database)
   }
 
   async install() {
@@ -206,7 +211,7 @@ module.exports = class extends Generator {
             ? await firebaseJwt.getGoogleCredentials(this.options.credentials.projectId)
             : null;
 
-        //Verifying lb4 installation 
+        //Verifying lb4 installation
         let isLb4Installed = await lb4Installation();
         if (isLb4Installed) {
           let credentials = this.env.options.database.postgresURL.split(`:`);
@@ -255,28 +260,6 @@ module.exports = class extends Generator {
       }
     }
   }
-  /*async install() {
-    if (this.options.deployFrontEnd && this.props.lbVersion) {
-      await herokuDeploy.herokuCLI(
-        this.options.name,
-        this.options.angularHerokuApp,
-        'API_URL',
-        `${this.env.options.database.herokuURL.trim()}api`,
-        true
-      );
-    }
-
-    if (this.options.deployFrontEnd && !this.props.lbVersion) {
-      await herokuDeploy.herokuCLI(
-        this.options.name,
-        this.options.angularHerokuApp,
-        'API_URL',
-        `${this.env.options.database.herokuURL.trim()}`,
-        true
-      );
-    }
-  }*/
-
 
   end() {
     /**
