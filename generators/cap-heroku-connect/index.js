@@ -95,7 +95,7 @@ module.exports = class extends Generator {
     console.log('this.env.options.database', this.env.options.database)
   }
 
-  async writing() {
+  async install() {
     this.props.path = slugify(this.props.path);
     if (this.props.lbVersion) {
       exec('lb --version', async error => {
@@ -183,7 +183,6 @@ module.exports = class extends Generator {
             true
           );
         }
-
         /**
          * Deploy FrontEnd
          */
@@ -255,6 +254,28 @@ module.exports = class extends Generator {
       }
     }
   }
+  /*async install() {
+    if (this.options.deployFrontEnd && this.props.lbVersion) {
+      await herokuDeploy.herokuCLI(
+        this.options.name,
+        this.options.angularHerokuApp,
+        'API_URL',
+        `${this.env.options.database.herokuURL.trim()}api`,
+        true
+      );
+    }
+
+    if (this.options.deployFrontEnd && !this.props.lbVersion) {
+      await herokuDeploy.herokuCLI(
+        this.options.name,
+        this.options.angularHerokuApp,
+        'API_URL',
+        `${this.env.options.database.herokuURL.trim()}`,
+        true
+      );
+    }
+  }*/
+
 
   end() {
     /**
