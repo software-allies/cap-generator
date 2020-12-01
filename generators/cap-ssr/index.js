@@ -15,7 +15,7 @@ module.exports = class extends Generator {
       'ng',
       [
         'add',
-        '@nguniversal/express-engine@^9.0.0',
+        '@nguniversal/express-engine',
         '--clientProject',
         this.options.name
       ],
