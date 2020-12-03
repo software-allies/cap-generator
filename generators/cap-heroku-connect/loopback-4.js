@@ -15,7 +15,7 @@ module.exports = class extends Generator {
     deploy = opts.deploy;
   }
 
-  async prompting() {}
+  async prompting() { }
 
   async writing() {
     try {
@@ -66,7 +66,7 @@ module.exports = class extends Generator {
         );
       }
     } catch (error) {
-      console.log('error: ', error);
+      console.log('error: ', error.message);
     }
   }
 
@@ -135,7 +135,7 @@ export class DbDataSource extends juggler.DataSource
         });
       }
     } catch (error) {
-      console.log('error: ', error);
+      console.log('error: ', error.message);
     }
   }
 };

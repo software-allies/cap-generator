@@ -221,7 +221,8 @@ const startConfigurationApp = async (name, path) => {
         }
       }
     } catch (error) {
-      console.log('error: ', error);
+      console.log('error: ', error.message);
+      return error.message;
     }
   }
 };

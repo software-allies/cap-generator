@@ -16,7 +16,7 @@ module.exports = class extends Generator {
     deploy = opts.deploy;
   }
 
-  async prompting() { }
+  async prompting() {}
 
   async writing() {
     try {
@@ -50,8 +50,8 @@ module.exports = class extends Generator {
       load.succeed('Successfully preparation of the files');
     } catch (error) {
       load.stop();
-      load.fail(error);
-      console.log('error: ', error);
+      load.fail(error.message);
+      console.log('error: ', error.message);
     }
   }
 
@@ -65,8 +65,8 @@ module.exports = class extends Generator {
       load.succeed('Successfully installation');
     } catch (error) {
       load.stop();
-      console.log('error: ', error);
-      load.fail(error);
+      console.log('error: ', error.message);
+      load.fail(error.message);
     }
   }
 
@@ -114,8 +114,8 @@ module.exports = class extends Generator {
       this.log(`HEROKU DEPLOY STATUS`, deployStatus.stderr.toString());
     } catch (error) {
       load.stop();
-      console.log('error: ', error);
-      load.fail(error);
+      console.log('error: ', error.message);
+      load.fail(error.message);
     }
   }
 };
