@@ -93,7 +93,7 @@ module.exports = class extends Generator {
           ? `endPoint: '${this.env.options.database.herokuURL.trim()}api/CapUserCs'`
           : `endPoint: '${this.env.options.database.herokuURL.trim()}/CapUserCs'`
         :
-          this.props.lbVersion
+        this.props.lbVersion
           ? `endPoint: 'http://localhost:3000/api/CapUserCs'`
           : `endPoint: 'http://localhost:3000/CapUserCs'`
     );
@@ -211,7 +211,7 @@ module.exports = class extends Generator {
             ? await firebaseJwt.getGoogleCredentials(this.options.credentials.projectId)
             : null;
 
-        //Verifying lb4 installation
+        // Verifying lb4 installation
         let isLb4Installed = await lb4Installation();
         if (isLb4Installed) {
           let credentials = this.env.options.database.postgresURL.split(`:`);
@@ -238,10 +238,11 @@ module.exports = class extends Generator {
                 this.options.credentials.authService === 'auth0'
                   ? this.options.credentials.AUTH0_DOMAIN
                   : `https://${
-                  this.options.credentials.projectId
-                  }.firebaseio.com/jwks/${jkws}.json`
+                      this.options.credentials.projectId
+                    }.firebaseio.com/jwks/${jkws}.json`
             }
           });
+
           /**
            * Deploy FrontEnd
            */

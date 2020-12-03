@@ -13,6 +13,7 @@ const lb4Version = async () => {
       load.succeed('Loopback 4 is already installed.');
       return true;
     }
+    return false;
   } catch (error) {
     load.stop();
     load.fail("There's not an lb4 version installed");
@@ -29,12 +30,12 @@ const lb4Installation = async () => {
       await exec('npm i -g @loopback/cli');
       load.stop();
       load.succeed('Loopback 4 has been installed successfully');
-      return true;
     }
-    return;
+    return true;
   } catch (error) {
     load.stop();
     load.fail('Error trying to install lb4');
+    return false;
   }
 };
 module.exports = lb4Installation;
