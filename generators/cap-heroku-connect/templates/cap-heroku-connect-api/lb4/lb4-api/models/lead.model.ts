@@ -27,19 +27,6 @@ export class Lead extends Entity {
   @property({
     type: 'string',
     postgresql: {
-      columnName: 'name',
-      dataType: 'character varying',
-      dataLength: 255,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  Name?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
       columnName: 'sacap__uuid__c',
       dataType: 'character varying',
       dataLength: 50,
