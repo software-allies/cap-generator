@@ -106,7 +106,7 @@ export class CapUserCController {
     return this.capUserCRepository.updateAll(capUserC, where);
   }
 
-  @get('/CapUserCs/{id}', {
+  @get('/CapUserCs/{sacap__uuid__c}', {
     responses: {
       '200': {
         description: 'CapUserC model instance',
@@ -119,13 +119,13 @@ export class CapUserCController {
     },
   })
   async findById(
-    @param.path.number('id') id: number,
+    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
     @param.filter(CapUserC, {exclude: 'where'}) filter?: FilterExcludingWhere<CapUserC>
   ): Promise<CapUserC> {
-    return this.capUserCRepository.findById(id, filter);
+    return this.capUserCRepository.findById(sacap__uuid__c, filter);
   }
 
-  @patch('/CapUserCs/{id}', {
+  @patch('/CapUserCs/{sacap__uuid__c}', {
     responses: {
       '204': {
         description: 'CapUserC PATCH success',
@@ -133,7 +133,7 @@ export class CapUserCController {
     },
   })
   async updateById(
-    @param.path.number('id') id: number,
+    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -143,10 +143,10 @@ export class CapUserCController {
     })
     capUserC: CapUserC,
   ): Promise<void> {
-    await this.capUserCRepository.updateById(id, capUserC);
+    await this.capUserCRepository.updateById(sacap__uuid__c, capUserC);
   }
 
-  @put('/CapUserCs/{id}', {
+  @put('/CapUserCs/{sacap__uuid__c}', {
     responses: {
       '204': {
         description: 'CapUserC PUT success',
@@ -154,20 +154,20 @@ export class CapUserCController {
     },
   })
   async replaceById(
-    @param.path.number('id') id: number,
+    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
     @requestBody() capUserC: CapUserC,
   ): Promise<void> {
-    await this.capUserCRepository.replaceById(id, capUserC);
+    await this.capUserCRepository.replaceById(sacap__uuid__c, capUserC);
   }
 
-  @del('/CapUserCs/{id}', {
+  @del('/CapUserCs/{sacap__uuid__c}', {
     responses: {
       '204': {
         description: 'CapUserC DELETE success',
       },
     },
   })
-  async deleteById(@param.path.number('id') id: number): Promise<void> {
-    await this.capUserCRepository.deleteById(id);
+  async deleteById(@param.path.string('sacap__uuid__c') sacap__uuid__c: string): Promise<void> {
+    await this.capUserCRepository.deleteById(sacap__uuid__c);
   }
 }

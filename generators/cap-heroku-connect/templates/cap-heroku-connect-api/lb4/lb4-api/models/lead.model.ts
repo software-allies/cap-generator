@@ -11,7 +11,6 @@ import {Entity, model, property} from '@loopback/repository';
 export class Lead extends Entity {
   @property({
     type: 'number',
-    id: true,
     generated: false,
     postgresql: {
       columnName: 'id',
@@ -38,6 +37,7 @@ export class Lead extends Entity {
   Name?: string;
 
   @property({
+    id: true,
     type: 'string',
     postgresql: {
       columnName: 'sacap__uuid__c',

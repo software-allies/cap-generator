@@ -106,7 +106,7 @@ export class LeadController {
     return this.leadRepository.updateAll(lead, where);
   }
 
-  @get('/Leads/{id}', {
+  @get('/Leads/{sacap__uuid__c}', {
     responses: {
       '200': {
         description: 'Lead model instance',
@@ -119,13 +119,13 @@ export class LeadController {
     },
   })
   async findById(
-    @param.path.number('id') id: number,
+    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
     @param.filter(Lead, {exclude: 'where'}) filter?: FilterExcludingWhere<Lead>
   ): Promise<Lead> {
-    return this.leadRepository.findById(id, filter);
+    return this.leadRepository.findById(sacap__uuid__c, filter);
   }
 
-  @patch('/Leads/{id}', {
+  @patch('/Leads/{sacap__uuid__c}', {
     responses: {
       '204': {
         description: 'Lead PATCH success',
@@ -133,7 +133,7 @@ export class LeadController {
     },
   })
   async updateById(
-    @param.path.number('id') id: number,
+    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -143,10 +143,10 @@ export class LeadController {
     })
     lead: Lead,
   ): Promise<void> {
-    await this.leadRepository.updateById(id, lead);
+    await this.leadRepository.updateById(sacap__uuid__c, lead);
   }
 
-  @put('/Leads/{id}', {
+  @put('/Leads/{sacap__uuid__c}', {
     responses: {
       '204': {
         description: 'Lead PUT success',
@@ -154,20 +154,20 @@ export class LeadController {
     },
   })
   async replaceById(
-    @param.path.number('id') id: number,
+    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
     @requestBody() lead: Lead,
   ): Promise<void> {
-    await this.leadRepository.replaceById(id, lead);
+    await this.leadRepository.replaceById(sacap__uuid__c, lead);
   }
 
-  @del('/Leads/{id}', {
+  @del('/Leads/{sacap__uuid__c}', {
     responses: {
       '204': {
         description: 'Lead DELETE success',
       },
     },
   })
-  async deleteById(@param.path.number('id') id: number): Promise<void> {
-    await this.leadRepository.deleteById(id);
+  async deleteById(@param.path.string('sacap__uuid__c') sacap__uuid__c: string): Promise<void> {
+    await this.leadRepository.deleteById(sacap__uuid__c);
   }
 }

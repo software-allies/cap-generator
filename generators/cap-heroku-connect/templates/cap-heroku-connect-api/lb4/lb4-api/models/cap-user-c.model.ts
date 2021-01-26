@@ -12,7 +12,6 @@ import {CapFileC} from './cap-file-c.model';
 export class CapUserC extends Entity {
   @property({
     type: 'number',
-    id: true,
     generated: false,
     postgresql: {
       columnName: 'id',
@@ -26,6 +25,7 @@ export class CapUserC extends Entity {
   id?: number;
 
   @property({
+    id: true,
     type: 'string',
     postgresql: {
       columnName: 'sacap__uuid__c',

@@ -39,10 +39,10 @@ export class AccountOpportunityController {
     },
   })
   async find(
-    @param.path.number('id') id: number,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @param.query.object('filter') filter?: Filter<Opportunity>,
   ): Promise<Opportunity[]> {
-    return this.accountRepository.opportunities(id).find(filter);
+    return this.accountRepository.opportunities(SACAP__UUID__c).find(filter);
   }
 
   @post('/Accounts/{id}/opportunities', {
@@ -54,7 +54,7 @@ export class AccountOpportunityController {
     },
   })
   async create(
-    @param.path.number('id') id: typeof Account.prototype.id,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: typeof Account.prototype.SACAP__UUID__c,
     @requestBody({
       content: {
         'application/json': {
@@ -65,12 +65,12 @@ export class AccountOpportunityController {
           }),
         },
       },
-    }) opportunity: Omit<Opportunity, 'id'>,
+    }) opportunity: Omit<Opportunity, 'SACAP__UUID__c'>,
   ): Promise<Opportunity> {
-    return this.accountRepository.opportunities(id).create(opportunity);
+    return this.accountRepository.opportunities(SACAP__UUID__c).create(opportunity);
   }
 
-  @patch('/Accounts/{id}/opportunities', {
+  @patch('/Accounts/{SACAP__UUID__c}/opportunities', {
     responses: {
       '200': {
         description: 'Account.Opportunity PATCH success count',
@@ -79,7 +79,7 @@ export class AccountOpportunityController {
     },
   })
   async patch(
-    @param.path.number('id') id: number,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -90,10 +90,10 @@ export class AccountOpportunityController {
     opportunity: Partial<Opportunity>,
     @param.query.object('where', getWhereSchemaFor(Opportunity)) where?: Where<Opportunity>,
   ): Promise<Count> {
-    return this.accountRepository.opportunities(id).patch(opportunity, where);
+    return this.accountRepository.opportunities(SACAP__UUID__c).patch(opportunity, where);
   }
 
-  @del('/Accounts/{id}/opportunities', {
+  @del('/Accounts/{SACAP__UUID__c}/opportunities', {
     responses: {
       '200': {
         description: 'Account.Opportunity DELETE success count',
@@ -102,9 +102,9 @@ export class AccountOpportunityController {
     },
   })
   async delete(
-    @param.path.number('id') id: number,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @param.query.object('where', getWhereSchemaFor(Opportunity)) where?: Where<Opportunity>,
   ): Promise<Count> {
-    return this.accountRepository.opportunities(id).delete(where);
+    return this.accountRepository.opportunities(SACAP__UUID__c).delete(where);
   }
 }

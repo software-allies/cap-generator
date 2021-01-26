@@ -1,6 +1,6 @@
-import {Entity, hasMany, model, property} from '@loopback/repository';
-import {Contact} from './contact.model';
-import {Opportunity} from './opportunity.model';
+import { Entity, hasMany, model, property } from '@loopback/repository';
+import { Contact } from './contact.model';
+import { Opportunity } from './opportunity.model';
 
 @model({
   settings: {
@@ -13,7 +13,6 @@ import {Opportunity} from './opportunity.model';
 export class Account extends Entity {
   @property({
     type: 'number',
-    id: true,
     generated: false,
     postgresql: {
       columnName: 'id',
@@ -27,6 +26,7 @@ export class Account extends Entity {
   id?: number;
 
   @property({
+    id: true,
     type: 'string',
     postgresql: {
       columnName: 'sacap__uuid__c',
@@ -481,10 +481,10 @@ export class Account extends Entity {
   })
   SfId?: string;
 
-  @hasMany(() => Contact, {keyTo: 'AccountId', keyFrom: 'SfId'})
+  @hasMany(() => Contact, { keyTo: 'AccountId', keyFrom: 'SfId' })
   contacts: Contact[];
 
-  @hasMany(() => Opportunity, {keyTo: 'AccountId', keyFrom: 'SfId'})
+  @hasMany(() => Opportunity, { keyTo: 'AccountId', keyFrom: 'SfId' })
   opportunities: Opportunity[];
 
   constructor(data?: Partial<Account>) {

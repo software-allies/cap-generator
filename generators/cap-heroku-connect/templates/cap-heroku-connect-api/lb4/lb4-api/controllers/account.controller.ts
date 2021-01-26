@@ -106,7 +106,7 @@ export class AccountController {
     return this.accountRepository.updateAll(account, where);
   }
 
-  @get('/Accounts/{id}', {
+  @get('/Accounts/{SACAP__UUID__c}', {
     responses: {
       '200': {
         description: 'Account model instance',
@@ -119,13 +119,13 @@ export class AccountController {
     },
   })
   async findById(
-    @param.path.number('id') id: number,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @param.filter(Account, {exclude: 'where'}) filter?: FilterExcludingWhere<Account>
   ): Promise<Account> {
-    return this.accountRepository.findById(id, filter);
+    return this.accountRepository.findById(SACAP__UUID__c, filter);
   }
 
-  @patch('/Accounts/{id}', {
+  @patch('/Accounts/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Account PATCH success',
@@ -133,7 +133,7 @@ export class AccountController {
     },
   })
   async updateById(
-    @param.path.number('id') id: number,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -143,10 +143,10 @@ export class AccountController {
     })
     account: Account,
   ): Promise<void> {
-    await this.accountRepository.updateById(id, account);
+    await this.accountRepository.updateById(SACAP__UUID__c, account);
   }
 
-  @put('/Accounts/{id}', {
+  @put('/Accounts/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Account PUT success',
@@ -154,10 +154,10 @@ export class AccountController {
     },
   })
   async replaceById(
-    @param.path.number('id') id: number,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody() account: Account,
   ): Promise<void> {
-    await this.accountRepository.replaceById(id, account);
+    await this.accountRepository.replaceById(SACAP__UUID__c, account);
   }
 
   @del('/Accounts/{id}', {
@@ -167,7 +167,7 @@ export class AccountController {
       },
     },
   })
-  async deleteById(@param.path.number('id') id: number): Promise<void> {
-    await this.accountRepository.deleteById(id);
+  async deleteById(@param.path.string('SACAP__UUID__c') SACAP__UUID__c: string): Promise<void> {
+    await this.accountRepository.deleteById(SACAP__UUID__c);
   }
 }

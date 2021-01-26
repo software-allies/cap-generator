@@ -106,7 +106,7 @@ export class CapFileCController {
     return this.capFileCRepository.updateAll(capFileC, where);
   }
 
-  @get('/CapFileCs/{id}', {
+  @get('/CapFileCs/{sacap__uuid__c}', {
     responses: {
       '200': {
         description: 'CapFileC model instance',
@@ -119,13 +119,13 @@ export class CapFileCController {
     },
   })
   async findById(
-    @param.path.number('id') id: number,
+    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
     @param.filter(CapFileC, {exclude: 'where'}) filter?: FilterExcludingWhere<CapFileC>
   ): Promise<CapFileC> {
-    return this.capFileCRepository.findById(id, filter);
+    return this.capFileCRepository.findById(sacap__uuid__c, filter);
   }
 
-  @patch('/CapFileCs/{id}', {
+  @patch('/CapFileCs/{sacap__uuid__c}', {
     responses: {
       '204': {
         description: 'CapFileC PATCH success',
@@ -133,7 +133,7 @@ export class CapFileCController {
     },
   })
   async updateById(
-    @param.path.number('id') id: number,
+    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -143,7 +143,7 @@ export class CapFileCController {
     })
     capFileC: CapFileC,
   ): Promise<void> {
-    await this.capFileCRepository.updateById(id, capFileC);
+    await this.capFileCRepository.updateById(sacap__uuid__c, capFileC);
   }
 
   @put('/CapFileCs/{id}', {
@@ -154,10 +154,10 @@ export class CapFileCController {
     },
   })
   async replaceById(
-    @param.path.number('id') id: number,
+    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
     @requestBody() capFileC: CapFileC,
   ): Promise<void> {
-    await this.capFileCRepository.replaceById(id, capFileC);
+    await this.capFileCRepository.replaceById(sacap__uuid__c, capFileC);
   }
 
   @del('/CapFileCs/{id}', {
@@ -167,7 +167,7 @@ export class CapFileCController {
       },
     },
   })
-  async deleteById(@param.path.number('id') id: number): Promise<void> {
-    await this.capFileCRepository.deleteById(id);
+  async deleteById(@param.path.string('sacap__uuid__c') sacap__uuid__c: string): Promise<void> {
+    await this.capFileCRepository.deleteById(sacap__uuid__c);
   }
 }

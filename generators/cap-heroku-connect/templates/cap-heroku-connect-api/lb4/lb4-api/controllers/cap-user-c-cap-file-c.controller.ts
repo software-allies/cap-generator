@@ -26,7 +26,7 @@ export class CapUserCCapFileCController {
     @repository(CapUserCRepository) protected capUserCRepository: CapUserCRepository,
   ) { }
 
-  @get('/cap-user-cs/{id}/cap-file-cs', {
+  @get('/cap-user-cs/{SACAP__UUID__c}/cap-file-cs', {
     responses: {
       '200': {
         description: 'Array of CapUserC has many CapFileC',
@@ -39,13 +39,13 @@ export class CapUserCCapFileCController {
     },
   })
   async find(
-    @param.path.number('id') id: number,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @param.query.object('filter') filter?: Filter<CapFileC>,
   ): Promise<CapFileC[]> {
-    return this.capUserCRepository.capUserFiles(id).find(filter);
+    return this.capUserCRepository.capUserFiles(SACAP__UUID__c).find(filter);
   }
 
-  @post('/cap-user-cs/{id}/cap-file-cs', {
+  @post('/cap-user-cs/{SACAP__UUID__c}/cap-file-cs', {
     responses: {
       '200': {
         description: 'CapUserC model instance',
@@ -54,7 +54,7 @@ export class CapUserCCapFileCController {
     },
   })
   async create(
-    @param.path.number('id') id: typeof CapUserC.prototype.id,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: typeof CapUserC.prototype.SACAP__UUID__c,
     @requestBody({
       content: {
         'application/json': {
@@ -65,12 +65,12 @@ export class CapUserCCapFileCController {
           }),
         },
       },
-    }) capFileC: Omit<CapFileC, 'id'>,
+    }) capFileC: Omit<CapFileC, 'SACAP__UUID__c'>,
   ): Promise<CapFileC> {
-    return this.capUserCRepository.capUserFiles(id).create(capFileC);
+    return this.capUserCRepository.capUserFiles(SACAP__UUID__c).create(capFileC);
   }
 
-  @patch('/cap-user-cs/{id}/cap-file-cs', {
+  @patch('/cap-user-cs/{SACAP__UUID__c}/cap-file-cs', {
     responses: {
       '200': {
         description: 'CapUserC.CapFileC PATCH success count',
@@ -79,7 +79,7 @@ export class CapUserCCapFileCController {
     },
   })
   async patch(
-    @param.path.number('id') id: number,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -90,10 +90,10 @@ export class CapUserCCapFileCController {
     capFileC: Partial<CapFileC>,
     @param.query.object('where', getWhereSchemaFor(CapFileC)) where?: Where<CapFileC>,
   ): Promise<Count> {
-    return this.capUserCRepository.capUserFiles(id).patch(capFileC, where);
+    return this.capUserCRepository.capUserFiles(SACAP__UUID__c).patch(capFileC, where);
   }
 
-  @del('/cap-user-cs/{id}/cap-file-cs', {
+  @del('/cap-user-cs/{SACAP__UUID__c}/cap-file-cs', {
     responses: {
       '200': {
         description: 'CapUserC.CapFileC DELETE success count',
@@ -102,9 +102,9 @@ export class CapUserCCapFileCController {
     },
   })
   async delete(
-    @param.path.number('id') id: number,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @param.query.object('where', getWhereSchemaFor(CapFileC)) where?: Where<CapFileC>,
   ): Promise<Count> {
-    return this.capUserCRepository.capUserFiles(id).delete(where);
+    return this.capUserCRepository.capUserFiles(SACAP__UUID__c).delete(where);
   }
 }

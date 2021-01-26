@@ -106,7 +106,7 @@ export class ContactController {
     return this.contactRepository.updateAll(contact, where);
   }
 
-  @get('/Contacts/{id}', {
+  @get('/Contacts/{sacap__uuid__c}', {
     responses: {
       '200': {
         description: 'Contact model instance',
@@ -119,13 +119,13 @@ export class ContactController {
     },
   })
   async findById(
-    @param.path.number('id') id: number,
+    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
     @param.filter(Contact, {exclude: 'where'}) filter?: FilterExcludingWhere<Contact>
   ): Promise<Contact> {
-    return this.contactRepository.findById(id, filter);
+    return this.contactRepository.findById(sacap__uuid__c, filter);
   }
 
-  @patch('/Contacts/{id}', {
+  @patch('/Contacts/{sacap__uuid__c}', {
     responses: {
       '204': {
         description: 'Contact PATCH success',
@@ -133,7 +133,7 @@ export class ContactController {
     },
   })
   async updateById(
-    @param.path.number('id') id: number,
+    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -143,10 +143,10 @@ export class ContactController {
     })
     contact: Contact,
   ): Promise<void> {
-    await this.contactRepository.updateById(id, contact);
+    await this.contactRepository.updateById(sacap__uuid__c, contact);
   }
 
-  @put('/Contacts/{id}', {
+  @put('/Contacts/{sacap__uuid__c}', {
     responses: {
       '204': {
         description: 'Contact PUT success',
@@ -154,20 +154,20 @@ export class ContactController {
     },
   })
   async replaceById(
-    @param.path.number('id') id: number,
+    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
     @requestBody() contact: Contact,
   ): Promise<void> {
-    await this.contactRepository.replaceById(id, contact);
+    await this.contactRepository.replaceById(sacap__uuid__c, contact);
   }
 
-  @del('/Contacts/{id}', {
+  @del('/Contacts/{sacap__uuid__c}', {
     responses: {
       '204': {
         description: 'Contact DELETE success',
       },
     },
   })
-  async deleteById(@param.path.number('id') id: number): Promise<void> {
-    await this.contactRepository.deleteById(id);
+  async deleteById(@param.path.string('sacap__uuid__c') sacap__uuid__c: string): Promise<void> {
+    await this.contactRepository.deleteById(sacap__uuid__c);
   }
 }

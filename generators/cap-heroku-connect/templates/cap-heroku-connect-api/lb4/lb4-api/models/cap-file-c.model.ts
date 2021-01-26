@@ -11,7 +11,6 @@ import {Entity, model, property} from '@loopback/repository';
 export class CapFileC extends Entity {
   @property({
     type: 'number',
-    id: true,
     generated: false,
     postgresql: {
       columnName: 'id',
@@ -25,6 +24,7 @@ export class CapFileC extends Entity {
   id?: number;
 
   @property({
+    id: true,
     type: 'string',
     postgresql: {
       columnName: 'sacap__uuid__c',

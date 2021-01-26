@@ -10,7 +10,6 @@ import {Entity, model, property} from '@loopback/repository';
 export class Contact extends Entity {
   @property({
     type: 'number',
-    id: true,
     generated: false,
     postgresql: {
       columnName: 'id',
@@ -37,6 +36,7 @@ export class Contact extends Entity {
   Name?: string;
 
   @property({
+    id: true,
     type: 'string',
     postgresql: {
       columnName: 'sacap__uuid__c',
