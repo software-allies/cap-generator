@@ -5,7 +5,7 @@ import {inject} from '@loopback/core';
 
 export class CapFileCRepository extends DefaultCrudRepository<
   CapFileC,
-  typeof CapFileC.prototype.id,
+  typeof CapFileC.prototype.SACAP__UUID__c,
   CapFileCRelations
 > {
   constructor(

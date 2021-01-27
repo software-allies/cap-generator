@@ -129,7 +129,7 @@ export class CapUserC extends Entity {
   })
   SfId?: string;
 
-  @hasMany(() => CapFileC, {keyTo: 'SACAP__CAP_User__c', keyFrom: 'SfId'})
+  @hasMany(() => CapFileC, {keyTo: 'SACAP__UUID__c', keyFrom: 'SACAP__UUID__c'})
   capUserFiles: CapFileC[];
 
   constructor(data?: Partial<CapUserC>) {

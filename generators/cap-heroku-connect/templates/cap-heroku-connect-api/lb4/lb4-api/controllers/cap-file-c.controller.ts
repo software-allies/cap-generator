@@ -22,7 +22,7 @@ import {CapFileCRepository} from '../repositories';
 export class CapFileCController {
   constructor(
     @repository(CapFileCRepository)
-    public capFileCRepository : CapFileCRepository,
+    public capFileCRepository: CapFileCRepository,
   ) {}
 
   @post('/CapFileCs', {
@@ -39,12 +39,12 @@ export class CapFileCController {
         'application/json': {
           schema: getModelSchemaRef(CapFileC, {
             title: 'NewCapFileC',
-            exclude: ['id'],
+            exclude: ['SACAP__UUID__c'],
           }),
         },
       },
     })
-    capFileC: Omit<CapFileC, 'id'>,
+    capFileC: Omit<CapFileC, 'SACAP__UUID__c'>,
   ): Promise<CapFileC> {
     return this.capFileCRepository.create(capFileC);
   }
@@ -106,7 +106,7 @@ export class CapFileCController {
     return this.capFileCRepository.updateAll(capFileC, where);
   }
 
-  @get('/CapFileCs/{sacap__uuid__c}', {
+  @get('/CapFileCs/{SACAP__UUID__c}', {
     responses: {
       '200': {
         description: 'CapFileC model instance',
@@ -119,13 +119,13 @@ export class CapFileCController {
     },
   })
   async findById(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @param.filter(CapFileC, {exclude: 'where'}) filter?: FilterExcludingWhere<CapFileC>
   ): Promise<CapFileC> {
-    return this.capFileCRepository.findById(sacap__uuid__c, filter);
+    return this.capFileCRepository.findById(SACAP__UUID__c, filter);
   }
 
-  @patch('/CapFileCs/{sacap__uuid__c}', {
+  @patch('/CapFileCs/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'CapFileC PATCH success',
@@ -133,7 +133,7 @@ export class CapFileCController {
     },
   })
   async updateById(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -143,10 +143,10 @@ export class CapFileCController {
     })
     capFileC: CapFileC,
   ): Promise<void> {
-    await this.capFileCRepository.updateById(sacap__uuid__c, capFileC);
+    await this.capFileCRepository.updateById(SACAP__UUID__c, capFileC);
   }
 
-  @put('/CapFileCs/{id}', {
+  @put('/CapFileCs/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'CapFileC PUT success',
@@ -154,20 +154,20 @@ export class CapFileCController {
     },
   })
   async replaceById(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody() capFileC: CapFileC,
   ): Promise<void> {
-    await this.capFileCRepository.replaceById(sacap__uuid__c, capFileC);
+    await this.capFileCRepository.replaceById(SACAP__UUID__c, capFileC);
   }
 
-  @del('/CapFileCs/{id}', {
+  @del('/CapFileCs/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'CapFileC DELETE success',
       },
     },
   })
-  async deleteById(@param.path.string('sacap__uuid__c') sacap__uuid__c: string): Promise<void> {
-    await this.capFileCRepository.deleteById(sacap__uuid__c);
+  async deleteById(@param.path.string('SACAP__UUID__c') SACAP__UUID__c: string): Promise<void> {
+    await this.capFileCRepository.deleteById(SACAP__UUID__c);
   }
 }

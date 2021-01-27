@@ -24,7 +24,7 @@ import {CapUserCRepository} from '../repositories';
 export class CapUserCCapFileCController {
   constructor(
     @repository(CapUserCRepository) protected capUserCRepository: CapUserCRepository,
-  ) { }
+  ) {}
 
   @get('/cap-user-cs/{SACAP__UUID__c}/cap-file-cs', {
     responses: {

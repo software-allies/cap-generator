@@ -5,7 +5,7 @@ import {inject} from '@loopback/core';
 
 export class LeadRepository extends DefaultCrudRepository<
   Lead,
-  typeof Lead.prototype.id,
+  typeof Lead.prototype.SACAP__UUID__c,
   LeadRelations
 > {
   constructor(

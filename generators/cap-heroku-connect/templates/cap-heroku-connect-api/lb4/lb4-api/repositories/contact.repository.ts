@@ -5,7 +5,7 @@ import {inject} from '@loopback/core';
 
 export class ContactRepository extends DefaultCrudRepository<
   Contact,
-  typeof Contact.prototype.id,
+  typeof Contact.prototype.SACAP__UUID__c,
   ContactRelations
 > {
   constructor(

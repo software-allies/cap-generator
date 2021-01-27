@@ -7,13 +7,13 @@ import {OpportunityRepository} from './opportunity.repository';
 
 export class AccountRepository extends DefaultCrudRepository<
   Account,
-  typeof Account.prototype.id,
+  typeof Account.prototype.SACAP__UUID__c,
   AccountRelations
 > {
 
-  public readonly contacts: HasManyRepositoryFactory<Contact, typeof Account.prototype.id>;
+  public readonly contacts: HasManyRepositoryFactory<Contact, typeof Account.prototype.SACAP__UUID__c>;
 
-  public readonly opportunities: HasManyRepositoryFactory<Opportunity, typeof Account.prototype.id>;
+  public readonly opportunities: HasManyRepositoryFactory<Opportunity, typeof Account.prototype.SACAP__UUID__c>;
 
   constructor(
     @inject('datasources.db') dataSource: DbDataSource, @repository.getter('ContactRepository') protected contactRepositoryGetter: Getter<ContactRepository>, @repository.getter('OpportunityRepository') protected opportunityRepositoryGetter: Getter<OpportunityRepository>,

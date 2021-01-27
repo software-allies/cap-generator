@@ -22,7 +22,7 @@ import {AccountRepository} from '../repositories';
 export class AccountController {
   constructor(
     @repository(AccountRepository)
-    public accountRepository : AccountRepository,
+    public accountRepository: AccountRepository,
   ) {}
 
   @post('/Accounts', {
@@ -160,7 +160,7 @@ export class AccountController {
     await this.accountRepository.replaceById(SACAP__UUID__c, account);
   }
 
-  @del('/Accounts/{id}', {
+  @del('/Accounts/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Account DELETE success',

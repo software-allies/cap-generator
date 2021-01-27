@@ -22,7 +22,7 @@ import {ContactRepository} from '../repositories';
 export class ContactController {
   constructor(
     @repository(ContactRepository)
-    public contactRepository : ContactRepository,
+    public contactRepository: ContactRepository,
   ) {}
 
   @post('/Contacts', {
@@ -106,7 +106,7 @@ export class ContactController {
     return this.contactRepository.updateAll(contact, where);
   }
 
-  @get('/Contacts/{sacap__uuid__c}', {
+  @get('/Contacts/{SACAP__UUID__c}', {
     responses: {
       '200': {
         description: 'Contact model instance',
@@ -119,13 +119,13 @@ export class ContactController {
     },
   })
   async findById(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @param.filter(Contact, {exclude: 'where'}) filter?: FilterExcludingWhere<Contact>
   ): Promise<Contact> {
-    return this.contactRepository.findById(sacap__uuid__c, filter);
+    return this.contactRepository.findById(SACAP__UUID__c, filter);
   }
 
-  @patch('/Contacts/{sacap__uuid__c}', {
+  @patch('/Contacts/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Contact PATCH success',
@@ -133,7 +133,7 @@ export class ContactController {
     },
   })
   async updateById(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -143,10 +143,10 @@ export class ContactController {
     })
     contact: Contact,
   ): Promise<void> {
-    await this.contactRepository.updateById(sacap__uuid__c, contact);
+    await this.contactRepository.updateById(SACAP__UUID__c, contact);
   }
 
-  @put('/Contacts/{sacap__uuid__c}', {
+  @put('/Contacts/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Contact PUT success',
@@ -154,20 +154,20 @@ export class ContactController {
     },
   })
   async replaceById(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody() contact: Contact,
   ): Promise<void> {
-    await this.contactRepository.replaceById(sacap__uuid__c, contact);
+    await this.contactRepository.replaceById(SACAP__UUID__c, contact);
   }
 
-  @del('/Contacts/{sacap__uuid__c}', {
+  @del('/Contacts/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Contact DELETE success',
       },
     },
   })
-  async deleteById(@param.path.string('sacap__uuid__c') sacap__uuid__c: string): Promise<void> {
-    await this.contactRepository.deleteById(sacap__uuid__c);
+  async deleteById(@param.path.string('SACAP__UUID__c') SACAP__UUID__c: string): Promise<void> {
+    await this.contactRepository.deleteById(SACAP__UUID__c);
   }
 }

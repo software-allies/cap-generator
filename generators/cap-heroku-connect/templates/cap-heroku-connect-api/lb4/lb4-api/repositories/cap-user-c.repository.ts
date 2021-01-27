@@ -6,11 +6,11 @@ import {CapFileCRepository} from './cap-file-c.repository';
 
 export class CapUserCRepository extends DefaultCrudRepository<
   CapUserC,
-  typeof CapUserC.prototype.id,
+  typeof CapUserC.prototype.SACAP__UUID__c,
   CapUserCRelations
 > {
 
-  public readonly capUserFiles: HasManyRepositoryFactory<CapFileC, typeof CapUserC.prototype.id>;
+  public readonly capUserFiles: HasManyRepositoryFactory<CapFileC, typeof CapUserC.prototype.SACAP__UUID__c>;
 
   constructor(
     @inject('datasources.db') dataSource: DbDataSource, @repository.getter('CapFileCRepository') protected capFileCRepositoryGetter: Getter<CapFileCRepository>,

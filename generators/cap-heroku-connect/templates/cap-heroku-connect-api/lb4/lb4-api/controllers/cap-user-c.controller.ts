@@ -22,7 +22,7 @@ import {CapUserCRepository} from '../repositories';
 export class CapUserCController {
   constructor(
     @repository(CapUserCRepository)
-    public capUserCRepository : CapUserCRepository,
+    public capUserCRepository: CapUserCRepository,
   ) {}
 
   @post('/CapUserCs', {
@@ -39,12 +39,12 @@ export class CapUserCController {
         'application/json': {
           schema: getModelSchemaRef(CapUserC, {
             title: 'NewCapUserC',
-            exclude: ['id'],
+            exclude: ['SACAP__UUID__c'],
           }),
         },
       },
     })
-    capUserC: Omit<CapUserC, 'id'>,
+    capUserC: Omit<CapUserC, 'SACAP__UUID__c'>,
   ): Promise<CapUserC> {
     return this.capUserCRepository.create(capUserC);
   }
@@ -106,7 +106,7 @@ export class CapUserCController {
     return this.capUserCRepository.updateAll(capUserC, where);
   }
 
-  @get('/CapUserCs/{sacap__uuid__c}', {
+  @get('/CapUserCs/{SACAP__UUID__c}', {
     responses: {
       '200': {
         description: 'CapUserC model instance',
@@ -119,13 +119,13 @@ export class CapUserCController {
     },
   })
   async findById(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @param.filter(CapUserC, {exclude: 'where'}) filter?: FilterExcludingWhere<CapUserC>
   ): Promise<CapUserC> {
-    return this.capUserCRepository.findById(sacap__uuid__c, filter);
+    return this.capUserCRepository.findById(SACAP__UUID__c, filter);
   }
 
-  @patch('/CapUserCs/{sacap__uuid__c}', {
+  @patch('/CapUserCs/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'CapUserC PATCH success',
@@ -133,7 +133,7 @@ export class CapUserCController {
     },
   })
   async updateById(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -143,10 +143,10 @@ export class CapUserCController {
     })
     capUserC: CapUserC,
   ): Promise<void> {
-    await this.capUserCRepository.updateById(sacap__uuid__c, capUserC);
+    await this.capUserCRepository.updateById(SACAP__UUID__c, capUserC);
   }
 
-  @put('/CapUserCs/{sacap__uuid__c}', {
+  @put('/CapUserCs/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'CapUserC PUT success',
@@ -154,20 +154,20 @@ export class CapUserCController {
     },
   })
   async replaceById(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody() capUserC: CapUserC,
   ): Promise<void> {
-    await this.capUserCRepository.replaceById(sacap__uuid__c, capUserC);
+    await this.capUserCRepository.replaceById(SACAP__UUID__c, capUserC);
   }
 
-  @del('/CapUserCs/{sacap__uuid__c}', {
+  @del('/CapUserCs/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'CapUserC DELETE success',
       },
     },
   })
-  async deleteById(@param.path.string('sacap__uuid__c') sacap__uuid__c: string): Promise<void> {
-    await this.capUserCRepository.deleteById(sacap__uuid__c);
+  async deleteById(@param.path.string('SACAP__UUID__c') SACAP__UUID__c: string): Promise<void> {
+    await this.capUserCRepository.deleteById(SACAP__UUID__c);
   }
 }

@@ -24,9 +24,9 @@ import {AccountRepository} from '../repositories';
 export class AccountContactController {
   constructor(
     @repository(AccountRepository) protected accountRepository: AccountRepository,
-  ) { }
+  ) {}
 
-  @get('/Accounts/{sacap__uuid__c}/contacts', {
+  @get('/Accounts/{SACAP__UUID__c}/contacts', {
     responses: {
       '200': {
         description: 'Array of Account has many Contact',
@@ -39,10 +39,10 @@ export class AccountContactController {
     },
   })
   async find(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @param.query.object('filter') filter?: Filter<Contact>,
   ): Promise<Contact[]> {
-    return this.accountRepository.contacts(sacap__uuid__c).find(filter);
+    return this.accountRepository.contacts(SACAP__UUID__c).find(filter);
   }
 
   @post('/Accounts/{SACAP__UUID__c}/contacts', {
@@ -70,7 +70,7 @@ export class AccountContactController {
     return this.accountRepository.contacts(SACAP__UUID__c).create(contact);
   }
 
-  @patch('/Accounts/{sacap__uuid__c}/contacts', {
+  @patch('/Accounts/{SACAP__UUID__c}/contacts', {
     responses: {
       '200': {
         description: 'Account.Contact PATCH success count',
@@ -79,7 +79,7 @@ export class AccountContactController {
     },
   })
   async patch(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -90,10 +90,10 @@ export class AccountContactController {
     contact: Partial<Contact>,
     @param.query.object('where', getWhereSchemaFor(Contact)) where?: Where<Contact>,
   ): Promise<Count> {
-    return this.accountRepository.contacts(sacap__uuid__c).patch(contact, where);
+    return this.accountRepository.contacts(SACAP__UUID__c).patch(contact, where);
   }
 
-  @del('/Accounts/{sacap__uuid__c}/contacts', {
+  @del('/Accounts/{SACAP__UUID__c}/contacts', {
     responses: {
       '200': {
         description: 'Account.Contact DELETE success count',
@@ -102,9 +102,9 @@ export class AccountContactController {
     },
   })
   async delete(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @param.query.object('where', getWhereSchemaFor(Contact)) where?: Where<Contact>,
   ): Promise<Count> {
-    return this.accountRepository.contacts(sacap__uuid__c).delete(where);
+    return this.accountRepository.contacts(SACAP__UUID__c).delete(where);
   }
 }

@@ -24,9 +24,9 @@ import {AccountRepository} from '../repositories';
 export class AccountOpportunityController {
   constructor(
     @repository(AccountRepository) protected accountRepository: AccountRepository,
-  ) { }
+  ) {}
 
-  @get('/Accounts/{id}/opportunities', {
+  @get('/Accounts/{SACAP__UUID__c}/opportunities', {
     responses: {
       '200': {
         description: 'Array of Account has many Opportunity',
@@ -45,7 +45,7 @@ export class AccountOpportunityController {
     return this.accountRepository.opportunities(SACAP__UUID__c).find(filter);
   }
 
-  @post('/Accounts/{id}/opportunities', {
+  @post('/Accounts/{SACAP__UUID__c}/opportunities', {
     responses: {
       '200': {
         description: 'Account model instance',
@@ -60,7 +60,7 @@ export class AccountOpportunityController {
         'application/json': {
           schema: getModelSchemaRef(Opportunity, {
             title: 'NewOpportunityInAccount',
-            exclude: ['id'],
+            exclude: ['SACAP__UUID__c'],
             optional: ['AccountId']
           }),
         },

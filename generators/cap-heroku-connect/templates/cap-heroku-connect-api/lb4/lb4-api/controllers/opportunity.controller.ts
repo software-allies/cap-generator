@@ -22,7 +22,7 @@ import {OpportunityRepository} from '../repositories';
 export class OpportunityController {
   constructor(
     @repository(OpportunityRepository)
-    public opportunityRepository : OpportunityRepository,
+    public opportunityRepository: OpportunityRepository,
   ) {}
 
   @post('/Opportunitys', {
@@ -106,7 +106,7 @@ export class OpportunityController {
     return this.opportunityRepository.updateAll(opportunity, where);
   }
 
-  @get('/Opportunitys/{id}', {
+  @get('/Opportunitys/{SACAP__UUID__c}', {
     responses: {
       '200': {
         description: 'Opportunity model instance',
@@ -119,13 +119,13 @@ export class OpportunityController {
     },
   })
   async findById(
-    @param.path.number('id') id: number,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @param.filter(Opportunity, {exclude: 'where'}) filter?: FilterExcludingWhere<Opportunity>
   ): Promise<Opportunity> {
-    return this.opportunityRepository.findById(id, filter);
+    return this.opportunityRepository.findById(SACAP__UUID__c, filter);
   }
 
-  @patch('/Opportunitys/{id}', {
+  @patch('/Opportunitys/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Opportunity PATCH success',
@@ -133,7 +133,7 @@ export class OpportunityController {
     },
   })
   async updateById(
-    @param.path.number('id') id: number,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -143,7 +143,7 @@ export class OpportunityController {
     })
     opportunity: Opportunity,
   ): Promise<void> {
-    await this.opportunityRepository.updateById(id, opportunity);
+    await this.opportunityRepository.updateById(SACAP__UUID__c, opportunity);
   }
 
   @put('/Opportunitys/{id}', {
@@ -154,20 +154,20 @@ export class OpportunityController {
     },
   })
   async replaceById(
-    @param.path.number('id') id: number,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody() opportunity: Opportunity,
   ): Promise<void> {
-    await this.opportunityRepository.replaceById(id, opportunity);
+    await this.opportunityRepository.replaceById(SACAP__UUID__c, opportunity);
   }
 
-  @del('/Opportunitys/{id}', {
+  @del('/Opportunitys/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Opportunity DELETE success',
       },
     },
   })
-  async deleteById(@param.path.number('id') id: number): Promise<void> {
-    await this.opportunityRepository.deleteById(id);
+  async deleteById(@param.path.string('SACAP__UUID__c') SACAP__UUID__c: string): Promise<void> {
+    await this.opportunityRepository.deleteById(SACAP__UUID__c);
   }
 }

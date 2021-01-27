@@ -22,7 +22,7 @@ import {LeadRepository} from '../repositories';
 export class LeadController {
   constructor(
     @repository(LeadRepository)
-    public leadRepository : LeadRepository,
+    public leadRepository: LeadRepository,
   ) {}
 
   @post('/Leads', {
@@ -106,7 +106,7 @@ export class LeadController {
     return this.leadRepository.updateAll(lead, where);
   }
 
-  @get('/Leads/{sacap__uuid__c}', {
+  @get('/Leads/{SACAP__UUID__c}', {
     responses: {
       '200': {
         description: 'Lead model instance',
@@ -119,13 +119,13 @@ export class LeadController {
     },
   })
   async findById(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @param.filter(Lead, {exclude: 'where'}) filter?: FilterExcludingWhere<Lead>
   ): Promise<Lead> {
-    return this.leadRepository.findById(sacap__uuid__c, filter);
+    return this.leadRepository.findById(SACAP__UUID__c, filter);
   }
 
-  @patch('/Leads/{sacap__uuid__c}', {
+  @patch('/Leads/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Lead PATCH success',
@@ -133,7 +133,7 @@ export class LeadController {
     },
   })
   async updateById(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody({
       content: {
         'application/json': {
@@ -143,10 +143,10 @@ export class LeadController {
     })
     lead: Lead,
   ): Promise<void> {
-    await this.leadRepository.updateById(sacap__uuid__c, lead);
+    await this.leadRepository.updateById(SACAP__UUID__c, lead);
   }
 
-  @put('/Leads/{sacap__uuid__c}', {
+  @put('/Leads/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Lead PUT success',
@@ -154,20 +154,20 @@ export class LeadController {
     },
   })
   async replaceById(
-    @param.path.string('sacap__uuid__c') sacap__uuid__c: string,
+    @param.path.string('SACAP__UUID__c') SACAP__UUID__c: string,
     @requestBody() lead: Lead,
   ): Promise<void> {
-    await this.leadRepository.replaceById(sacap__uuid__c, lead);
+    await this.leadRepository.replaceById(SACAP__UUID__c, lead);
   }
 
-  @del('/Leads/{sacap__uuid__c}', {
+  @del('/Leads/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Lead DELETE success',
       },
     },
   })
-  async deleteById(@param.path.string('sacap__uuid__c') sacap__uuid__c: string): Promise<void> {
-    await this.leadRepository.deleteById(sacap__uuid__c);
+  async deleteById(@param.path.string('SACAP__UUID__c') SACAP__UUID__c: string): Promise<void> {
+    await this.leadRepository.deleteById(SACAP__UUID__c);
   }
 }

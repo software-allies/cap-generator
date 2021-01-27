@@ -481,10 +481,10 @@ export class Account extends Entity {
   })
   SfId?: string;
 
-  @hasMany(() => Contact, { keyTo: 'AccountId', keyFrom: 'SfId' })
+  @hasMany(() => Contact, { keyTo: 'SACAP__UUID__c', keyFrom: 'SACAP__UUID__c' })
   contacts: Contact[];
 
-  @hasMany(() => Opportunity, { keyTo: 'AccountId', keyFrom: 'SfId' })
+  @hasMany(() => Opportunity, { keyTo: 'SACAP__UUID__c', keyFrom: 'SACAP__UUID__c' })
   opportunities: Opportunity[];
 
   constructor(data?: Partial<Account>) {

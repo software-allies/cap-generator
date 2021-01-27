@@ -5,7 +5,7 @@ import {inject} from '@loopback/core';
 
 export class OpportunityRepository extends DefaultCrudRepository<
   Opportunity,
-  typeof Opportunity.prototype.id,
+  typeof Opportunity.prototype.SACAP__UUID__c,
   OpportunityRelations
 > {
   constructor(
