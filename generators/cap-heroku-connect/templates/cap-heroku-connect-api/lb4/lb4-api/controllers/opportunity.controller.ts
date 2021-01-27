@@ -25,7 +25,7 @@ export class OpportunityController {
     public opportunityRepository: OpportunityRepository,
   ) {}
 
-  @post('/Opportunitys', {
+  @post('/Opportunities', {
     responses: {
       '200': {
         description: 'Opportunity model instance',
@@ -49,7 +49,7 @@ export class OpportunityController {
     return this.opportunityRepository.create(opportunity);
   }
 
-  @get('/Opportunitys/count', {
+  @get('/Opportunities/count', {
     responses: {
       '200': {
         description: 'Opportunity model count',
@@ -63,7 +63,7 @@ export class OpportunityController {
     return this.opportunityRepository.count(where);
   }
 
-  @get('/Opportunitys', {
+  @get('/Opportunities', {
     responses: {
       '200': {
         description: 'Array of Opportunity model instances',
@@ -84,7 +84,7 @@ export class OpportunityController {
     return this.opportunityRepository.find(filter);
   }
 
-  @patch('/Opportunitys', {
+  @patch('/Opportunities', {
     responses: {
       '200': {
         description: 'Opportunity PATCH success count',
@@ -146,7 +146,7 @@ export class OpportunityController {
     await this.opportunityRepository.updateById(SACAP__UUID__c, opportunity);
   }
 
-  @put('/Opportunitys/{id}', {
+  @put('/Opportunities/{id}', {
     responses: {
       '204': {
         description: 'Opportunity PUT success',

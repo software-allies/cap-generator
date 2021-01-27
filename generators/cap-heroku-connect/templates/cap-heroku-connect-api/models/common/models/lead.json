@@ -26,21 +26,6 @@
         "nullable": "NO"
       }
     },
-    "Name": {
-      "type": "String",
-      "required": false,
-      "length": 255,
-      "precision": null,
-      "scale": null,
-      "postgresql": {
-        "columnName": "name",
-        "dataType": "character varying",
-        "dataLength": 255,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "YES"
-      }
-    },
     "SACAP__UUID__c": {
       "type": "String",
       "required": false,

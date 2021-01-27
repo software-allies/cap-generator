@@ -75,8 +75,12 @@ module.exports = class extends Generator {
           ? `--credentials=${false}`
           : `--credentials=${true}`,
         this.props.deploy
-          ? `--apiEndPoint=${this.env.options.database.herokuURL.trim()}api`
-          : '--apiEndPoint=http://localhost:3000/api'
+          ? this.props.lbVersion
+            ? `--apiEndPoint=${this.env.options.database.herokuURL.trim()}api`
+            : `--apiEndPoint=${this.env.options.database.herokuURL.trim()}`
+          : this.props.lbVersion
+           ? '--apiEndPoint=http://localhost:3000/api'
+           : '--apiEndPoint=http://localhost:3000'
       ],
       {
         cwd: this.destinationPath(this.options.name)
@@ -91,9 +95,8 @@ module.exports = class extends Generator {
       this.props.deploy
         ? this.props.lbVersion
           ? `endPoint: '${this.env.options.database.herokuURL.trim()}api/CapUserCs'`
-          : `endPoint: '${this.env.options.database.herokuURL.trim()}/CapUserCs'`
-        :
-        this.props.lbVersion
+          : `endPoint: '${this.env.options.database.herokuURL.trim()}CapUserCs'`
+        : this.props.lbVersion
           ? `endPoint: 'http://localhost:3000/api/CapUserCs'`
           : `endPoint: 'http://localhost:3000/CapUserCs'`
     );
