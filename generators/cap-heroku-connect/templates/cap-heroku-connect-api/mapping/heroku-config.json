@@ -17,16 +17,13 @@
         "sf_max_daily_api_calls": 30000,
         "access": "read_write",
         "upsert_field": "SACAP__UUID__c",
-        "applied_at": "2020-02-10T22:55:34.139884Z",
         "sf_polling_seconds": 600,
         "sf_notify_enabled": true,
         "fields": {
-          "CustomerPriority__c": {},
           "TickerSymbol": {},
           "ShippingState": {},
           "SACAP__UUID__c": {},
           "NumberOfEmployees": {},
-          "NumberofLocations__c": {},
           "ParentId": {},
           "ShippingPostalCode": {},
           "BillingCity": {},
@@ -48,17 +45,12 @@
           "Website": {},
           "BillingCountry": {},
           "Id": {},
-          "SLA__c": {},
           "Description": {},
           "AnnualRevenue": {},
           "Rating": {},
-          "UpsellOpportunity__c": {},
           "Fax": {},
-          "Active__c": {},
-          "SLAExpirationDate__c": {},
           "Industry": {},
-          "BillingStreet": {},
-          "SLASerialNumber__c": {}
+          "BillingStreet": {}
         }
       }
     },
@@ -79,7 +71,6 @@
         "sf_max_daily_api_calls": 30000,
         "access": "read_write",
         "upsert_field": "SACAP__UUID__c",
-        "applied_at": "2020-02-10T22:55:34.718218Z",
         "sf_polling_seconds": 600,
         "sf_notify_enabled": true,
         "fields": {
@@ -91,10 +82,8 @@
           "OtherCountry": {},
           "AccountId": {},
           "OtherPostalCode": {},
-          "Languages__c": {},
           "AssistantName": {},
           "MailingCountry": {},
-          "Name": {},
           "MobilePhone": {},
           "Birthdate": {},
           "Phone": {},
@@ -117,8 +106,7 @@
           "Email": {},
           "Description": {},
           "Fax": {},
-          "OtherPhone": {},
-          "Level__c": {}
+          "OtherPhone": {}
         }
       }
     },
@@ -139,21 +127,14 @@
         "sf_max_daily_api_calls": 30000,
         "access": "read_write",
         "upsert_field": "SACAP__UUID__c",
-        "applied_at": "2020-02-10T22:55:35.270479Z",
         "sf_polling_seconds": 600,
         "sf_notify_enabled": true,
         "fields": {
           "LastName": {},
-          "Primary__c": {},
           "Street": {},
           "SACAP__UUID__c": {},
           "NumberOfEmployees": {},
-          "NumberofLocations__c": {},
-          "SICCode__c": {},
-          "ProductInterest__c": {},
-          "CurrentGenerators__c": {},
           "City": {},
-          "Name": {},
           "MobilePhone": {},
           "Phone": {},
           "IsDeleted": {},
@@ -196,25 +177,19 @@
         "sf_max_daily_api_calls": 30000,
         "access": "read_write",
         "upsert_field": "SACAP__UUID__c",
-        "applied_at": "2020-07-31T20:45:18.541848Z",
         "sf_polling_seconds": 600,
         "sf_notify_enabled": true,
         "fields": {
-          "DeliveryInstallationStatus__c": {},
-          "TrackingNumber__c": {},
           "SACAP__UUID__c": {},
           "ExpectedRevenue": {},
           "CloseDate": {},
           "AccountId": {},
           "StageName": {},
-          "CurrentGenerators__c": {},
           "CampaignId": {},
           "Name": {},
-          "OrderNumber__c": {},
           "IsDeleted": {},
           "SystemModstamp": {},
           "Probability": {},
-          "MainCompetitors__c": {},
           "CreatedDate": {},
           "LeadSource": {},
           "Amount": {},
@@ -246,7 +221,6 @@
         "sf_max_daily_api_calls": 30000,
         "access": "read_write",
         "upsert_field": "SACAP__UUID__c",
-        "applied_at": "2020-04-16T20:26:01.732994Z",
         "sf_polling_seconds": 600,
         "sf_notify_enabled": true,
         "fields": {
@@ -299,16 +273,5 @@
       }
     }
   ],
-  "connection": {
-    "features": {
-      "disable_bulk_writes": false,
-      "poll_db_no_merge": true,
-      "poll_external_ids": false,
-      "rest_count_only": false
-    },
-    "api_version": "48.0",
-    "name": "",
-    "logplex_log_enabled": false
-  },
   "version": 1
 }
