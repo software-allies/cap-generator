@@ -23,19 +23,6 @@ export class Contact extends Entity {
   id?: number;
 
   @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'name',
-      dataType: 'character varying',
-      dataLength: 255,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  Name?: string;
-
-  @property({
     id: true,
     type: 'string',
     postgresql: {
@@ -407,32 +394,6 @@ export class Contact extends Entity {
   @property({
     type: 'string',
     postgresql: {
-      columnName: 'languages__c',
-      dataType: 'character varying',
-      dataLength: 100,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  Languages__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'level__c',
-      dataType: 'character varying',
-      dataLength: 255,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  Level__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
       columnName: 'description',
       dataType: 'character varying',
       dataLength: 32000,
@@ -442,19 +403,6 @@ export class Contact extends Entity {
     },
   })
   Description?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'sfid',
-      dataType: 'character varying',
-      dataLength: 53,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  SfId?: string;
 
   // @belongsTo(() => Account, {name: 'contacts', keyFrom: 'SfId'})
   // AccountId: number;

@@ -200,71 +200,6 @@ export class Opportunity extends Entity {
   @property({
     type: 'string',
     postgresql: {
-      columnName: 'ordernumber__c',
-      dataType: 'character varying',
-      dataLength: 8,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  OrderNumber__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'currentgenerators__c',
-      dataType: 'character varying',
-      dataLength: 100,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  CurrentGenerators__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'trackingnumber__c',
-      dataType: 'character varying',
-      dataLength: 12,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  TrackingNumber__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'maincompetitors__c',
-      dataType: 'character varying',
-      dataLength: 100,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  MainCompetitors__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'deliveryinstallationstatus__c',
-      dataType: 'character varying',
-      dataLength: 255,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  DeliveryInstallationStatus__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
       columnName: 'description',
       dataType: 'character varying',
       dataLength: 32000,
@@ -274,19 +209,6 @@ export class Opportunity extends Entity {
     },
   })
   Description?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'sfid',
-      dataType: 'character varying',
-      dataLength: 53,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  SfId?: string;
 
   constructor(data?: Partial<Opportunity>) {
     super(data);

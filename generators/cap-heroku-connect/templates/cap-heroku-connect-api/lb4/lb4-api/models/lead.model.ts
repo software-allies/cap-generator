@@ -1,4 +1,4 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from '@loopback/repository';
 
 @model({
   settings: {
@@ -22,19 +22,6 @@ export class Lead extends Entity {
     },
   })
   id?: number;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'name',
-      dataType: 'character varying',
-      dataLength: 255,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  Name?: string;
 
   @property({
     id: true,
@@ -326,71 +313,6 @@ export class Lead extends Entity {
   @property({
     type: 'string',
     postgresql: {
-      columnName: 'productinterest__c',
-      dataType: 'character varying',
-      dataLength: 255,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  ProductInterest__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'siccode__c',
-      dataType: 'character varying',
-      dataLength: 15,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  SICCode__c?: string;
-
-  @property({
-    type: 'number',
-    postgresql: {
-      columnName: 'numberoflocations__c',
-      dataType: 'character varying',
-      dataLength: 3,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  NumberofLocations__c?: number;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'currentgenerators__c',
-      dataType: 'character varying',
-      dataLength: 100,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  CurrentGenerators__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'primary__c',
-      dataType: 'character varying',
-      dataLength: 255,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  Primary__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
       columnName: 'description',
       dataType: 'character varying',
       dataLength: 32000,
@@ -400,19 +322,6 @@ export class Lead extends Entity {
     },
   })
   Description?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'sfid',
-      dataType: 'character varying',
-      dataLength: 53,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  SfId?: string;
 
   constructor(data?: Partial<Lead>) {
     super(data);

@@ -367,97 +367,6 @@ export class Account extends Entity {
   @property({
     type: 'string',
     postgresql: {
-      columnName: 'customerpriority__c',
-      dataType: 'character varying',
-      dataLength: 255,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  CustomerPriority__c?: string;
-
-  @property({
-    type: 'date',
-    postgresql: {
-      columnName: 'slaexpirationdate__c',
-      dataType: 'character varying',
-      dataLength: null,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  SLAExpirationDate__c?: string;
-
-  @property({
-    type: 'number',
-    postgresql: {
-      columnName: 'numberoflocations__c',
-      dataType: 'character varying',
-      dataLength: 3,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  NumberofLocations__c?: number;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'active__c',
-      dataType: 'character varying',
-      dataLength: 255,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  Active__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'sla__c',
-      dataType: 'character varying',
-      dataLength: 255,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  SLA__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'slaserialnumber__c',
-      dataType: 'character varying',
-      dataLength: 10,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  SLASerialNumber__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'upsellopportunity__c',
-      dataType: 'character varying',
-      dataLength: 255,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  UpsellOpportunity__c?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
       columnName: 'description',
       dataType: 'character varying',
       dataLength: 32000,
@@ -467,19 +376,6 @@ export class Account extends Entity {
     },
   })
   Description?: string;
-
-  @property({
-    type: 'string',
-    postgresql: {
-      columnName: 'sfid',
-      dataType: 'character varying',
-      dataLength: 53,
-      dataPrecision: null,
-      dataScale: null,
-      nullable: 'YES',
-    },
-  })
-  SfId?: string;
 
   @hasMany(() => Contact, { keyTo: 'SACAP__UUID__c', keyFrom: 'SACAP__UUID__c' })
   contacts: Contact[];
