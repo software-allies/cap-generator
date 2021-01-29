@@ -106,7 +106,7 @@ export class OpportunityController {
     return this.opportunityRepository.updateAll(opportunity, where);
   }
 
-  @get('/Opportunitys/{SACAP__UUID__c}', {
+  @get('/Opportunities/{SACAP__UUID__c}', {
     responses: {
       '200': {
         description: 'Opportunity model instance',
@@ -125,7 +125,7 @@ export class OpportunityController {
     return this.opportunityRepository.findById(SACAP__UUID__c, filter);
   }
 
-  @patch('/Opportunitys/{SACAP__UUID__c}', {
+  @patch('/Opportunities/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Opportunity PATCH success',
@@ -146,7 +146,7 @@ export class OpportunityController {
     await this.opportunityRepository.updateById(SACAP__UUID__c, opportunity);
   }
 
-  @put('/Opportunities/{id}', {
+  @put('/Opportunities/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Opportunity PUT success',
@@ -160,7 +160,7 @@ export class OpportunityController {
     await this.opportunityRepository.replaceById(SACAP__UUID__c, opportunity);
   }
 
-  @del('/Opportunitys/{SACAP__UUID__c}', {
+  @del('/Opportunities/{SACAP__UUID__c}', {
     responses: {
       '204': {
         description: 'Opportunity DELETE success',
