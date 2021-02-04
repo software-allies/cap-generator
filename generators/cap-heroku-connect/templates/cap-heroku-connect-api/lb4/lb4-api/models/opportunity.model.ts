@@ -24,6 +24,19 @@ export class Opportunity extends Entity {
   id?: number;
 
   @property({
+    type: 'string',
+    postgresql: {
+      columnName: 'sfid',
+      dataType: 'character varying',
+      dataLength: 53,
+      dataPrecision: null,
+      dataScale: null,
+      nullable: 'YES',
+    },
+  })
+  SfId?: string;
+
+  @property({
     type: 'number',
     postgresql: {
       columnName: 'expectedrevenue',
