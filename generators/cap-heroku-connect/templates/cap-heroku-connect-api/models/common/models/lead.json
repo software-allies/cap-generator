@@ -2,7 +2,7 @@
   "name": "Lead",
   "plural": "Leads",
   "base": "PersistedModel",
-  "idInjection": true,
+  "idInjection": false,
   "options": {
     "validateUpsert": true,
     "postgresql": {
@@ -12,6 +12,7 @@
   },
   "properties": {
     "id": {
+      "id": false,
       "type": "Number",
       "required": false,
       "length": null,
@@ -27,6 +28,7 @@
       }
     },
     "SACAP__UUID__c": {
+      "id": true,
       "type": "String",
       "required": false,
       "length": 50,

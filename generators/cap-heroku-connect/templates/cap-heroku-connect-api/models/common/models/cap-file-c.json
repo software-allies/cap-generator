@@ -1,7 +1,7 @@
 {
   "name": "CapFileC",
   "base": "PersistedModel",
-  "idInjection": true,
+  "idInjection": false,
   "options": {
     "validateUpsert": true,
     "postgresql": {
@@ -15,6 +15,7 @@
       "required": false,
       "length": null,
       "precision": 32,
+      "id": false,
       "scale": 0,
       "postgresql": {
         "columnName": "id",
@@ -31,6 +32,7 @@
       "length": 50,
       "precision": null,
       "scale": null,
+      "id": true,
       "postgresql": {
         "columnName": "sacap__uuid__c",
         "dataType": "character varying",

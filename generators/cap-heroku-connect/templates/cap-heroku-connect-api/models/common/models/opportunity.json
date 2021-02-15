@@ -2,7 +2,7 @@
   "name": "Opportunity",
   "plural": "Opportunities",
   "base": "PersistedModel",
-  "idInjection": true,
+  "idInjection": false,
   "options": {
     "validateUpsert": true,
     "postgresql": {
@@ -12,6 +12,7 @@
   },
   "properties": {
     "id": {
+      "id": false,
       "type": "Number",
       "required": false,
       "length": null,
@@ -42,6 +43,7 @@
       }
     },
     "SACAP__UUID__c": {
+      "id": true,
       "type": "String",
       "required": false,
       "length": 50,
@@ -49,6 +51,22 @@
       "scale": null,
       "postgresql": {
         "columnName": "sacap__uuid__c",
+        "dataType": "character varying",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Account__SACAP__UUID__c": {
+      "id": true,
+      "type": "String",
+      "required": false,
+      "length": 50,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "account__sacap__uuid__c",
         "dataType": "character varying",
         "dataLength": 50,
         "dataPrecision": null,

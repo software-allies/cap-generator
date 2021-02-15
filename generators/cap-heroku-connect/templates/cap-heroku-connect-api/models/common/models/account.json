@@ -2,7 +2,7 @@
   "name": "Account",
   "plural": "Accounts",
   "base": "PersistedModel",
-  "idInjection": true,
+  "idInjection": false,
   "options": {
     "validateUpsert": true,
     "postgresql": {
@@ -16,6 +16,7 @@
       "required": false,
       "length": null,
       "precision": 32,
+      "id": false,
       "scale": 0,
       "postgresql": {
         "columnName": "id",
@@ -28,6 +29,7 @@
     },
     "SACAP__UUID__c": {
       "type": "String",
+      "id": true,
       "required": false,
       "length": 50,
       "precision": null,
@@ -36,6 +38,21 @@
         "columnName": "sacap__uuid__c",
         "dataType": "character varying",
         "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      }
+    },
+    "Parent__SACAP__UUID__c": {
+      "type": "String",
+      "required": false,
+      "length": 53,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "parent__sacap__uuid__c",
+        "dataType": "character varying",
+        "dataLength": 53,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "YES"
