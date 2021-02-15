@@ -50,6 +50,34 @@ export class Contact extends Entity {
   SACAP__UUID__c?: string;
 
   @property({
+    id: true,
+    type: 'string',
+    postgresql: {
+      columnName: 'account__sacap__uuid__c',
+      dataType: 'character varying',
+      dataLength: 50,
+      dataPrecision: null,
+      dataScale: null,
+      nullable: 'YES',
+    },
+  })
+  Account__SACAP__UUID__c?: string;
+
+  @property({
+    id: true,
+    type: 'string',
+    postgresql: {
+      columnName: 'reportsto__sacap__uuid__c',
+      dataType: 'character varying',
+      dataLength: 50,
+      dataPrecision: null,
+      dataScale: null,
+      nullable: 'YES',
+    },
+  })
+  ReportsTo__SACAP__UUID__c?: string;
+
+  @property({
     type: 'string',
     postgresql: {
       columnName: 'salutation',
