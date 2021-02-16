@@ -64,7 +64,6 @@ export class Opportunity extends Entity {
   SACAP__UUID__c?: string;
 
   @property({
-    id: true,
     type: 'string',
     postgresql: {
       columnName: 'account__sacap__uuid__c',

@@ -53,7 +53,6 @@ export class Account extends Entity {
   SACAP__UUID__c?: string;
 
   @property({
-    id: true,
     type: 'string',
     postgresql: {
       columnName: 'parent__sacap__uuid__c',

@@ -44,7 +44,6 @@
       }
     },
     "Account__SACAP__UUID__c": {
-      "id": true,
       "type": "String",
       "required": false,
       "length": 50,
@@ -60,7 +59,6 @@
       }
     },
     "ReportsTo__SACAP__UUID__c": {
-      "id": true,
       "type": "String",
       "required": false,
       "length": 50,
