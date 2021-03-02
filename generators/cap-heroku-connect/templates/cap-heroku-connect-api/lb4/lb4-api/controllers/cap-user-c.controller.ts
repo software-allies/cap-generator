@@ -39,12 +39,12 @@ export class CapUserCController {
         'application/json': {
           schema: getModelSchemaRef(CapUserC, {
             title: 'NewCapUserC',
-            exclude: ['SACAP__UUID__c'],
+            exclude: ['id'],
           }),
         },
       },
     })
-    capUserC: Omit<CapUserC, 'SACAP__UUID__c'>,
+    capUserC: Omit<CapUserC, 'id'>,
   ): Promise<CapUserC> {
     return this.capUserCRepository.create(capUserC);
   }
