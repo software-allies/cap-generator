@@ -364,7 +364,7 @@ module.exports = class extends Generator {
       'ng',
       [
         'add',
-        'cap-angular-schematic-responsive@~1.2.0',
+        'cap-angular-schematic-responsive@~1.2.1',
         this.props.appName,
         true,
         true,
