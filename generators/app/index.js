@@ -295,11 +295,13 @@ module.exports = class extends Generator {
       }
     );
 
-    /*await ts_ast.astFunctions.astFiles(
-      this.destinationPath(`${this.props.appName}/tsconfig.json`),
-      `"target": "es2015"`,
-      `"target": "es5"`
-    );*/
+    if (this.props.version) {
+      await ts_ast.astFunctions.astFiles(
+        this.destinationPath(`${this.props.appName}/tsconfig.json`),
+        `"target": "es2015"`,
+        `"target": "es5"`
+      );
+    }
 
     if (this.props.authService === 'auth0') {
 
