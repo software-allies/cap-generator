@@ -313,10 +313,10 @@ module.exports = class extends Generator {
 
       this.spawnCommandSync(
         'ng',
-        // eslint-disable-next-line no-sparse-arrays
         [
           'add',
           `cap-angular-schematic-auth-auth0@${this.env.options.auth0.version}`,
+          this.props.version ? '--angularVersion=Angular 8' : '--angularVersion=Angular 9',
           this.props.deploy ? `--credentials=${false}` : `--credentials=${true}`,
           `--clientID=${this.props.AUTH0_CLIENT_ID}`,
           `--clientSecret=${this.props.AUTH0_CLIENT_SECRET}`,
